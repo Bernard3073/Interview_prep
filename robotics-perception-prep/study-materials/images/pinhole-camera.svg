@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="320" viewBox="0 0 640 320" font-family="system-ui, sans-serif">
+  <rect width="640" height="320" fill="#0f1320"/>
+  <text x="20" y="28" fill="#e8ecf6" font-size="16" font-weight="bold">Pinhole Camera Model</text>
+  <!-- optical axis -->
+  <line x1="90" y1="190" x2="600" y2="190" stroke="#2b3350" stroke-width="2" stroke-dasharray="5 5"/>
+  <text x="560" y="208" fill="#9aa6c2" font-size="12">optical axis (Z)</text>
+  <!-- camera center -->
+  <circle cx="120" cy="190" r="5" fill="#22d3a6"/>
+  <text x="90" y="230" fill="#22d3a6" font-size="12">camera center C</text>
+  <!-- image plane -->
+  <line x1="230" y1="110" x2="230" y2="270" stroke="#4f8cff" stroke-width="2"/>
+  <text x="180" y="100" fill="#4f8cff" font-size="12">image plane</text>
+  <line x1="120" y1="190" x2="230" y2="190" stroke="#c084fc" stroke-width="1.5"/>
+  <text x="150" y="183" fill="#c084fc" font-size="12">f</text>
+  <!-- 3D point -->
+  <circle cx="520" cy="90" r="6" fill="#ff8a4c"/>
+  <text x="530" y="86" fill="#ff8a4c" font-size="13">X = (X,Y,Z)</text>
+  <!-- projection rays -->
+  <line x1="120" y1="190" x2="520" y2="90" stroke="#ff8a4c" stroke-width="1.5"/>
+  <!-- projected point on image plane: intersection -->
+  <circle cx="230" cy="162" r="5" fill="#e8ecf6"/>
+  <text x="238" y="155" fill="#e8ecf6" font-size="12">x = (u,v)</text>
+  <!-- equations -->
+  <text x="20" y="300" fill="#9aa6c2" font-size="13">u = f·X/Z + cx,  v = f·Y/Z + cy      x ~ K [R | t] X</text>
+</svg>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Robotics & Perception — Interview Prep Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">◎</span>
+      <div>
+        <h1>Robotics &amp; Perception — Interview Prep</h1>
+        <p class="subtitle">8-week plan · Python + C++ · trackable</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button id="theme-btn" class="ghost-btn" title="Toggle theme">🌙</button>
+      <button id="reset-btn" class="ghost-btn danger" title="Reset all progress">Reset</button>
+    </div>
+  </header>
+
+  <section class="dashboard">
+    <div class="overall-card">
+      <div class="overall-text">
+        <span class="big-pct" id="overall-pct">0%</span>
+        <span class="overall-label">Overall progress</span>
+      </div>
+      <div class="progress-track big"><div class="progress-fill" id="overall-fill"></div></div>
+      <div class="stat-row">
+        <div class="stat"><span id="done-count">0</span><label>items done</label></div>
+        <div class="stat"><span id="total-count">0</span><label>total</label></div>
+        <div class="stat"><span id="streak">0</span><label>weeks complete</label></div>
+      </div>
+    </div>
+    <div class="legend">
+      <span class="chip topic">Lecture topic</span>
+      <span class="chip lc">LeetCode</span>
+      <span class="chip rob">Robotics task</span>
+      <span class="hint">Progress is saved automatically in this browser (localStorage).</span>
+    </div>
+  </section>
+
+  <main id="weeks"></main>
+
+  <footer>
+    <p>Study materials live in <code>study-materials/</code> · code in <code>coding-practice/</code>.
+       Edit <code>curriculum.js</code> to customize the plan.</p>
+  </footer>
+
+  <script src="curriculum.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
