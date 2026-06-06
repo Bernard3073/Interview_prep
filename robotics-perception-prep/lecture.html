@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lecture — Robotics &amp; Perception Prep</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="reader">
+  <header class="topbar">
+    <div class="brand">
+      <a class="logo" href="index.html" title="Back to tracker">◎</a>
+      <div>
+        <h1>Lecture Notes</h1>
+        <p class="subtitle"><a href="index.html" class="back-link">← Back to progress tracker</a></p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button id="theme-btn" class="ghost-btn" title="Toggle theme">🌙</button>
+    </div>
+  </header>
+
+  <div class="reader-layout">
+    <!-- left: all lectures -->
+    <aside class="lec-sidebar">
+      <div class="sidebar-title">Curriculum</div>
+      <nav id="lec-nav"></nav>
+    </aside>
+
+    <!-- center: the lecture -->
+    <main class="lec-main">
+      <article id="lec-article">
+        <h1 id="lec-title">Loading…</h1>
+        <div id="lec-body"></div>
+      </article>
+      <nav class="lec-prevnext">
+        <a id="lec-prev" class="pn-btn" href="#">← Previous</a>
+        <a id="lec-next" class="pn-btn" href="#">Next →</a>
+      </nav>
+    </main>
+
+    <!-- right: table of contents -->
+    <aside class="lec-toc">
+      <div class="sidebar-title">On this page</div>
+      <nav id="toc-nav"></nav>
+    </aside>
+  </div>
+
+  <button id="toc-fab" class="toc-fab" title="Contents">☰</button>
+
+  <script src="curriculum.js"></script>
+  <script src="lectures-data.js"></script>
+  <script src="lecture.js"></script>
+</body>
+</html>

@@ -55,8 +55,8 @@
       // Lecture link
       const lec = document.createElement("a");
       lec.className = "lecture-link";
-      lec.href = w.lecture; lec.target = "_blank";
-      lec.innerHTML = `📖 Lecture notes: <strong>&nbsp;${w.title}</strong>`;
+      lec.href = w.lecture;
+      lec.innerHTML = `📖 Read lecture notes: <strong>&nbsp;${w.title}</strong>`;
       body.appendChild(lec);
 
       body.appendChild(sectionTitle("Lecture topics"));

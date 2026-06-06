@@ -9,7 +9,7 @@ const CURRICULUM = [
     week: 1,
     title: "Math Foundations",
     goal: "Rebuild the linear algebra, probability, and optimization muscles every perception algorithm leans on.",
-    lecture: "study-materials/01-math-foundations.md",
+    lecture: "lecture.html?week=1",
     topics: [
       "Vectors, matrices, norms, dot/cross products",
       "Eigenvalues, eigenvectors, SVD (geometric meaning)",
@@ -31,7 +31,7 @@ const CURRICULUM = [
     week: 2,
     title: "3D Geometry & Rigid-Body Transforms",
     goal: "Master rotations, quaternions, and SE(3) — the language of every robot pose.",
-    lecture: "study-materials/02-3d-geometry-transforms.md",
+    lecture: "lecture.html?week=2",
     topics: [
       "Rotation matrices, properties of SO(3)",
       "Euler angles & gimbal lock",
@@ -54,7 +54,7 @@ const CURRICULUM = [
     week: 3,
     title: "Camera Models & Classical Image Processing",
     goal: "Understand how 3D becomes pixels, and the filtering/feature toolkit on top of it.",
-    lecture: "study-materials/03-camera-models-image-processing.md",
+    lecture: "lecture.html?week=3",
     topics: [
       "Pinhole model, intrinsics K, extrinsics",
       "Lens distortion (radial/tangential) & undistortion",
@@ -77,7 +77,7 @@ const CURRICULUM = [
     week: 4,
     title: "Features & Multi-View Geometry",
     goal: "Detect, describe, and match features; recover geometry between views.",
-    lecture: "study-materials/04-features-multiview-geometry.md",
+    lecture: "lecture.html?week=4",
     topics: [
       "Harris corners, FAST, blob detectors",
       "Descriptors: SIFT, ORB, BRIEF; matching + ratio test",
@@ -101,7 +101,7 @@ const CURRICULUM = [
     week: 5,
     title: "State Estimation & Filtering",
     goal: "Fuse noisy sensors over time: Bayes filter, KF/EKF/UKF, particle filter.",
-    lecture: "study-materials/05-state-estimation.md",
+    lecture: "lecture.html?week=5",
     topics: [
       "Recursive Bayes filter (predict/update)",
       "Kalman filter derivation & assumptions",
@@ -124,7 +124,7 @@ const CURRICULUM = [
     week: 6,
     title: "SLAM, Odometry & Sensor Fusion",
     goal: "Tie geometry + estimation together into mapping and localization systems.",
-    lecture: "study-materials/06-slam-odometry.md",
+    lecture: "lecture.html?week=6",
     topics: [
       "SLAM problem: front-end vs back-end",
       "Visual odometry pipeline (feature & direct)",
@@ -147,7 +147,7 @@ const CURRICULUM = [
     week: 7,
     title: "Deep Learning for Perception",
     goal: "Modern neural perception: detection, segmentation, 3D, and point clouds.",
-    lecture: "study-materials/07-deep-learning-perception.md",
+    lecture: "lecture.html?week=7",
     topics: [
       "CNN building blocks; receptive field; BN/dropout",
       "Object detection (one-stage vs two-stage, anchors, NMS)",
@@ -170,7 +170,7 @@ const CURRICULUM = [
     week: 8,
     title: "Systems, ROS & Mock Interviews",
     goal: "Wire it into real systems and rehearse the interview itself.",
-    lecture: "study-materials/08-systems-ros-interview.md",
+    lecture: "lecture.html?week=8",
     topics: [
       "ROS/ROS2 concepts: nodes, topics, TF, time sync",
       "Real-time, latency, threading, memory in C++",
