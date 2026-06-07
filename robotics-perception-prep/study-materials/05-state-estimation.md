@@ -93,12 +93,25 @@ resample proportional to weight  (deal with particle depletion)
 ---
 
 ## Interview-style questions
-1. Derive the Kalman gain — what is it trading off?
-2. EKF vs. UKF vs. particle filter: when does each break down?
-3. What is the innovation, and how do you use it to reject outliers?
-4. Your EKF diverges. List the things you'd check.
-5. Why can't a particle filter scale to a 12-D state?
-6. What does it mean for a filter to be "inconsistent / overconfident"?
+*Click a question to reveal a model answer.*
+
+??? Derive the Kalman gain — what is it trading off?
+After predicting `x⁻, P⁻`, choose the gain `K` that minimizes the posterior covariance (trace of `P`). The result is **`K = P⁻Hᵀ (H P⁻ Hᵀ + R)⁻¹`**, i.e. "prediction uncertainty mapped into measurement space" divided by "total innovation uncertainty (prediction + measurement)". It trades trust between model and sensor: large `R` (noisy sensor) → small `K` (trust the prediction); large `P⁻` or small `R` → large `K` (trust the measurement). The update is `x = x⁻ + K·(innovation)`.
+
+??? EKF vs. UKF vs. particle filter: when does each break down?
+**EKF** breaks under strong nonlinearity or poor initialization — first-order linearization is biased and the hand-derived Jacobians are error-prone. **UKF** handles nonlinearity better (sigma points, no Jacobians) but still assumes a single Gaussian and costs a bit more; it struggles with multimodal beliefs. **Particle filter** represents arbitrary/multimodal distributions but suffers the **curse of dimensionality** (particle count grows exponentially with state size) and sample impoverishment.
+
+??? What is the innovation, and how do you use it to reject outliers?
+The **innovation** (residual) is `z − H·x⁻`, the gap between the actual and predicted measurement; its covariance is `S = H P⁻ Hᵀ + R`. Compute the **normalized innovation squared** `d² = innovᵀ S⁻¹ innov` and **gate**: reject the measurement if `d²` exceeds a chi-square threshold for the measurement's DoF. This stops outliers / bad data associations from corrupting the state.
+
+??? Your EKF diverges. List the things you'd check.
+Wrong or badly-derived **Jacobians** (most common); poor **initialization** (state far off, or `P` too small/large); mis-tuned **`Q`/`R`** (overconfident); excessive **nonlinearity** → switch to UKF/iterated EKF; **numerical** issues → use Joseph-form covariance update or a square-root filter and keep `P` symmetric PSD; **angle-wrapping** bugs in residuals; **observability** — maybe the state isn't observable from those measurements; and **time-sync / wrong `dt`**.
+
+??? Why can't a particle filter scale to a 12-D state?
+Particles must cover the state space, and the number needed grows **roughly exponentially with dimension**, so a 12-D state would need an astronomical particle count to avoid weight collapse (one particle dominating). PFs shine in low dimensions (2–3D pose, MCL). For high-D states use Gaussian filters / optimization, or **Rao-Blackwellization** to factor out the linear-Gaussian substates (as FastSLAM does).
+
+??? What does it mean for a filter to be "inconsistent / overconfident"?
+A filter is **inconsistent** when its reported covariance `P` doesn't match the actual estimation error. **Overconfident** means the true errors are systematically larger than `P` claims (`P` too small), so gating rejects good measurements and the filter can diverge; underconfident is the opposite. You measure this with **NEES** (state error) and **NIS** (innovation) against chi-square bounds over many runs. Common causes: ignored correlations, linearization error, double-counting information.
 
 ## Resources
 - Thrun, Burgard, Fox, *Probabilistic Robotics* — Ch. 2–4, 7–8 (the canonical text).

@@ -91,11 +91,22 @@ Most perception "solve" steps minimize a sum of squared residuals
 ---
 
 ## Interview-style questions
-1. When would you use the normal equations vs. SVD for least squares?
-2. You have `Ax = 0`; how do you find a nontrivial `x`? Why the smallest singular value?
-3. Why is the covariance matrix symmetric positive semi-definite? What do its eigenvectors mean?
-4. Derive the Gauss–Newton update from a first-order Taylor expansion.
-5. What's the geometric interpretation of Mahalanobis distance vs. Euclidean?
+*Click a question to reveal a model answer.*
+
+??? When would you use the normal equations vs. SVD for least squares?
+Normal equations `x = (AᵀA)⁻¹Aᵀb` are fast and fine when `A` is well-conditioned and you want speed. But forming `AᵀA` **squares the condition number**, so you lose precision on ill-conditioned or nearly-collinear systems. Prefer **SVD (or QR)** when accuracy/robustness matters or `A` may be rank-deficient: SVD reveals the rank via the singular values and gives the minimum-norm solution. Rule of thumb: prototype / huge-sparse → normal equations or conjugate gradient; numerically sensitive → SVD/QR.
+
+??? You have `Ax = 0`; how do you find a nontrivial `x`? Why the smallest singular value?
+Stack the constraints into `A` and minimize `‖Ax‖` subject to `‖x‖ = 1`. Using `A = UΣVᵀ` and `y = Vᵀx`, you minimize `Σ σᵢ² yᵢ²` under `‖y‖ = 1`, which puts all the weight on the **smallest singular value** — so the solution is the corresponding right-singular vector, the **last column of V**. If a singular value is ~0, that column is an exact null-space direction. This is exactly how the 8-point algorithm, homography (DLT), and triangulation are solved.
+
+??? Why is the covariance matrix symmetric positive semi-definite? What do its eigenvectors mean?
+`Σ = E[(x−μ)(x−μ)ᵀ]` is symmetric by construction, and PSD because for any vector `a`, `aᵀΣa = Var(aᵀx) ≥ 0` (a variance can't be negative). Its **eigenvectors are the principal axes** of the uncertainty ellipsoid and its **eigenvalues are the variances** along those axes (so `√λ` is the std). This is the basis of PCA and of drawing covariance/uncertainty ellipses.
+
+??? Derive the Gauss–Newton update from a first-order Taylor expansion.
+Minimize `f(x) = ½‖r(x)‖²`. Linearize the residual: `r(x+Δ) ≈ r(x) + JΔ` with `J = ∂r/∂x`. Substitute: `f ≈ ½‖r + JΔ‖²`. Set the gradient w.r.t. `Δ` to zero: `Jᵀ(r + JΔ) = 0`, giving the normal equation **`(JᵀJ)Δ = −Jᵀr`**. Iterate `x ← x + Δ`. Levenberg–Marquardt damps this as `(JᵀJ + λI)Δ = −Jᵀr` to stay stable far from the optimum.
+
+??? What's the geometric interpretation of Mahalanobis distance vs. Euclidean?
+Euclidean distance treats every direction equally (equidistant points form a circle/sphere). Mahalanobis `d² = (x−μ)ᵀΣ⁻¹(x−μ)` rescales by the covariance, so distance is measured in **standard deviations along the (possibly correlated) principal axes** — equidistant points form the covariance ellipse, not a circle. That makes it the correct metric for outlier gating and data association, because it accounts for the shape of the sensor noise.
 
 ## Resources
 - *MIT 18.06* (Strang) lectures on SVD, least squares, eigenvalues.

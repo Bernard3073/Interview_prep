@@ -1,5 +1,11 @@
 # LeetCode Practice Guide (robotics-perception flavored)
 
+> 💡 **Solve these in the site.** Open the tracker, click a LeetCode problem, and
+> you'll land in the in-site editor (`practice.html`) where you can write Python or
+> C++ and run it against test cases — no need to leave for leetcode.com. All 24
+> problems below are wired up in-site.
+
+
 You don't need 500 problems. You need fluency in the **patterns** that show up in
 perception/robotics coding rounds. Each week's problems (in the tracker) target a
 pattern below. Do them in the language you'll interview in (Python for speed, C++

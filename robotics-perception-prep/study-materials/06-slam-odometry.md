@@ -103,12 +103,25 @@ changes) — the key trick behind VINS-Mono, OKVIS, ORB-SLAM3.
 ---
 
 ## Interview-style questions
-1. Filter-based vs. optimization-based SLAM — trade-offs?
-2. Why does monocular VO drift in scale and how do stereo/IMU/RGB-D fix it?
-3. Walk through ICP. How do you make it robust and fast?
-4. What is loop closure and why does it matter? How do you detect one?
-5. Why preintegrate IMU measurements?
-6. What's a factor graph and why is it the right structure for SLAM?
+*Click a question to reveal a model answer.*
+
+??? Filter-based vs. optimization-based SLAM — trade-offs?
+**Filter** (EKF-SLAM, MSCKF): marginalizes past states for constant per-step cost, but linearizes once (errors accumulate) and the covariance becomes dense (`O(n²)` in landmarks). **Optimization / smoothing** (graph SLAM, BA): keeps a window or all keyframes and re-linearizes, giving higher accuracy and easy loop closure while exploiting sparsity; raw cost grows but incremental solvers (iSAM2) keep it efficient. Modern systems favor optimization; filters survive where compute is very tight.
+
+??? Why does monocular VO drift in scale and how do stereo/IMU/RGB-D fix it?
+Monocular geometry has the same **scale ambiguity** as the essential matrix — you can't tell a small near scene from a big far one — so per-frame translation scale is unconstrained and small errors make global scale drift. **Stereo** fixes it via the known baseline, **RGB-D/LiDAR** via direct metric depth, and **IMU (VIO)** via accelerometer + gravity tying acceleration to metric units. Loop closure + global BA additionally bound the accumulated drift.
+
+??? Walk through ICP. How do you make it robust and fast?
+ICP: (1) for each source point find the nearest target point (kd-tree); (2) solve the best rigid `R, t` minimizing `Σ‖R pᵢ + t − qᵢ‖²` in closed form (Kabsch/SVD); (3) apply and repeat to convergence. Robust + fast: good **initialization** (IMU/odometry), **point-to-plane** error (uses normals — faster, more accurate on structured scenes), **voxel downsampling**, reject far/outlier correspondences with robust kernels, normal-space sampling, and kd-tree / GPU nearest-neighbor.
+
+??? What is loop closure and why does it matter? How do you detect one?
+Loop closure = recognizing a **previously visited place** and adding a constraint between the current pose and that past pose. It matters because it **corrects accumulated odometry drift**, snapping the trajectory and map into global consistency — without it, SLAM is just drifting odometry. Detect it by appearance: **bag-of-visual-words** (DBoW2) or learned place recognition (NetVLAD), then **geometric verification** (RANSAC PnP / fundamental matrix) to reject false positives.
+
+??? Why preintegrate IMU measurements?
+Between two keyframes there are many high-rate IMU samples; naively you'd **re-integrate them every time** the optimizer changes the linearization point (pose/bias), which is expensive. **Preintegration** summarizes those samples into a single relative-motion measurement (`ΔR, Δv, Δp`) plus a bias-update Jacobian, expressed independently of the absolute pose, so it can be reused and cheaply re-linearized as one factor between keyframes. It's the key trick behind real-time VIO (VINS-Mono, ORB-SLAM3).
+
+??? What's a factor graph and why is it the right structure for SLAM?
+A factor graph is a bipartite graph of **variable nodes** (poses, landmarks, biases) and **factor nodes** (measurements: odometry, loop closures, priors, projections) representing `p(variables | measurements)` as a product of factors. It fits SLAM because the MAP estimate is exactly **minimizing the sum of factor residuals**, the graph is **sparse** (each factor touches few variables), and incremental solvers (iSAM2) update it efficiently as new factors stream in.
 
 ## Resources
 - Cadena et al., *"Past, Present, and Future of SLAM"* (survey) — read once, twice.

@@ -12,6 +12,12 @@
   }
   function saveState() { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
 
+  // Problems solved in the in-site practice page (separate store).
+  function solvedSet() {
+    try { return JSON.parse(localStorage.getItem("rp_prep_solved")) || {}; }
+    catch { return {}; }
+  }
+
   // Stable id per checkable item
   function idFor(week, kind, i) { return `w${week}_${kind}_${i}`; }
 
@@ -66,12 +72,19 @@
       }))));
 
       body.appendChild(sectionTitle("LeetCode practice"));
-      body.appendChild(itemList(w.leetcode.map((p, i) => ({
-        id: idFor(w.week, "lc", i),
-        html: `<span class="item-label"><a href="${p.url}" target="_blank">${p.name}</a></span>
-               <span class="tag">${p.tag}</span>
-               <span class="badge ${p.diff}">${p.diff}</span>`,
-      }))));
+      body.appendChild(itemList(w.leetcode.map((p, i) => {
+        // In-site problems (have a pid) open the practice page; others link out.
+        const link = p.pid
+          ? `<a href="practice.html?p=${p.pid}">${p.name}</a> <span class="solve-chip">▶ solve in-site</span>`
+          : `<a href="${p.url}" target="_blank">${p.name} ↗</a>`;
+        const solvedBadge = p.pid && solvedSet()[p.pid] ? `<span class="mini-solved">✓</span>` : "";
+        return {
+          id: idFor(w.week, "lc", i),
+          html: `<span class="item-label">${solvedBadge}${link}</span>
+                 <span class="tag">${p.tag}</span>
+                 <span class="badge ${p.diff}">${p.diff}</span>`,
+        };
+      })));
 
       body.appendChild(sectionTitle("Robotics / perception coding"));
       body.appendChild(itemList(w.robotics.map((p, i) => ({

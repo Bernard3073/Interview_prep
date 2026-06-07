@@ -19,6 +19,12 @@ xdg-open index.html        # Linux
 - Click **"Read lecture notes"** on any week to open the **lecture reader**
   (`lecture.html`) — a styled page with sidebar navigation, an auto
   table-of-contents, inline diagrams, and prev/next buttons.
+- Each lecture ends with **interview-style questions as click-to-reveal Q&A** —
+  try to answer first, then expand to compare with a model answer.
+- Click any of the **24 LeetCode problems** to solve it **inside the site**
+  (`practice.html`): read the statement, write Python or C++ in the editor, and
+  **Run / Submit** against test cases. Code executes on real CPython 3.12 and g++ 13
+  via the Wandbox compile API, so the runner needs internet (the rest stays offline).
 - Progress (checkboxes) and the dark/light theme are saved automatically in the
   browser via `localStorage` and shared across both pages.
 
@@ -32,9 +38,12 @@ robotics-perception-prep/
 ├── index.html / app.js          # progress tracker (home)
 ├── lecture.html / lecture.js    # in-site lecture reader
 ├── lectures-data.js             # lecture content as rendered HTML  ← what the site shows
+├── practice.html / practice.js  # in-site LeetCode editor + test runner
+├── problems.js                  # 24 problems w/ verified test cases  ← what practice shows
 ├── curriculum.js                # the 8-week plan data (single source of truth)
-├── style.css                    # shared theme for both pages
+├── style.css                    # shared theme for all pages
 ├── build_lectures.cjs           # regenerates lectures-data.js from markdown source
+├── gen_problems.py              # regenerates problems.js (verifies test cases locally)
 ├── study-materials/
 │   ├── *.md                     # editable SOURCE for the notes (not shown raw)
 │   └── images/                  # SVG diagrams used in the notes
@@ -93,9 +102,13 @@ for f in w*.py; do echo "=== $f ==="; python "$f" || break; done
 
 ## ✏️ Customizing
 
-- **Plan / problems:** edit `curriculum.js` — both pages read it directly.
+- **Plan / problems:** edit `curriculum.js` — every page reads it directly.
 - **Lecture content:** edit `study-materials/*.md` and run
   `node build_lectures.cjs`, or edit `lectures-data.js` directly.
+- **Practice problems:** edit `gen_problems.py` (add a statement, starter code, and
+  test inputs) and run `python3 gen_problems.py` — it computes the expected outputs
+  from a reference solution and compile-checks the C++ starters, then writes
+  `problems.js`. All 24 of the curriculum's LeetCode problems are solvable in-site.
 - **Look & feel:** edit `style.css` (theme variables live at the top in `:root`).
 
 ---

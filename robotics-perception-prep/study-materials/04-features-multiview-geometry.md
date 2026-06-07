@@ -97,12 +97,25 @@ min Σ_i Σ_j ρ( ‖ x_ij − π(K, T_i, X_j) ‖² )
 ---
 
 ## Interview-style questions
-1. Harris vs. SIFT vs. ORB — when would you pick each?
-2. What does `x'ᵀ F x = 0` mean geometrically? Why rank-2?
-3. Why is monocular translation only recoverable up to scale? How do you fix the scale?
-4. Homography vs. fundamental matrix — what scene geometry distinguishes them?
-5. Derive how many RANSAC iterations you need for 50% inliers, 4-point model, 99% success.
-6. What makes bundle adjustment tractable for thousands of points?
+*Click a question to reveal a model answer.*
+
+??? Harris vs. SIFT vs. ORB — when would you pick each?
+**Harris**: cheap corner detector, not scale/rotation-invariant and no descriptor — good for tracking at roughly known scale. **SIFT**: scale + rotation invariant, 128-D float descriptor, highest accuracy/robustness but slower — good for SfM and wide-baseline matching where accuracy dominates. **ORB**: FAST + oriented BRIEF, binary descriptor matched by Hamming distance, very fast — good for real-time SLAM / embedded. Choose along the speed-vs-robustness trade-off.
+
+??? What does `x'ᵀ F x = 0` mean geometrically? Why rank-2?
+It's the **epipolar constraint**: a match `x'` must lie on the epipolar line `l' = Fx` in the second image (and `x` on `Fᵀx'`). `F` is **rank-2** (`det F = 0`) because all epipolar lines pass through a single point — the epipole — which is `F`'s null vector; a full-rank 3×3 wouldn't produce that pencil of lines. After the linear 8-point solve you enforce rank-2 by zeroing the smallest singular value.
+
+??? Why is monocular translation only recoverable up to scale? How do you fix the scale?
+From images alone you can't distinguish a small scene viewed up close from a large scene far away, so scaling the whole scene and the translation by the same factor reprojects identically — `E = [t]ₓR` only fixes the **direction** of `t` (unit norm). Recover metric scale with extra information: **stereo baseline, RGB-D/LiDAR depth, IMU + gravity (VIO), known object size, or wheel odometry**. Loop closure + global BA also bound scale drift.
+
+??? Homography vs. fundamental matrix — what scene geometry distinguishes them?
+A **homography** (`x' = Hx`, invertible 3×3) applies when the scene is **planar** or the camera undergoes **pure rotation** (no parallax). The **fundamental/essential** matrix applies to a **general 3D scene with camera translation** (parallax). In practice you fit both with RANSAC and pick via a model-selection score (e.g. GRIC); planar/degenerate scenes make `F` ill-conditioned, which is exactly why ORB-SLAM runs both in parallel.
+
+??? Derive how many RANSAC iterations you need for 50% inliers, 4-point model, 99% success.
+Use `N = log(1−p) / log(1 − wˢ)` with `p = 0.99`, `w = 0.5`, `s = 4`. Then `wˢ = 0.0625`, `1 − wˢ = 0.9375`, `log(0.9375) ≈ −0.0645`, `log(0.01) ≈ −4.605`, so `N ≈ 71.4` → **about 72 iterations** (round up).
+
+??? What makes bundle adjustment tractable for thousands of points?
+**Sparsity.** Each 3D point is seen by only a few cameras, so the Hessian `JᵀJ` is block-sparse with an arrowhead structure. The **Schur complement** marginalizes the many point variables to solve a much smaller reduced camera system, then back-substitutes for the points. Combined with robust kernels (Huber), good initialization, and sparse Cholesky solvers, thousands of points become feasible in real time.
 
 ## Resources
 - Hartley & Zisserman, *Multiple View Geometry* — the bible (Ch. 9–11, 18).

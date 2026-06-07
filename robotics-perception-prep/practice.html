@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Practice — Robotics &amp; Perception Prep</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="practice">
+  <header class="topbar">
+    <div class="brand">
+      <a class="logo" href="index.html" title="Back to tracker">◎</a>
+      <div>
+        <h1>Coding Practice</h1>
+        <p class="subtitle"><a href="index.html" class="back-link">← Back to progress tracker</a></p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button id="theme-btn" class="ghost-btn" title="Toggle theme">🌙</button>
+    </div>
+  </header>
+
+  <div class="practice-layout">
+    <!-- problem list -->
+    <aside class="prob-sidebar">
+      <div class="sidebar-title">Problems</div>
+      <nav id="prob-nav"></nav>
+    </aside>
+
+    <!-- problem statement -->
+    <section class="prob-main">
+      <div class="prob-head">
+        <h2 id="prob-title">…</h2>
+        <div class="prob-meta">
+          <span id="prob-diff" class="badge"></span>
+          <span id="prob-pattern" class="tag"></span>
+          <span id="prob-solved" class="solved-flag" hidden>✓ Solved</span>
+        </div>
+      </div>
+      <div id="prob-statement"></div>
+      <h3 class="io-h">Input</h3>  <pre id="prob-in" class="io-spec"></pre>
+      <h3 class="io-h">Output</h3> <pre id="prob-out" class="io-spec"></pre>
+      <h3 class="io-h">Examples</h3>
+      <div id="prob-examples"></div>
+    </section>
+
+    <!-- editor + runner -->
+    <section class="editor-pane">
+      <div class="editor-bar">
+        <div class="lang-toggle">
+          <button class="lang-btn active" data-lang="python">Python</button>
+          <button class="lang-btn" data-lang="cpp">C++</button>
+        </div>
+        <div class="editor-actions">
+          <button id="reset-code" class="ghost-btn" title="Reset to starter code">Reset</button>
+          <button id="run-btn" class="ghost-btn">▶ Run examples</button>
+          <button id="submit-btn" class="primary-btn">✓ Submit</button>
+        </div>
+      </div>
+      <textarea id="code" spellcheck="false" autocomplete="off"></textarea>
+      <div class="console" id="console">
+        <div class="console-head">
+          <span>Results</span>
+          <span class="console-hint">runs real Python / g++ via the Wandbox API — needs internet</span>
+        </div>
+        <div id="results"></div>
+      </div>
+    </section>
+  </div>
+
+  <script src="curriculum.js"></script>
+  <script src="problems.js"></script>
+  <script src="practice.js"></script>
+</body>
+</html>

@@ -96,11 +96,22 @@ T  =   [ 0   1 ]          transform:  X̃' = T X̃
 ---
 
 ## Interview-style questions
-1. Why do quaternions avoid gimbal lock when Euler angles don't?
-2. How would you optimize a camera pose over SO(3)/SE(3) while staying on the manifold?
-3. Given `T_world_cam` and a point in world coordinates, write the transform to camera coordinates.
-4. What's the inverse of a homogeneous transform — derive it, don't just invert 4×4.
-5. ROS gives a quaternion as `[x,y,z,w]`; another lib expects `[w,x,y,z]`. What breaks and how do you catch it?
+*Click a question to reveal a model answer.*
+
+??? Why do quaternions avoid gimbal lock when Euler angles don't?
+Gimbal lock is a **singularity of the 3-parameter Euler representation**: when the middle rotation aligns two axes (e.g. pitch = ±90°), two of the three DoF collapse and you lose a rotational direction. Quaternions parameterize `SO(3)` on the unit 3-sphere with 4 numbers and have **no coordinate singularities**, so every orientation is smooth and unique up to the `q ≡ −q` double cover, and interpolation (slerp) is well-behaved. The price is the unit-norm constraint and that sign ambiguity.
+
+??? How would you optimize a camera pose over SO(3)/SE(3) while staying on the manifold?
+Don't optimize the raw 9/12 matrix entries — they'd drift off the manifold. Parameterize the **update in the Lie algebra**: represent a small perturbation as a 3-vector (`so(3)`) or 6-vector (`se(3)`) `ξ`, apply it via the exponential map `T ← exp(ξ^)·T`, and take Jacobians w.r.t. `ξ`. After each Gauss–Newton/LM step you re-anchor at the new `T`, so the estimate stays exactly on `SO(3)/SE(3)`. Tooling: Sophus, GTSAM, Ceres local/manifold parameterizations.
+
+??? Given `T_world_cam` and a point in world coordinates, write the transform to camera coordinates.
+You need `T_cam_world = (T_world_cam)⁻¹`. Then `p_cam = T_cam_world · [x y z 1]ᵀ` and take the first three components. (Subscripts must cancel: `cam←world · world-point` → camera-point.)
+
+??? What's the inverse of a homogeneous transform — derive it, don't just invert 4×4.
+For `T = [R t; 0 1]`, the inverse must un-translate then un-rotate. Since `R⁻¹ = Rᵀ`, the inverse is **`T⁻¹ = [Rᵀ  −Rᵀt; 0 1]`**. Check: `[Rᵀ −Rᵀt; 0 1]·[R t; 0 1] = [RᵀR  Rᵀt−Rᵀt; 0 1] = [I 0; 0 1]`. It's cheaper and more numerically stable than a generic 4×4 inverse.
+
+??? ROS gives a quaternion as `[x,y,z,w]`; another lib expects `[w,x,y,z]`. What breaks and how do you catch it?
+The scalar/vector ordering mismatch **silently produces a wrong rotation** (often "almost right" or sign-flipped) because both are just four floats — no exception is thrown. Catch it by: asserting unit norm, round-tripping through a rotation matrix and comparing against a known transform, rotating a known vector and checking the result, or verifying that identity maps to `[0,0,0,1]` (ROS msg order) vs `[1,0,0,0]` (Eigen ctor order). Always document the convention.
 
 ## Resources
 - *Modern Robotics* (Lynch & Park), Ch. 3 — rotations, SE(3), screws. Free PDF + Coursera.
