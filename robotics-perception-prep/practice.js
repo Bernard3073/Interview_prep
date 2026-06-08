@@ -31,26 +31,41 @@
 
   // ---------- sidebar ----------
   const nav = document.getElementById("prob-nav");
+  let filter = localStorage.getItem("rp_prac_filter") || "all";
   function buildNav() {
     nav.innerHTML = "";
     let curWeek = null;
-    PROBLEMS.slice().sort((a, b) => a.week - b.week).forEach((p) => {
-      if (p.week !== curWeek) {
-        curWeek = p.week;
-        const h = document.createElement("div");
-        h.className = "prob-week";
-        h.textContent = "Week " + p.week;
-        nav.appendChild(h);
-      }
-      const a = document.createElement("a");
-      a.className = "prob-item" + (p.id === pid ? " active" : "");
-      a.href = "practice.html?p=" + p.id;
-      a.innerHTML = `<span class="pi-check">${solved[p.id] ? "✓" : "○"}</span>
-        <span class="pi-title">${p.title}</span>
-        <span class="badge ${p.diff}">${p.diff}</span>`;
-      nav.appendChild(a);
-    });
+    PROBLEMS.slice()
+      .sort((a, b) => a.week - b.week || (a.category > b.category ? 1 : -1))
+      .filter((p) => filter === "all" || (p.category || "leetcode") === filter)
+      .forEach((p) => {
+        if (p.week !== curWeek) {
+          curWeek = p.week;
+          const h = document.createElement("div");
+          h.className = "prob-week";
+          h.textContent = "Week " + p.week;
+          nav.appendChild(h);
+        }
+        const cat = p.category || "leetcode";
+        const a = document.createElement("a");
+        a.className = "prob-item" + (p.id === pid ? " active" : "");
+        a.href = "practice.html?p=" + p.id;
+        a.innerHTML = `<span class="pi-check">${solved[p.id] ? "✓" : "○"}</span>
+          <span class="pi-cat ${cat}">${cat === "robotics" ? "ROB" : "LC"}</span>
+          <span class="pi-title">${p.title}</span>
+          <span class="badge ${p.diff}">${p.diff}</span>`;
+        nav.appendChild(a);
+      });
   }
+  document.querySelectorAll(".filt-btn").forEach((b) => {
+    b.classList.toggle("active", b.dataset.filt === filter);
+    b.addEventListener("click", () => {
+      filter = b.dataset.filt;
+      localStorage.setItem("rp_prac_filter", filter);
+      document.querySelectorAll(".filt-btn").forEach((x) => x.classList.toggle("active", x.dataset.filt === filter));
+      buildNav();
+    });
+  });
 
   // ---------- editor helpers ----------
   const codeEl = document.getElementById("code");
@@ -79,6 +94,13 @@
     const diff = document.getElementById("prob-diff");
     diff.textContent = p.diff; diff.className = "badge " + p.diff;
     document.getElementById("prob-pattern").textContent = p.pattern;
+    const catEl = document.getElementById("prob-cat");
+    const cat = p.category || "leetcode";
+    catEl.textContent = cat === "robotics" ? "Robotics" : "LeetCode";
+    catEl.className = "cat-chip " + cat;
+    const lecEl = document.getElementById("prob-lecture");
+    lecEl.href = `lecture.html?week=${p.week}`;
+    lecEl.textContent = `📖 Week ${p.week} lecture`;
     document.getElementById("prob-solved").hidden = !solved[p.id];
     document.getElementById("prob-statement").innerHTML = p.statement;
     document.getElementById("prob-in").textContent = p.inputFormat;
@@ -103,22 +125,47 @@
   }
   const norm = (s) => s.replace(/\r/g, "").split("\n").map((l) => l.replace(/\s+$/, "")).join("\n").replace(/\n+$/, "");
 
+  // Output checker: exact (default) or float-tolerant (token-wise) for numeric problems.
+  function checkOutput(problem, got, expected) {
+    if (problem.checker === "float") {
+      const g = norm(got).split(/\s+/).filter(Boolean);
+      const e = norm(expected).split(/\s+/).filter(Boolean);
+      if (g.length !== e.length) return false;
+      const tol = problem.tol || 1e-3;
+      for (let i = 0; i < e.length; i++) {
+        const a = parseFloat(g[i]), b = parseFloat(e[i]);
+        if (!isNaN(a) && !isNaN(b)) {
+          if (Math.abs(a - b) > tol + tol * Math.abs(b)) return false;
+        } else if (g[i] !== e[i]) return false;
+      }
+      return true;
+    }
+    return norm(got) === norm(expected);
+  }
+
   // ---------- runner ----------
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
   async function runWandbox(code, stdin) {
-    const body = {
-      compiler: COMPILER[lang],
-      code,
-      stdin,
-      save: false,
-    };
+    const body = { compiler: COMPILER[lang], code, stdin, save: false };
     if (lang === "cpp") body["compiler-option-raw"] = "-std=c++17\n-O2";
-    const resp = await fetch(WANDBOX, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    if (!resp.ok) throw new Error("Wandbox HTTP " + resp.status);
-    return resp.json();
+    // The shared runner occasionally returns a transient "resource unavailable"
+    // error under load — retry a couple of times before giving up.
+    let last;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const resp = await fetch(WANDBOX, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (!resp.ok) { last = new Error("Wandbox HTTP " + resp.status); await sleep(1500); continue; }
+      const json = await resp.json();
+      const transient = /temporarily unavailable|OCI runtime|Resource/i.test(
+        (json.compiler_error || "") + (json.program_error || "") + (json.compiler_message || ""));
+      if (transient && attempt < 2) { await sleep(2000); continue; }
+      return json;
+    }
+    throw (last || new Error("runner temporarily unavailable — try again"));
   }
 
   const resultsEl = document.getElementById("results");
@@ -151,11 +198,10 @@
           resultsEl.innerHTML = `<div class="run-status err">❌ Compile error</div><pre class="err-out">${escapeHtml(compileErr)}</pre>`;
           running = false; setButtons(false); return;
         }
-        const got = norm(r.program_output || "");
-        const exp = norm(t.expected);
-        const ok = got === exp;
+        const got = r.program_output || "";
+        const ok = checkOutput(p, got, t.expected);
         if (ok) passed++;
-        rows.push({ i, ok, t, got, runtimeErr: (r.program_error || "").trim() });
+        rows.push({ i, ok, t, got: norm(got), runtimeErr: (r.program_error || "").trim() });
       }
     } finally {
       setButtons(false); running = false;

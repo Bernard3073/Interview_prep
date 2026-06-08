@@ -118,4 +118,4 @@ The scalar/vector ordering mismatch **silently produces a wrong rotation** (ofte
 - *State Estimation for Robotics* (Barfoot), Ch. 6–7 — Lie groups for estimation.
 - Quaternion visualizer: eater.net/quaternions.
 
-➡ **Coding:** `coding-practice/robotics/w2_rotations.py`, `w2_transform_chain.py`
+➡ **Practice (solve in-site):** [w2_rotations.py](practice.html?p=rob-quaternion-rotate), [w2_transform_chain.py](practice.html?p=rob-transform-point)

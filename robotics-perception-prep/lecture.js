@@ -40,6 +40,31 @@
     `<span class="lec-week-badge">Week ${week}</span>${cleanTitle}`;
   document.getElementById("lec-body").innerHTML = data.html;
 
+  // ---- "Practice for this week" panel (links to the in-site coding playground) ----
+  (function addPracticePanel() {
+    const all = [].concat(cur.leetcode || [], cur.robotics || []).filter((p) => p.pid);
+    if (!all.length) return;
+    const solved = (() => { try { return JSON.parse(localStorage.getItem("rp_prep_solved")) || {}; } catch { return {}; } })();
+    const panel = document.createElement("div");
+    panel.className = "lec-practice";
+    panel.innerHTML = `<h2 id="practice-this-week">💻 Practice for this week</h2>
+      <p>Solve these in the in-site editor (Python or C++), no setup needed.</p>`;
+    const ul = document.createElement("ul");
+    ul.className = "lec-practice-list";
+    all.forEach((p) => {
+      const li = document.createElement("li");
+      const done = solved[p.pid] ? `<span class="mini-solved">✓</span>` : "";
+      li.innerHTML = `${done}<a href="practice.html?p=${p.pid}">${p.name}</a>
+        <span class="badge ${p.diff}">${p.diff}</span>
+        <span class="tag">${p.tag || ""}</span>`;
+      ul.appendChild(li);
+    });
+    panel.appendChild(ul);
+    document.getElementById("lec-body").appendChild(panel);
+    // include in the TOC
+    (data.toc || []).push({ level: 2, txt: "Practice for this week", id: "practice-this-week" });
+  })();
+
   // ---- right TOC ----
   const tocNav = document.getElementById("toc-nav");
   (data.toc || []).forEach((t) => {

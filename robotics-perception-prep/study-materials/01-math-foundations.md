@@ -113,4 +113,4 @@ Euclidean distance treats every direction equally (equidistant points form a cir
 - *Mathematics for Machine Learning* (Deisenroth) — Ch. 2–5, free PDF.
 - 3Blue1Brown "Essence of Linear Algebra" for geometric intuition.
 
-➡ **Coding:** `coding-practice/robotics/w1_least_squares.py`, `w1_covariance.py`
+➡ **Practice (solve in-site):** [w1_least_squares.py](practice.html?p=rob-least-squares-line), [w1_covariance.py](practice.html?p=rob-covariance-mahalanobis)

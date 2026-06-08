@@ -23,8 +23,8 @@ const CURRICULUM = [
       { name: "Product of Array Except Self", pid: "product-except-self", url: "https://leetcode.com/problems/product-of-array-except-self/", diff: "Medium", tag: "Arrays" },
     ],
     robotics: [
-      { name: "Implement SVD-based least squares line fit", file: "coding-practice/robotics/w1_least_squares.py" },
-      { name: "Covariance + Mahalanobis distance from scratch", file: "coding-practice/robotics/w1_covariance.py" },
+      { name: "Least-Squares Line Fit", pid: "rob-least-squares-line", diff: "Easy", tag: "Linear Algebra", file: "coding-practice/robotics/w1_least_squares.py" },
+      { name: "Covariance & Mahalanobis Distance", pid: "rob-covariance-mahalanobis", diff: "Medium", tag: "Probability", file: "coding-practice/robotics/w1_covariance.py" },
     ],
   },
   {
@@ -46,8 +46,8 @@ const CURRICULUM = [
       { name: "Set Matrix Zeroes", pid: "set-matrix-zeroes", url: "https://leetcode.com/problems/set-matrix-zeroes/", diff: "Medium", tag: "Matrix" },
     ],
     robotics: [
-      { name: "Quaternion <-> rotation matrix <-> Euler converters", file: "coding-practice/robotics/w2_rotations.py" },
-      { name: "Chain TF transforms to project a point world->camera", file: "coding-practice/robotics/w2_transform_chain.py" },
+      { name: "Rotate a Vector by a Quaternion", pid: "rob-quaternion-rotate", diff: "Easy", tag: "3D Geometry", file: "coding-practice/robotics/w2_rotations.py" },
+      { name: "Compose SE(3) and Transform a Point", pid: "rob-transform-point", diff: "Medium", tag: "3D Geometry", file: "coding-practice/robotics/w2_transform_chain.py" },
     ],
   },
   {
@@ -69,8 +69,8 @@ const CURRICULUM = [
       { name: "Pacific Atlantic Water Flow", pid: "pacific-atlantic", url: "https://leetcode.com/problems/pacific-atlantic-water-flow/", diff: "Medium", tag: "Grid DFS" },
     ],
     robotics: [
-      { name: "Implement 2D convolution + Sobel edges (NumPy)", file: "coding-practice/robotics/w3_convolution.py" },
-      { name: "Project 3D points with K[R|t] and add distortion", file: "coding-practice/robotics/w3_projection.py" },
+      { name: "2D Cross-Correlation", pid: "rob-convolution-2d", diff: "Easy", tag: "Image Processing", file: "coding-practice/robotics/w3_convolution.py" },
+      { name: "Project a 3D Point to a Pixel", pid: "rob-project-point", diff: "Easy", tag: "Camera Model", file: "coding-practice/robotics/w3_projection.py" },
     ],
   },
   {
@@ -93,8 +93,8 @@ const CURRICULUM = [
       { name: "Find K Closest Elements", pid: "find-k-closest-elements", url: "https://leetcode.com/problems/find-k-closest-elements/", diff: "Medium", tag: "Binary Search" },
     ],
     robotics: [
-      { name: "RANSAC line/plane fitting from scratch", file: "coding-practice/robotics/w4_ransac.py" },
-      { name: "Estimate homography + warp; 8-point fundamental matrix", file: "coding-practice/robotics/w4_homography_fmatrix.py" },
+      { name: "RANSAC Line — Max Inliers", pid: "rob-ransac-line-inliers", diff: "Medium", tag: "Robust Fitting", file: "coding-practice/robotics/w4_ransac.py" },
+      { name: "2D Rigid Point-Set Alignment (Kabsch)", pid: "rob-rigid-align-2d", diff: "Medium", tag: "Registration", file: "coding-practice/robotics/w4_homography_fmatrix.py" },
     ],
   },
   {
@@ -116,8 +116,8 @@ const CURRICULUM = [
       { name: "Find Median from Data Stream", pid: "find-median-from-data-stream", url: "https://leetcode.com/problems/find-median-from-data-stream/", diff: "Hard", tag: "Heaps" },
     ],
     robotics: [
-      { name: "1D Kalman filter for constant-velocity tracking", file: "coding-practice/robotics/w5_kalman_1d.py" },
-      { name: "2D EKF for range-bearing landmark localization", file: "coding-practice/robotics/w5_ekf_localization.py" },
+      { name: "1D Kalman Filter (scalar)", pid: "rob-kalman-1d", diff: "Medium", tag: "State Estimation", file: "coding-practice/robotics/w5_kalman_1d.py" },
+      { name: "Inverse-Variance Sensor Fusion", pid: "rob-measurement-fusion", diff: "Easy", tag: "Sensor Fusion" },
     ],
   },
   {
@@ -139,8 +139,8 @@ const CURRICULUM = [
       { name: "Graph Valid Tree", pid: "graph-valid-tree", url: "https://leetcode.com/problems/graph-valid-tree/", diff: "Medium", tag: "Union-Find" },
     ],
     robotics: [
-      { name: "2D ICP (point-to-point) aligning two scans", file: "coding-practice/robotics/w6_icp.py" },
-      { name: "2D pose-graph optimization (Gauss-Newton)", file: "coding-practice/robotics/w6_pose_graph.py" },
+      { name: "ICP — One Iteration (2D)", pid: "rob-icp-2d-step", diff: "Hard", tag: "SLAM / Registration", file: "coding-practice/robotics/w6_icp.py" },
+      { name: "1D Pose-Graph Optimization", pid: "rob-pose-graph-1d", diff: "Hard", tag: "SLAM / Optimization", file: "coding-practice/robotics/w6_pose_graph.py" },
     ],
   },
   {
@@ -162,8 +162,8 @@ const CURRICULUM = [
       { name: "LRU Cache", pid: "lru-cache", url: "https://leetcode.com/problems/lru-cache/", diff: "Medium", tag: "Design" },
     ],
     robotics: [
-      { name: "IoU + Non-Max Suppression from scratch", file: "coding-practice/robotics/w7_nms_iou.py" },
-      { name: "mAP computation for object detection", file: "coding-practice/robotics/w7_map.py" },
+      { name: "IoU + Non-Max Suppression", pid: "rob-iou-nms", diff: "Medium", tag: "Detection", file: "coding-practice/robotics/w7_nms_iou.py" },
+      { name: "Average Precision (detection)", pid: "rob-average-precision", diff: "Hard", tag: "Detection Metrics", file: "coding-practice/robotics/w7_map.py" },
     ],
   },
   {
@@ -185,8 +185,8 @@ const CURRICULUM = [
       { name: "Time-Based Key-Value Store", pid: "time-based-key-value-store", url: "https://leetcode.com/problems/time-based-key-value-store/", diff: "Medium", tag: "Design" },
     ],
     robotics: [
-      { name: "Ring buffer for time-synced sensor messages", file: "coding-practice/robotics/w8_ring_buffer.py" },
-      { name: "Nearest-timestamp message synchronizer", file: "coding-practice/robotics/w8_time_sync.py" },
+      { name: "Sensor Ring Buffer", pid: "rob-ring-buffer", diff: "Easy", tag: "Systems / Design", file: "coding-practice/robotics/w8_ring_buffer.py" },
+      { name: "Nearest-Timestamp Sensor Sync", pid: "rob-time-sync", diff: "Medium", tag: "Systems / Sync", file: "coding-practice/robotics/w8_time_sync.py" },
     ],
   },
 ];

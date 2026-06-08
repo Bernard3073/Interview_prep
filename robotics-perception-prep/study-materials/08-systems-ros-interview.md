@@ -104,4 +104,4 @@ warehouse AMR / L2 driving feature."* Structure your answer:
 - "Grokking the System Design Interview" for structure (adapt to robotics).
 - Reread the survey papers and your own project notes.
 
-➡ **Coding:** `coding-practice/robotics/w8_ring_buffer.py`, `w8_time_sync.py`
+➡ **Practice (solve in-site):** [w8_ring_buffer.py](practice.html?p=rob-ring-buffer), [w8_time_sync.py](practice.html?p=rob-time-sync)

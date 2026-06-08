@@ -122,4 +122,4 @@ Use `N = log(1−p) / log(1 − wˢ)` with `p = 0.99`, `w = 0.5`, `s = 4`. Then 
 - Szeliski Ch. 7–8, 11.
 - Cyrill Stachniss "Photogrammetry" YouTube lectures (excellent, intuitive).
 
-➡ **Coding:** `coding-practice/robotics/w4_ransac.py`, `w4_homography_fmatrix.py`
+➡ **Practice (solve in-site):** [w4_ransac.py](practice.html?p=rob-ransac-line-inliers), [w4_homography_fmatrix.py](practice.html?p=rob-rigid-align-2d)

@@ -21,10 +21,13 @@ xdg-open index.html        # Linux
   table-of-contents, inline diagrams, and prev/next buttons.
 - Each lecture ends with **interview-style questions as click-to-reveal Q&A** —
   try to answer first, then expand to compare with a model answer.
-- Click any of the **24 LeetCode problems** to solve it **inside the site**
-  (`practice.html`): read the statement, write Python or C++ in the editor, and
-  **Run / Submit** against test cases. Code executes on real CPython 3.12 and g++ 13
+- Click any of the **40 coding problems** (24 LeetCode + 16 robotics/perception) to
+  solve it **inside the site** (`practice.html`): read the statement, write Python or
+  C++ in the editor, and **Run / Submit** against test cases. Numeric (robotics)
+  problems use a float-tolerant judge. Code executes on real CPython 3.12 and g++ 13
   via the Wandbox compile API, so the runner needs internet (the rest stays offline).
+- Each **lecture page** ends with a "Practice for this week" panel linking straight
+  to that week's problems, and each problem links back to its lecture.
 - Progress (checkboxes) and the dark/light theme are saved automatically in the
   browser via `localStorage` and shared across both pages.
 
@@ -39,7 +42,7 @@ robotics-perception-prep/
 ├── lecture.html / lecture.js    # in-site lecture reader
 ├── lectures-data.js             # lecture content as rendered HTML  ← what the site shows
 ├── practice.html / practice.js  # in-site LeetCode editor + test runner
-├── problems.js                  # 24 problems w/ verified test cases  ← what practice shows
+├── problems.js                  # 40 problems w/ verified test cases  ← what practice shows
 ├── curriculum.js                # the 8-week plan data (single source of truth)
 ├── style.css                    # shared theme for all pages
 ├── build_lectures.cjs           # regenerates lectures-data.js from markdown source
@@ -76,6 +79,12 @@ all tracked as checkboxes.
 
 ## 🧪 Running the robotics exercises
 
+> These `coding-practice/robotics/*.py` files are the **full numpy reference
+> versions** (richer than the in-site problems). The tracker links to them as
+> "📄 .py" next to each in-site robotics problem. To *practice* interactively,
+> use the in-site editor instead (no numpy needed); use these to study a complete,
+> idiomatic solution.
+
 They need only `numpy`. Each file has a problem statement, a reference solution,
 and an assertion-based self-test:
 
@@ -108,7 +117,8 @@ for f in w*.py; do echo "=== $f ==="; python "$f" || break; done
 - **Practice problems:** edit `gen_problems.py` (add a statement, starter code, and
   test inputs) and run `python3 gen_problems.py` — it computes the expected outputs
   from a reference solution and compile-checks the C++ starters, then writes
-  `problems.js`. All 24 of the curriculum's LeetCode problems are solvable in-site.
+  `problems.js`. All 40 problems (24 LeetCode + 16 robotics/perception) are solvable
+  in-site, in Python or C++.
 - **Look & feel:** edit `style.css` (theme variables live at the top in `:root`).
 
 ---

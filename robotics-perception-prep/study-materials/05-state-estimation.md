@@ -118,4 +118,4 @@ A filter is **inconsistent** when its reported covariance `P` doesn't match the 
 - Roger Labbe, *Kalman and Bayesian Filters in Python* — free, interactive notebooks.
 - Cyrill Stachniss filtering lectures (YouTube).
 
-➡ **Coding:** `coding-practice/robotics/w5_kalman_1d.py`, `w5_ekf_localization.py`
+➡ **Practice (solve in-site):** [w5_kalman_1d.py](practice.html?p=rob-kalman-1d), [w5_measurement_fusion](practice.html?p=rob-measurement-fusion) — plus the full [w5_ekf_localization.py](coding-practice/robotics/w5_ekf_localization.py) numpy reference

@@ -111,4 +111,4 @@ First **calibrate the extrinsics and time-sync** the sensors, then fuse — proj
 - Papers: ResNet, Faster R-CNN, YOLO, U-Net, Mask R-CNN, PointNet, PointPillars, DETR.
 - *Dive into Deep Learning* (d2l.ai) for hands-on.
 
-➡ **Coding:** `coding-practice/robotics/w7_nms_iou.py`, `w7_map.py`
+➡ **Practice (solve in-site):** [w7_nms_iou.py](practice.html?p=rob-iou-nms), [w7_map.py](practice.html?p=rob-average-precision)

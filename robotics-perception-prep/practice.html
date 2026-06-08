@@ -24,6 +24,11 @@
     <!-- problem list -->
     <aside class="prob-sidebar">
       <div class="sidebar-title">Problems</div>
+      <div class="prob-filter" id="prob-filter">
+        <button class="filt-btn active" data-filt="all">All</button>
+        <button class="filt-btn" data-filt="leetcode">LeetCode</button>
+        <button class="filt-btn" data-filt="robotics">Robotics</button>
+      </div>
       <nav id="prob-nav"></nav>
     </aside>
 
@@ -34,6 +39,8 @@
         <div class="prob-meta">
           <span id="prob-diff" class="badge"></span>
           <span id="prob-pattern" class="tag"></span>
+          <span id="prob-cat" class="cat-chip"></span>
+          <a id="prob-lecture" class="lecture-chip" href="#">📖 Lecture</a>
           <span id="prob-solved" class="solved-flag" hidden>✓ Solved</span>
         </div>
       </div>

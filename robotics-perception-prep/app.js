@@ -87,10 +87,19 @@
       })));
 
       body.appendChild(sectionTitle("Robotics / perception coding"));
-      body.appendChild(itemList(w.robotics.map((p, i) => ({
-        id: idFor(w.week, "rb", i),
-        html: `<span class="item-label"><a href="${p.file}" target="_blank">${p.name}</a></span>`,
-      }))));
+      body.appendChild(itemList(w.robotics.map((p, i) => {
+        const link = p.pid
+          ? `<a href="practice.html?p=${p.pid}">${p.name}</a> <span class="solve-chip">▶ solve in-site</span>`
+          : `<a href="${p.file}" target="_blank">${p.name}</a>`;
+        const ref = p.pid && p.file ? ` <a class="ref-link" href="${p.file}" target="_blank" title="full numpy reference">📄 .py</a>` : "";
+        const solvedBadge = p.pid && solvedSet()[p.pid] ? `<span class="mini-solved">✓</span>` : "";
+        return {
+          id: idFor(w.week, "rb", i),
+          html: `<span class="item-label">${solvedBadge}${link}${ref}</span>
+                 ${p.tag ? `<span class="tag">${p.tag}</span>` : ""}
+                 ${p.diff ? `<span class="badge ${p.diff}">${p.diff}</span>` : ""}`,
+        };
+      })));
 
       card.append(head, mini, body);
       weeksEl.appendChild(card);

@@ -125,4 +125,4 @@ That's **radial lens distortion** (barrel distortion). Fix it by calibrating the
 - First Principles of Computer Vision (Shree Nayar) YouTube series.
 - OpenCV calibration tutorial.
 
-➡ **Coding:** `coding-practice/robotics/w3_convolution.py`, `w3_projection.py`
+➡ **Practice (solve in-site):** [w3_convolution.py](practice.html?p=rob-convolution-2d), [w3_projection.py](practice.html?p=rob-project-point)

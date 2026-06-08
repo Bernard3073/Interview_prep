@@ -341,3 +341,24 @@ a.logo { text-decoration: none; }
 /* in-site solve chips on the tracker */
 .solve-chip { font-size: 10.5px; color: var(--accent-2); border: 1px solid color-mix(in srgb, var(--accent-2) 45%, var(--border)); border-radius: 999px; padding: 1px 7px; margin-left: 6px; white-space: nowrap; }
 .mini-solved { color: var(--accent-2); font-weight: 700; margin-right: 5px; }
+
+/* practice: category filter + chips */
+.prob-filter { display: flex; gap: 4px; margin-bottom: 10px; }
+.filt-btn { flex: 1; background: var(--card); border: 1px solid var(--border); color: var(--muted); font-size: 11.5px; padding: 5px 6px; border-radius: 7px; cursor: pointer; }
+.filt-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.pi-cat { font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 5px; flex-shrink: 0; letter-spacing: .03em; }
+.pi-cat.leetcode { color: var(--lc); border: 1px solid color-mix(in srgb, var(--lc) 45%, var(--border)); }
+.pi-cat.robotics { color: var(--rob); border: 1px solid color-mix(in srgb, var(--rob) 45%, var(--border)); }
+.cat-chip { font-size: 11px; padding: 2px 9px; border-radius: 999px; border: 1px solid var(--border); }
+.cat-chip.leetcode { color: var(--lc); } .cat-chip.robotics { color: var(--rob); }
+.lecture-chip { font-size: 11px; padding: 2px 9px; border-radius: 999px; text-decoration: none; color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--border)); }
+.lecture-chip:hover { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.ref-link { font-size: 11px; color: var(--muted); text-decoration: none; margin-left: 4px; }
+.ref-link:hover { color: var(--accent); }
+
+/* lecture: "practice for this week" panel */
+.lec-practice { margin-top: 30px; padding-top: 8px; border-top: 1px solid var(--border); }
+.lec-practice-list { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 6px; }
+.lec-practice-list li { display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: 10px; font-size: 14px; }
+.lec-practice-list a { color: var(--accent); text-decoration: none; flex: 1; }
+.lec-practice-list a:hover { text-decoration: underline; }

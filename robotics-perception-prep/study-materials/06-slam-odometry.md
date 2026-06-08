@@ -128,4 +128,4 @@ A factor graph is a bipartite graph of **variable nodes** (poses, landmarks, bia
 - Cyrill Stachniss SLAM course (YouTube) — graph SLAM, ICP, factor graphs.
 - ORB-SLAM3, VINS-Mono papers; GTSAM/Ceres tutorials.
 
-➡ **Coding:** `coding-practice/robotics/w6_icp.py`, `w6_pose_graph.py`
+➡ **Practice (solve in-site):** [w6_icp.py](practice.html?p=rob-icp-2d-step), [w6_pose_graph.py](practice.html?p=rob-pose-graph-1d)
