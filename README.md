@@ -37,7 +37,7 @@ internet, no build step required to use it.
 ## 📂 What's inside
 
 ```
-robotics-perception-prep/
+Interview_prep/
 ├── index.html / app.js          # progress tracker (home)
 ├── lecture.html / lecture.js    # in-site lecture reader
 ├── lectures-data.js             # lecture content as rendered HTML  ← what the site shows
