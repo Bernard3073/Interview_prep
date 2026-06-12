@@ -192,7 +192,7 @@ const CURRICULUM = [
   {
     week: 9,
     title: "C++ for Robotics",
-    goal: "The C++ idioms you're expected to speak fluently — RAII, ownership, move semantics, real-time memory, and concurrency. Best practiced by re-implementing the design problems in C++.",
+    goal: "The C++ idioms you're expected to speak fluently — RAII, ownership, move semantics, real-time memory, and concurrency. No new problems: re-solve earlier ones with the C++ tab (design/systems problems are the best C++ drills).",
     lecture: "lecture.html?week=9",
     topics: [
       "RAII & deterministic resource management",
@@ -204,15 +204,8 @@ const CURRICULUM = [
       "Concurrency: threads, mutex, atomics, data races",
       "Eigen / PCL / OpenCV / ROS2 & CMake basics",
     ],
-    leetcode: [
-      { name: "LRU Cache", pid: "lru-cache", url: "https://leetcode.com/problems/lru-cache/", diff: "Medium", tag: "Design / Pointers" },
-      { name: "Design Circular Queue", pid: "design-circular-queue", url: "https://leetcode.com/problems/design-circular-queue/", diff: "Medium", tag: "Ring buffer" },
-      { name: "Time-Based Key-Value Store", pid: "time-based-key-value-store", url: "https://leetcode.com/problems/time-based-key-value-store/", diff: "Medium", tag: "Design / Binary Search" },
-    ],
-    robotics: [
-      { name: "Sensor Ring Buffer", pid: "rob-ring-buffer", diff: "Easy", tag: "Systems / Design", file: "coding-practice/robotics/w8_ring_buffer.py" },
-      { name: "1D Pose-Graph Optimization", pid: "rob-pose-graph-1d", diff: "Hard", tag: "SLAM / Optimization", file: "coding-practice/robotics/w6_pose_graph.py" },
-    ],
+    leetcode: [],
+    robotics: [],
   },
 ];
 

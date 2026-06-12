@@ -388,4 +388,4 @@ A `virtual` call goes through a **vtable indirection** (load the vtable pointer,
 - C++ Core Guidelines (isocpp.github.io/CppCoreGuidelines).
 - Compiler Explorer (godbolt.org) to *see* the generated assembly.
 
-➡ **Practice (solve in-site, in C++):** [LRU Cache](practice.html?p=lru-cache), [Design Circular Queue](practice.html?p=design-circular-queue), [Sensor Ring Buffer](practice.html?p=rob-ring-buffer)
+➡ **Practice tip:** this week adds no new problems — open any problem on the [practice page](practice.html) and solve it with the **C++** tab. The design / systems ones (caches, queues, ring buffers, time-based store) make the best C++ drills.

@@ -71,6 +71,7 @@
         html: `<span class="item-label">${t}</span>`,
       }))));
 
+      if (w.leetcode.length) {
       body.appendChild(sectionTitle("LeetCode practice"));
       body.appendChild(itemList(w.leetcode.map((p, i) => {
         // In-site problems (have a pid) open the practice page; others link out.
@@ -85,7 +86,9 @@
                  <span class="badge ${p.diff}">${p.diff}</span>`,
         };
       })));
+      }
 
+      if (w.robotics.length) {
       body.appendChild(sectionTitle("Robotics / perception coding"));
       body.appendChild(itemList(w.robotics.map((p, i) => {
         const link = p.pid
@@ -100,6 +103,7 @@
                  ${p.diff ? `<span class="badge ${p.diff}">${p.diff}</span>` : ""}`,
         };
       })));
+      }
 
       card.append(head, mini, body);
       weeksEl.appendChild(card);
