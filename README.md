@@ -1,7 +1,8 @@
 # 🤖 Robotics & Perception Engineer — Interview Prep
 
-A self-contained, **trackable** 8-week study plan for robotics/perception engineer
-interviews. Python + C++ focus, intermediate level. Includes in-browser lecture
+A self-contained, **trackable** 8-week study plan (plus a Week 9 C++ deep-dive) for
+robotics/perception engineer interviews. Python + C++ focus, intermediate level.
+Includes in-browser lecture
 notes (rendered as real web pages, with diagrams), LeetCode pattern practice, and
 from-scratch robotics coding exercises with self-tests.
 
@@ -43,7 +44,7 @@ Interview_prep/
 ├── lectures-data.js             # lecture content as rendered HTML  ← what the site shows
 ├── practice.html / practice.js  # in-site LeetCode editor + test runner
 ├── problems.js                  # 40 problems w/ verified test cases  ← what practice shows
-├── curriculum.js                # the 8-week plan data (single source of truth)
+├── curriculum.js                # the curriculum data (single source of truth)
 ├── style.css                    # shared theme for all pages
 ├── build_lectures.cjs           # regenerates lectures-data.js from markdown source
 ├── gen_problems.py              # regenerates problems.js (verifies test cases locally)
@@ -61,7 +62,7 @@ Interview_prep/
 > *editable source*. Edit them and run `node build_lectures.cjs` to regenerate the
 > rendered notes, or just edit `lectures-data.js` directly.
 
-## 🗓️ The 8-week plan at a glance
+## 🗓️ The plan at a glance (8 weeks + a C++ deep-dive)
 
 | Week | Theme |
 |---|---|
@@ -73,6 +74,7 @@ Interview_prep/
 | 6 | SLAM, odometry & sensor fusion (VO, ICP, pose graphs, VIO) |
 | 7 | Deep learning for perception (detection, segmentation, 3D, point clouds) |
 | 8 | Systems, ROS & mock interviews |
+| 9 | C++ for robotics (RAII, smart pointers, move semantics, real-time, concurrency) |
 
 Each week = lecture topics + 3 LeetCode problems + 2 robotics coding exercises,
 all tracked as checkboxes.
