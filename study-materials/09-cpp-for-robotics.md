@@ -61,6 +61,19 @@ Express **who owns** a heap object in the type system:
 - **Raw pointers / references** — fine for **non-owning** access ("I observe but
   don't manage lifetime"). A raw `T*` should never own.
 
+```cpp
+// A pipeline node solely owns its detector; the map is shared between nodes.
+auto detector = std::make_unique<Detector>(config);   // sole owner
+auto map      = std::make_shared<OccupancyMap>();      // shared owner
+
+planner.setMap(map);                  // planner holds a shared_ptr -> use_count == 2
+std::weak_ptr<OccupancyMap> watch = map;               // observes, does NOT own
+
+if (auto m = watch.lock()) {          // promote to shared_ptr iff still alive
+    m->update(scan);
+}                                     // `detector` is freed automatically here
+```
+
 > Default to `unique_ptr`; reach for `shared_ptr` only when ownership is genuinely
 > shared. Overusing `shared_ptr` hides lifetimes and adds atomic overhead.
 
@@ -85,6 +98,19 @@ guts (pointer + size) and leaves the source empty — cheap.
 - **Rule of 5:** with move semantics, that grows to include the move ctor and move
   assignment.
 
+```cpp
+struct PointCloud {
+    std::vector<float> pts;          // owns the data
+    // Rule of 0: std::vector already gives a correct copy AND move — write neither.
+};
+
+PointCloud makeCloud();              // returns by value
+
+PointCloud a = makeCloud();          // move / copy-elision — no deep copy
+PointCloud b = std::move(a);         // steals a.pts; `a` is now empty-but-valid
+queue.push_back(std::move(b));       // hand ownership to the queue (no copy)
+```
+
 ---
 
 ## 5. const correctness & references vs pointers
@@ -97,6 +123,19 @@ guts (pointer + size) and leaves the source empty — cheap.
   "always present"; use pointers (or `optional`) when absence is meaningful.
 - **Parameter passing:** by value for cheap/owned copies; **`const T&`** for large
   read-only inputs; **`T&&`** when you'll take ownership; `T&` for in/out params.
+
+```cpp
+class Pose {
+public:
+    double yaw() const { return yaw_; }                 // const: won't modify *this
+    double distanceTo(const Pose& other) const;         // const& param: no copy
+    void   integrate(double v, double w, double dt);    // non-const: mutates state
+private:
+    double x_{}, y_{}, yaw_{};
+};
+
+void log(const Pose& p);     // read-only, no copy made, cannot mutate p
+```
 
 ---
 
@@ -115,6 +154,20 @@ guts (pointer + size) and leaves the source empty — cheap.
 - **`unordered_map` for lookups**, `map` only when you need ordering.
 - **Iterator invalidation:** `vector` reallocation invalidates all iterators/
   pointers; erasing invalidates from the erase point. Know the rules per container.
+
+```cpp
+std::vector<int> v;
+v.reserve(1000);                       // one allocation up front — no reallocs below
+for (int i = 0; i < 1000; ++i) v.push_back(i);
+
+std::unordered_map<int, Track> tracks; // O(1) average lookup by id
+if (auto it = tracks.find(id); it != tracks.end())
+    it->second.update(z);
+
+// Erase-while-iterating: erase() returns the next valid iterator.
+for (auto it = v.begin(); it != v.end(); )
+    it = (*it % 2 == 0) ? v.erase(it) : std::next(it);
+```
 
 ---
 
@@ -135,6 +188,21 @@ guts (pointer + size) and leaves the source empty — cheap.
 - **Real-time = worst case, not average.** No unbounded loops, no blocking I/O, no
   surprise allocations.
 
+```cpp
+// Real-time loop: allocate ONCE, reuse every cycle — no heap in the hot path.
+std::vector<float> buffer(MAX_POINTS);            // preallocated outside the loop
+while (running) {
+    size_t n = sensor.read(buffer.data(), buffer.size());   // fills, no allocation
+    process(buffer.data(), n);
+}
+
+// Eigen alignment gotcha: a heap-allocated class with a fixed-size Eigen member.
+struct KalmanState {
+    Eigen::Matrix4d P;                 // fixed-size -> needs over-aligned storage
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW    // makes `new KalmanState` safe (pre-C++17)
+};
+```
+
 ---
 
 ## 8. Concurrency
@@ -149,6 +217,32 @@ guts (pointer + size) and leaves the source empty — cheap.
   (lock ordering!), and **priority inversion** in real-time systems.
 - Typical pattern: a **bounded (ring) buffer** between a sensor-capture thread and
   a processing thread, guarded by a mutex + condition variable.
+
+```cpp
+std::mutex m;
+std::condition_variable cv;
+std::queue<Scan> q;
+std::atomic<bool> running{true};
+
+void producer(Sensor& s) {
+    while (running) {
+        Scan scan = s.capture();
+        { std::lock_guard<std::mutex> lk(m); q.push(std::move(scan)); }  // lock only to push
+        cv.notify_one();
+    }
+}
+
+void consumer() {
+    while (running) {
+        std::unique_lock<std::mutex> lk(m);
+        cv.wait(lk, [&]{ return !q.empty() || !running; });   // sleep until work arrives
+        if (q.empty()) continue;
+        Scan s = std::move(q.front()); q.pop();
+        lk.unlock();                                          // process OUTSIDE the lock
+        process(s);
+    }
+}
+```
 
 ---
 
@@ -165,6 +259,31 @@ guts (pointer + size) and leaves the source empty — cheap.
 - **CMake** is the de-facto build system: `add_library`, `target_link_libraries`,
   `target_include_directories`, with transitive `PUBLIC`/`PRIVATE` usage.
 
+```cpp
+#include <Eigen/Dense>
+
+Eigen::Matrix3d R = Eigen::AngleAxisd(yaw, Eigen::Vector3d::UnitZ()).toRotationMatrix();
+Eigen::Vector3d t(1.0, 2.0, 0.0);
+
+Eigen::Vector3d p_world = R * p_body + t;          // transform a point
+Eigen::Matrix3d cov_w   = R * cov * R.transpose(); // propagate a covariance
+
+// Solve a (possibly overdetermined) linear system robustly:
+Eigen::MatrixXd A = Eigen::MatrixXd::Random(6, 4);
+Eigen::VectorXd x = A.colPivHouseholderQr().solve(b);
+```
+
+A minimal `CMakeLists.txt` for the above:
+
+```cmake
+cmake_minimum_required(VERSION 3.16)
+project(perception)
+find_package(Eigen3 REQUIRED)
+add_executable(node src/node.cpp)
+target_link_libraries(node PRIVATE Eigen3::Eigen)
+target_compile_features(node PRIVATE cxx_std_17)
+```
+
 ---
 
 ## 10. Modern C++ worth knowing (C++11 → 20)
@@ -174,6 +293,24 @@ guts (pointer + size) and leaves the source empty — cheap.
 `std::span`, `constexpr`, `std::chrono` for timing, `std::variant`, and (C++20)
 concepts, ranges, `std::jthread`. You don't need them all — but `auto`, lambdas,
 range-for, and structured bindings should be second nature.
+
+```cpp
+auto poses = loadPoses();                       // auto: deduce the type
+
+for (const auto& p : poses) { /* range-based for */ }
+
+auto [theta, tx, ty] = solveAlignment(a, b);    // structured bindings on a tuple/struct
+
+std::optional<Match> findMatch(int id);         // "maybe a value"
+if (auto m = findMatch(id)) use(*m);
+
+auto cost = [&](const Pose& p){ return error(p, target); };   // lambda capturing by ref
+
+auto t0 = std::chrono::steady_clock::now();     // timing
+// ... work ...
+double ms = std::chrono::duration<double, std::milli>(
+                std::chrono::steady_clock::now() - t0).count();
+```
 
 ---
 
@@ -187,6 +324,21 @@ range-for, and structured bindings should be second nature.
   overflow**, **null dereference** — all UB, meaning the compiler may do *anything*.
 - A surprising number of "weird robot behavior" bugs are UB or a lifetime bug, not
   an algorithm bug. Tools: `-Wall -Wextra`, AddressSanitizer/UBSan, `valgrind`.
+
+```cpp
+// BUG: returns a reference to a destroyed local -> dangling, use-after-free (UB).
+const Pose& latest() {
+    Pose p = readPose();
+    return p;                 // `p` dies at return; caller gets a dangling reference
+}
+
+// BUG: caching a pointer into a vector that then reallocates.
+int* first = &v[0];
+v.push_back(x);               // may reallocate the buffer...
+*first = 5;                   // ...so `first` now dangles -> UB
+
+// FIX: return by value; index by position instead of caching raw pointers/iterators.
+```
 
 ---
 
