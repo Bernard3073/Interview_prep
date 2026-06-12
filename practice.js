@@ -70,10 +70,25 @@
   // ---------- editor helpers ----------
   const codeEl = document.getElementById("code");
   const codeKey = (id, l) => `rp_code_${id}_${l}`;
+  // Snapshot of the code that actually PASSED, kept separately from the live draft
+  // so editing or resetting never loses your accepted solution.
+  const solnKey = (id, l) => `rp_soln_${id}_${l}`;
+  const solnBtn = document.getElementById("load-soln");
+
   function loadCode() {
     const saved = localStorage.getItem(codeKey(pid, lang));
     codeEl.value = saved != null ? saved : byId(pid).starter[lang];
+    updateSolnBtn();
   }
+  function updateSolnBtn() {
+    solnBtn.hidden = localStorage.getItem(solnKey(pid, lang)) == null;
+  }
+  solnBtn.addEventListener("click", () => {
+    const sol = localStorage.getItem(solnKey(pid, lang));
+    if (sol == null) return;
+    codeEl.value = sol;
+    localStorage.setItem(codeKey(pid, lang), sol);
+  });
   codeEl.addEventListener("input", () => localStorage.setItem(codeKey(pid, lang), codeEl.value));
   // Tab inserts 4 spaces
   codeEl.addEventListener("keydown", (e) => {
@@ -226,9 +241,11 @@
 
     if (all && allPass) {
       solved[pid] = true; saveSolved(solved);
+      localStorage.setItem(solnKey(pid, lang), code);   // keep the accepted solution
+      updateSolnBtn();
       document.getElementById("prob-solved").hidden = false;
       buildNav();
-      resultsEl.insertAdjacentHTML("afterbegin", `<div class="run-status ok">🎉 Marked as solved!</div>`);
+      resultsEl.insertAdjacentHTML("afterbegin", `<div class="run-status ok">🎉 Marked as solved! Your accepted solution is saved — restore it anytime with “✓ My solution”.</div>`);
     }
   }
 
