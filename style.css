@@ -142,6 +142,10 @@ a.logo { text-decoration: none; }
 
 /* center article */
 .lec-main { min-width: 0; }
+/* Keep all article content inside its column so it can never overlap the TOC. */
+#lec-article { min-width: 0; overflow-wrap: anywhere; }
+#lec-body { min-width: 0; }
+#lec-body > * { max-width: 100%; }
 #lec-article {
   background: var(--card); border: 1px solid var(--border); border-radius: 16px;
   padding: 36px 44px; box-shadow: var(--shadow);
@@ -172,7 +176,7 @@ a.logo { text-decoration: none; }
 }
 .lec-pre {
   background: #0b0e18; border: 1px solid var(--border); border-radius: 10px;
-  padding: 14px 16px; overflow-x: auto; margin: 14px 0;
+  padding: 14px 16px; overflow-x: auto; margin: 14px 0; max-width: 100%;
 }
 [data-theme="light"] .lec-pre { background: #f1f4fb; }
 .lec-pre code {
@@ -219,7 +223,7 @@ a.logo { text-decoration: none; }
 
 .toc-fab { display: none; }
 
-@media (max-width: 1100px) {
+@media (max-width: 1180px) {
   .reader-layout { grid-template-columns: 220px minmax(0,1fr); }
   .lec-toc { display: none; position: fixed; right: 16px; bottom: 70px; top: auto;
     width: 250px; max-height: 60vh; overflow-y: auto; background: var(--card);
