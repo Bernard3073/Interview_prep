@@ -79,6 +79,7 @@
     const saved = localStorage.getItem(codeKey(pid, lang));
     codeEl.value = saved != null ? saved : byId(pid).starter[lang];
     updateSolnBtn();
+    renderHL(); syncScroll();
   }
   function updateSolnBtn() {
     solnBtn.hidden = localStorage.getItem(solnKey(pid, lang)) == null;
@@ -88,9 +89,15 @@
     if (sol == null) return;
     codeEl.value = sol;
     localStorage.setItem(codeKey(pid, lang), sol);
+    renderHL();
   });
+  const hlEl = document.getElementById("code-hl");
+  function renderHL() { if (window.highlightCode) hlEl.innerHTML = highlightCode(codeEl.value, lang); }
+  function syncScroll() { hlEl.scrollTop = codeEl.scrollTop; hlEl.scrollLeft = codeEl.scrollLeft; }
+
   const persist = () => localStorage.setItem(codeKey(pid, lang), codeEl.value);
-  codeEl.addEventListener("input", persist);
+  codeEl.addEventListener("input", () => { persist(); renderHL(); });
+  codeEl.addEventListener("scroll", syncScroll);
 
   const UNIT = "    "; // one indent level = 4 spaces
 
@@ -101,7 +108,7 @@
       const s = codeEl.selectionStart, en = codeEl.selectionEnd;
       codeEl.value = codeEl.value.slice(0, s) + text + codeEl.value.slice(en);
       codeEl.selectionStart = codeEl.selectionEnd = s + text.length;
-      persist();
+      persist(); renderHL();
     }
   }
 
@@ -311,6 +318,7 @@
     if (confirm("Reset your code to the starter template?")) {
       codeEl.value = byId(pid).starter[lang];
       localStorage.setItem(codeKey(pid, lang), codeEl.value);
+      renderHL();
     }
   });
 

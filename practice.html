@@ -65,7 +65,10 @@
           <button id="submit-btn" class="primary-btn">✓ Submit</button>
         </div>
       </div>
-      <textarea id="code" spellcheck="false" autocomplete="off"></textarea>
+      <div class="editor-wrap">
+        <pre class="editor-hl" id="code-hl" aria-hidden="true"></pre>
+        <textarea id="code" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off" wrap="off"></textarea>
+      </div>
       <div class="console" id="console">
         <div class="console-head">
           <span>Results</span>
@@ -78,6 +81,7 @@
 
   <script src="curriculum.js"></script>
   <script src="problems.js"></script>
+  <script src="highlight.js"></script>
   <script src="practice.js"></script>
 </body>
 </html>

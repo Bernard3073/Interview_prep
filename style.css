@@ -308,12 +308,33 @@ a.logo { text-decoration: none; }
 .primary-btn { background: var(--accent-2); color: #06231b; border: none; padding: 9px 16px; border-radius: 9px; font-weight: 700; cursor: pointer; font-size: 13px; }
 .primary-btn:hover { filter: brightness(1.08); }
 .primary-btn:disabled, .ghost-btn:disabled { opacity: .5; cursor: not-allowed; }
-#code {
-  flex: 1; min-height: 200px; resize: none; border: none; outline: none;
-  background: #0b0e18; color: #d7e3ff; padding: 16px; font-size: 13.5px; line-height: 1.55;
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; tab-size: 4;
+/* Code editor: a transparent textarea over a syntax-highlighted layer.
+   Both must share identical font metrics/padding so the text aligns exactly. */
+.editor-wrap { position: relative; flex: 1; min-height: 200px; background: #1e1e1e; overflow: hidden; }
+#code, .editor-hl {
+  position: absolute; inset: 0; margin: 0; border: 0; padding: 16px;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 13.5px; line-height: 1.55; tab-size: 4;
+  white-space: pre; overflow-wrap: normal; word-break: normal;
 }
-[data-theme="light"] #code { background: #0f1320; color: #d7e3ff; }
+#code {
+  z-index: 2; width: 100%; height: 100%; resize: none; outline: none;
+  background: transparent; color: transparent; caret-color: #d4d4d4; overflow: auto;
+}
+#code::selection { background: rgba(38, 79, 120, 0.6); }
+.editor-hl { z-index: 1; overflow: hidden; pointer-events: none; color: #d4d4d4; }
+
+/* VS Code Dark+ token colors */
+.tok-comment { color: #6a9955; font-style: italic; }
+.tok-string  { color: #ce9178; }
+.tok-num     { color: #b5cea8; }
+.tok-kw      { color: #c586c0; }   /* control flow (if/for/return…) */
+.tok-key     { color: #569cd6; }   /* storage / type keywords */
+.tok-const   { color: #569cd6; }   /* True/False/None */
+.tok-type    { color: #4ec9b0; }   /* std types */
+.tok-fn      { color: #dcdcaa; }   /* function calls */
+.tok-builtin { color: #dcdcaa; }
+.tok-pre     { color: #c586c0; }   /* C++ preprocessor */
 
 /* console */
 .console { border-top: 1px solid var(--border); background: var(--card); max-height: 42%; overflow-y: auto; }
