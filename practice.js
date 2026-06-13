@@ -89,15 +89,66 @@
     codeEl.value = sol;
     localStorage.setItem(codeKey(pid, lang), sol);
   });
-  codeEl.addEventListener("input", () => localStorage.setItem(codeKey(pid, lang), codeEl.value));
-  // Tab inserts 4 spaces
+  const persist = () => localStorage.setItem(codeKey(pid, lang), codeEl.value);
+  codeEl.addEventListener("input", persist);
+
+  const UNIT = "    "; // one indent level = 4 spaces
+
+  // Insert text at the caret, preserving native undo where possible.
+  function insertText(text) {
+    const ok = document.execCommand && document.execCommand("insertText", false, text);
+    if (!ok) {                       // fallback for browsers without execCommand
+      const s = codeEl.selectionStart, en = codeEl.selectionEnd;
+      codeEl.value = codeEl.value.slice(0, s) + text + codeEl.value.slice(en);
+      codeEl.selectionStart = codeEl.selectionEnd = s + text.length;
+      persist();
+    }
+  }
+
+  // Editor conveniences: Tab indents, Enter auto-indents (and continues blocks),
+  // and in C++ a closing brace auto-dedents / brace pairs expand.
   codeEl.addEventListener("keydown", (e) => {
+    const v = codeEl.value, s = codeEl.selectionStart, en = codeEl.selectionEnd;
+
     if (e.key === "Tab") {
       e.preventDefault();
-      const s = codeEl.selectionStart, en = codeEl.selectionEnd;
-      codeEl.value = codeEl.value.slice(0, s) + "    " + codeEl.value.slice(en);
-      codeEl.selectionStart = codeEl.selectionEnd = s + 4;
-      localStorage.setItem(codeKey(pid, lang), codeEl.value);
+      insertText(UNIT);
+      return;
+    }
+
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const lineStart = v.lastIndexOf("\n", s - 1) + 1;
+      const curLine = v.slice(lineStart, s);
+      const baseIndent = (curLine.match(/^[ \t]*/) || [""])[0];
+      const trimmed = curLine.replace(/\s+$/, "");
+      // Open a new indent level after a block header.
+      const opensBlock =
+        (lang === "python" && /:$/.test(trimmed)) ||
+        (lang === "cpp" && (/[{([]$/.test(trimmed) ||
+          /^\s*(if|for|while|else\s+if|else|do|switch)\b.*\)\s*$/.test(curLine) ||
+          /^\s*else\s*$/.test(curLine)));
+      const indent = baseIndent + (opensBlock ? UNIT : "");
+      const after = v.slice(en, en + 1);
+      // C++: pressing Enter between `{` and `}` drops the brace to its own line.
+      if (lang === "cpp" && /\{$/.test(trimmed) && after === "}") {
+        insertText("\n" + indent + "\n" + baseIndent);
+        codeEl.selectionStart = codeEl.selectionEnd = s + 1 + indent.length;
+      } else {
+        insertText("\n" + indent);
+      }
+      return;
+    }
+
+    // C++: typing `}` on a blank, indented line snaps it out one level.
+    if (lang === "cpp" && e.key === "}" && s === en) {
+      const lineStart = v.lastIndexOf("\n", s - 1) + 1;
+      const before = v.slice(lineStart, s);
+      if (/^[ \t]+$/.test(before) && before.length >= UNIT.length) {
+        e.preventDefault();
+        codeEl.selectionStart = s - UNIT.length;  // select the trailing indent
+        insertText("}");                          // replace it with the brace
+      }
     }
   });
 
