@@ -246,7 +246,106 @@ void consumer() {
 
 ---
 
-## 9. The robotics C++ ecosystem
+## 9. Ring buffers — the real-time workhorse
+
+A **ring buffer** (a.k.a. **circular queue**) is a **fixed-capacity** queue stored in a
+**pre-allocated** array whose indices *wrap around* (`% cap`, or a bitmask when the
+capacity is a power of two). It's the most common data structure in robotics
+middleware — sensor drivers, message queues, log buffers, lock-free hand-offs —
+because:
+
+- **O(1) push and pop**, contiguous and cache-friendly.
+- **Bounded memory** and **zero allocation after construction** → safe in a real-time
+  callback (no `malloc` in the hot path).
+- A natural **producer/consumer buffer** between a fast sensor callback and slower
+  processing.
+
+> "Fixed-capacity, pre-allocated ring buffer" is three words describing one array:
+> *circular* = wrap-around indexing, *fixed-capacity* = it never grows, *pre-allocated*
+> = the storage is allocated once up front.
+
+### Mechanics
+Track a write index plus either a read index or a count. The next element goes at
+`head % cap`; wrap-around reuses old slots. **Full** when `count == cap` (or
+`head − tail == cap`); **empty** when `count == 0` (or `head == tail`).
+
+### Overflow policy — the real design decision
+When a `push` arrives and the buffer is full you must choose:
+- **Reject newest** — drop the incoming item (classic bounded queue).
+- **Block / backpressure** — make the producer wait (never lose data, but stalls a
+  hardware callback — usually unacceptable in flight).
+- **Drop oldest (keep-latest)** — overwrite the oldest so the freshest data survives;
+  best for perception, where stale frames are useless and latency must stay bounded.
+
+### A simple fixed-capacity ring buffer
+
+```cpp
+template <class T>
+class RingBuffer {
+    std::vector<T> buf_;        // pre-allocated once (fixed capacity)
+    size_t head_ = 0;          // index of the oldest element
+    size_t count_ = 0;         // how many elements are currently stored
+public:
+    explicit RingBuffer(size_t capacity) : buf_(capacity) {}
+
+    bool   empty() const { return count_ == 0; }
+    bool   full()  const { return count_ == buf_.size(); }
+    size_t size()  const { return count_; }
+
+    // keep-latest: when full, drop the oldest so the newest always fits
+    void push(const T& x) {
+        if (full()) { head_ = (head_ + 1) % buf_.size(); --count_; }  // drop oldest
+        buf_[(head_ + count_) % buf_.size()] = x;                     // write newest
+        ++count_;
+    }
+    bool pop(T& out) {                          // take the oldest
+        if (empty()) return false;
+        out = buf_[head_];
+        head_ = (head_ + 1) % buf_.size();
+        --count_;
+        return true;
+    }
+    const T& newest() const { return buf_[(head_ + count_ - 1) % buf_.size()]; }
+};
+```
+
+### Making it thread-safe — lock-free SPSC
+When a sensor thread (producer) feeds a processing thread (consumer), wrap the
+indices in **atomics** so no mutex is needed. The rule that keeps it lock-free *and*
+race-free: **one writer per index** — the producer owns `head_`, the consumer owns
+`tail_` — paired with **release/acquire** so a slot's data publishes before its index.
+
+```cpp
+template <class T, size_t N>                 // single-producer / single-consumer; N = capacity
+class SpscRing {
+    std::array<T, N> buf_{};                 // pre-allocated, no heap in flight
+    std::atomic<size_t> head_{0}, tail_{0};  // producer writes head_, consumer writes tail_
+public:
+    bool push(const T& x) {                  // producer only
+        size_t h = head_.load(std::memory_order_relaxed);
+        if (h - tail_.load(std::memory_order_acquire) == N) return false;  // full
+        buf_[h % N] = x;
+        head_.store(h + 1, std::memory_order_release);                     // publish
+        return true;
+    }
+    bool pop(T& out) {                        // consumer only
+        size_t t = tail_.load(std::memory_order_relaxed);
+        if (t == head_.load(std::memory_order_acquire)) return false;      // empty
+        out = buf_[t % N];
+        tail_.store(t + 1, std::memory_order_release);
+        return true;
+    }
+};
+```
+
+> This SPSC version *rejects* when full (returns `false`). To keep-latest **without a
+> lock**, keep the producer the sole writer of `head_` and have the consumer *skip*
+> any frames the producer overwrote — exactly the
+> [Real-Time Frame Ingest Buffer](practice.html?p=rob-frame-ingest) practice problem.
+
+---
+
+## 10. The robotics C++ ecosystem
 
 - **Eigen** — header-only linear algebra. Know fixed-size (`Matrix3d`, stack, fast)
   vs dynamic (`MatrixXd`, heap); lazy evaluation/expression templates; use
@@ -286,7 +385,7 @@ target_compile_features(node PRIVATE cxx_std_17)
 
 ---
 
-## 10. Modern C++ worth knowing (C++11 → 20)
+## 11. Modern C++ worth knowing (C++11 → 20)
 
 `auto`, range-based `for`, **lambdas** (and captures), **structured bindings**
 (`auto [a, b] = pair`), `std::optional`, `std::array`, `std::string_view`,
@@ -314,7 +413,7 @@ double ms = std::chrono::duration<double, std::milli>(
 
 ---
 
-## 11. Common pitfalls & undefined behavior
+## 12. Common pitfalls & undefined behavior
 
 - **Dangling reference / use-after-free** — returning a reference to a local,
   storing a pointer to a `vector` element then growing the vector.
