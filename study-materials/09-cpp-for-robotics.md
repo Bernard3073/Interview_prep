@@ -381,43 +381,6 @@ Fixed-size, vectorizable Eigen types (e.g. `Eigen::Matrix4d`, `Vector4f`) requir
 ??? Why can virtual functions hurt performance, and when should you avoid them?
 A `virtual` call goes through a **vtable indirection** (load the vtable pointer, load the function pointer, call), which adds a small cost and — more importantly — usually **prevents inlining** and can cause an instruction-cache/branch-predictor miss. That's negligible for setup or low-rate code, but in a **tight per-sample hot loop** (e.g. processing every point in a cloud) it can matter; there you prefer static dispatch (templates/CRTP) or a non-virtual design. Don't prematurely optimize — profile first — but know the mechanism.
 
-??? System design: a 30 Hz camera callback feeds an async perception model. Design a thread-safe structure to ingest frames without dropping data, minimize latency, and avoid dynamic allocation in flight.
-This is a **single-producer / single-consumer (SPSC)** hand-off — the camera callback produces, the perception thread consumes — so design for that, not a general MPMC queue. Key decisions:
-
-- **Preallocate a pool of frame buffers at startup** (N full-resolution images) and never `new`/`malloc` in the callback. The 30 Hz callback writes pixels into a free slot — bounded, deterministic time, no heap in flight.
-- **Use a fixed-capacity ring buffer of slots** (capacity a power of two for cheap masking) and pass **indices/pointers, not copies** — zero-copy hand-off keeps latency low.
-- **Make it lock-free (SPSC)** with two atomics (head/tail) and acquire/release ordering. The real-time callback must never block on a lock the consumer holds — that avoids **priority inversion** and latency spikes; an SPSC ring needs no mutex at all.
-- **"Never drop" vs "minimize latency" is a genuine trade-off.** If the model is slower than 30 Hz you must pick: **keep-latest / overwrite-oldest** (best for perception — the freshest frame matters, stale ones are useless, and latency stays bounded) or **block/backpressure** (truly lossless but stalls a hardware callback — usually unacceptable in flight). Size the ring to absorb worst-case consumer jitter and document the policy; for a slow model, a 2–3 slot **keep-latest** ring (triple buffering) is the usual answer.
-- **Wake the consumer** with a `condition_variable`/semaphore so it sleeps instead of busy-waiting; the producer's `notify` is cheap and non-blocking. **Return slots to the pool** when the consumer is done so the producer only ever writes to free slots (caps memory, prevents use-after-free).
-
-```cpp
-template <class Frame, size_t N>            // N must be a power of two
-class FrameRing {                           // lock-free SPSC over a preallocated pool
-    std::array<Frame, N> slots_{};          // allocated once — no heap in flight
-    std::atomic<size_t> head_{0}, tail_{0}; // producer owns head_, consumer owns tail_
-    static constexpr size_t MASK = N - 1;
-public:
-    Frame* acquireWrite() {                 // producer: a slot to fill (nullptr if full)
-        size_t h = head_.load(std::memory_order_relaxed);
-        if (h - tail_.load(std::memory_order_acquire) == N) return nullptr;
-        return &slots_[h & MASK];
-    }
-    void publish() {                        // producer: make the filled frame visible
-        head_.store(head_.load(std::memory_order_relaxed) + 1, std::memory_order_release);
-    }
-    Frame* acquireRead() {                   // consumer: oldest unread (nullptr if empty)
-        size_t t = tail_.load(std::memory_order_relaxed);
-        if (t == head_.load(std::memory_order_acquire)) return nullptr;
-        return &slots_[t & MASK];
-    }
-    void release() {                        // consumer: done — free the slot
-        tail_.store(tail_.load(std::memory_order_relaxed) + 1, std::memory_order_release);
-    }
-};
-```
-
-Camera callback (producer): `if (auto* f = ring.acquireWrite()) { fill(*f, image); ring.publish(); cv.notify_one(); }` — else apply the keep-latest policy (drop or overwrite). Perception thread (consumer): wait on `cv`, `acquireRead()` (optionally skip ahead to the newest slot for keep-latest), process in place, then `release()`.
-
 ## Resources
 - *Effective Modern C++* (Scott Meyers) — the canonical interview-prep book.
 - *A Tour of C++* (Bjarne Stroustrup) — concise modern overview.
@@ -425,4 +388,4 @@ Camera callback (producer): `if (auto* f = ring.acquireWrite()) { fill(*f, image
 - C++ Core Guidelines (isocpp.github.io/CppCoreGuidelines).
 - Compiler Explorer (godbolt.org) to *see* the generated assembly.
 
-➡ **Practice tip:** this week adds no new problems — open any problem on the [practice page](practice.html) and solve it with the **C++** tab. The design / systems ones (caches, queues, ring buffers, time-based store) make the best C++ drills.
+➡ **Practice (solve in-site):** [Real-Time Frame Ingest Buffer](practice.html?p=rob-frame-ingest) — implement the camera → perception ring buffer from Section 8. Then drill the other design/systems problems with the **C++** tab.

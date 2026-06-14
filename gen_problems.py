@@ -707,6 +707,31 @@ def ref_rob_time_sync():
             out.append("%d %d" % (i, j))
     print("\n".join(out))
 
+def ref_rob_frame_ingest():
+    import sys
+    d = sys.stdin.read().split()
+    idx = 0; cap = int(d[idx]); idx += 1; q = int(d[idx]); idx += 1
+    buf = [0]*cap; head = 0; count = 0; dropped = 0; out = []
+    for _ in range(q):
+        cmd = d[idx]; idx += 1
+        if cmd == "push":
+            x = int(d[idx]); idx += 1
+            if count == cap:                 # full -> keep-latest: drop oldest
+                head = (head + 1) % cap; count -= 1; dropped += 1
+            buf[(head + count) % cap] = x; count += 1
+        elif cmd == "pop":
+            if count == 0:
+                out.append("none")
+            else:
+                out.append(str(buf[head])); head = (head + 1) % cap; count -= 1
+        elif cmd == "latest":
+            out.append(str(buf[(head + count - 1) % cap]) if count else "none")
+        elif cmd == "dropped":
+            out.append(str(dropped))
+        elif cmd == "size":
+            out.append(str(count))
+    print("\n".join(out))
+
 # ----------------------------------------------------------------------------
 # Problem definitions
 # ----------------------------------------------------------------------------
@@ -1086,6 +1111,18 @@ P("rob-time-sync", "Nearest-Timestamp Sensor Sync", "Medium", "Systems / Sync", 
   [("7\n0.0 0.033 0.066 0.10 0.133 0.166 0.20\n3\n0.005 0.105 0.205\n0.02\n", True), ("3\n0 1 2\n2\n0.1 5\n0.5\n", True), ("2\n0 10\n2\n0.1 9.9\n0.2\n", False)],
   "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    idx = 0\n    na = int(data[idx]); idx += 1\n    A = [float(data[idx+i]) for i in range(na)]; idx += na\n    nb = int(data[idx]); idx += 1\n    B = [float(data[idx+i]) for i in range(nb)]; idx += nb\n    max_dt = float(data[idx])\n    # TODO: print matched 'i j' pairs within max_dt\n\nmain()\n",
   CPP_HEAD + "    int na; cin >> na; vector<double> A(na);\n    for (auto& v : A) cin >> v;\n    int nb; cin >> nb; vector<double> B(nb);\n    for (auto& v : B) cin >> v;\n    double max_dt; cin >> max_dt;\n    // TODO: print matched 'i j' pairs within max_dt\n    return 0;\n}\n", **ROB_EXACT),
+
+P("rob-frame-ingest", "Real-Time Frame Ingest Buffer", "Medium", "Systems / Real-Time", 9,
+  "<p>On a drone, a camera callback ingests frames at 30&nbsp;Hz while a slower perception model consumes them asynchronously. Implement the <b>fixed-capacity ring buffer</b> between them: bounded memory (no growth in flight) with a <b>keep-latest</b> policy — when full, a <code>push</code> drops the <i>oldest</i> frame so the freshest data survives and latency stays bounded.</p>"
+  "<p>Support: <code>push x</code> (ingest frame id x; if full, drop the oldest and count it), <code>pop</code> (consumer takes the oldest buffered frame — print its id or <code>none</code>), <code>latest</code> (newest buffered id or <code>none</code>), <code>dropped</code> (how many were dropped on overflow), <code>size</code> (current count).</p>",
+  "Line 1: capacity. Line 2: q. Next q lines: 'push x', 'pop', 'latest', 'dropped', or 'size'.",
+  "One line per pop / latest / dropped / size query.",
+  ref_rob_frame_ingest,
+  [("3\n8\npush 1\npush 2\npush 3\npush 4\npop\nlatest\ndropped\nsize\n", True),
+   ("2\n5\npush 10\npop\npop\nlatest\nsize\n", True),
+   ("2\n6\npush 5\npush 6\npush 7\nsize\nlatest\ndropped\n", False)],
+  "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    idx = 0\n    cap = int(data[idx]); idx += 1\n    q = int(data[idx]); idx += 1\n    out = []\n    # TODO: fixed-capacity ring buffer; keep-latest (drop oldest) when full\n    for _ in range(q):\n        cmd = data[idx]; idx += 1\n        if cmd == \"push\":\n            x = int(data[idx]); idx += 1\n            pass  # TODO\n        elif cmd == \"pop\":\n            pass  # TODO: out.append(oldest id or 'none')\n        elif cmd == \"latest\":\n            pass  # TODO\n        elif cmd == \"dropped\":\n            pass  # TODO\n        else:  # size\n            pass  # TODO\n    print(\"\\n\".join(out))\n\nmain()\n",
+  CPP_HEAD + "    int cap, q; cin >> cap >> q;\n    string cmd;\n    // TODO: fixed-capacity ring buffer (no dynamic growth); keep-latest on overflow\n    for (int i = 0; i < q; i++) {\n        cin >> cmd;\n        if (cmd == \"push\") { long long x; cin >> x; /* TODO */ }\n        else if (cmd == \"pop\") { /* TODO: print oldest id or \"none\" */ }\n        else if (cmd == \"latest\") { /* TODO */ }\n        else if (cmd == \"dropped\") { /* TODO */ }\n        else { /* size: TODO */ }\n    }\n    return 0;\n}\n", **ROB_EXACT),
 
 # ----------------------------------------------------------------------------
 # Compile-check every C++ starter so users never hit a template compile error

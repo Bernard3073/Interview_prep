@@ -192,7 +192,7 @@ const CURRICULUM = [
   {
     week: 9,
     title: "C++ for Robotics",
-    goal: "The C++ idioms you're expected to speak fluently — RAII, ownership, move semantics, real-time memory, and concurrency. No new problems: re-solve earlier ones with the C++ tab (design/systems problems are the best C++ drills).",
+    goal: "The C++ idioms you're expected to speak fluently — RAII, ownership, move semantics, real-time memory, and concurrency. Plus a real-time systems problem; re-solve earlier ones with the C++ tab too.",
     lecture: "lecture.html?week=9",
     topics: [
       "RAII & deterministic resource management",
@@ -205,7 +205,9 @@ const CURRICULUM = [
       "Eigen / PCL / OpenCV / ROS2 & CMake basics",
     ],
     leetcode: [],
-    robotics: [],
+    robotics: [
+      { name: "Real-Time Frame Ingest Buffer", pid: "rob-frame-ingest", diff: "Medium", tag: "Systems / Real-Time" },
+    ],
   },
 ];
 

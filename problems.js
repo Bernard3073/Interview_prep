@@ -1375,5 +1375,39 @@ const PROBLEMS = [
       "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    idx = 0\n    na = int(data[idx]); idx += 1\n    A = [float(data[idx+i]) for i in range(na)]; idx += na\n    nb = int(data[idx]); idx += 1\n    B = [float(data[idx+i]) for i in range(nb)]; idx += nb\n    max_dt = float(data[idx])\n    # TODO: print matched 'i j' pairs within max_dt\n\nmain()\n",
       "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int na; cin >> na; vector<double> A(na);\n    for (auto& v : A) cin >> v;\n    int nb; cin >> nb; vector<double> B(nb);\n    for (auto& v : B) cin >> v;\n    double max_dt; cin >> max_dt;\n    // TODO: print matched 'i j' pairs within max_dt\n    return 0;\n}\n"
     }
+  },
+  {
+    "id": "rob-frame-ingest",
+    "title": "Real-Time Frame Ingest Buffer",
+    "diff": "Medium",
+    "pattern": "Systems / Real-Time",
+    "week": 9,
+    "statement": "<p>On a drone, a camera callback ingests frames at 30&nbsp;Hz while a slower perception model consumes them asynchronously. Implement the <b>fixed-capacity ring buffer</b> between them: bounded memory (no growth in flight) with a <b>keep-latest</b> policy \u2014 when full, a <code>push</code> drops the <i>oldest</i> frame so the freshest data survives and latency stays bounded.</p><p>Support: <code>push x</code> (ingest frame id x; if full, drop the oldest and count it), <code>pop</code> (consumer takes the oldest buffered frame \u2014 print its id or <code>none</code>), <code>latest</code> (newest buffered id or <code>none</code>), <code>dropped</code> (how many were dropped on overflow), <code>size</code> (current count).</p>",
+    "inputFormat": "Line 1: capacity. Line 2: q. Next q lines: 'push x', 'pop', 'latest', 'dropped', or 'size'.",
+    "outputFormat": "One line per pop / latest / dropped / size query.",
+    "tests": [
+      {
+        "input": "3\n8\npush 1\npush 2\npush 3\npush 4\npop\nlatest\ndropped\nsize\n",
+        "expected": "2\n4\n1\n2\n",
+        "sample": true
+      },
+      {
+        "input": "2\n5\npush 10\npop\npop\nlatest\nsize\n",
+        "expected": "10\nnone\nnone\n0\n",
+        "sample": true
+      },
+      {
+        "input": "2\n6\npush 5\npush 6\npush 7\nsize\nlatest\ndropped\n",
+        "expected": "2\n7\n1\n",
+        "sample": false
+      }
+    ],
+    "category": "robotics",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    idx = 0\n    cap = int(data[idx]); idx += 1\n    q = int(data[idx]); idx += 1\n    out = []\n    # TODO: fixed-capacity ring buffer; keep-latest (drop oldest) when full\n    for _ in range(q):\n        cmd = data[idx]; idx += 1\n        if cmd == \"push\":\n            x = int(data[idx]); idx += 1\n            pass  # TODO\n        elif cmd == \"pop\":\n            pass  # TODO: out.append(oldest id or 'none')\n        elif cmd == \"latest\":\n            pass  # TODO\n        elif cmd == \"dropped\":\n            pass  # TODO\n        else:  # size\n            pass  # TODO\n    print(\"\\n\".join(out))\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int cap, q; cin >> cap >> q;\n    string cmd;\n    // TODO: fixed-capacity ring buffer (no dynamic growth); keep-latest on overflow\n    for (int i = 0; i < q; i++) {\n        cin >> cmd;\n        if (cmd == \"push\") { long long x; cin >> x; /* TODO */ }\n        else if (cmd == \"pop\") { /* TODO: print oldest id or \"none\" */ }\n        else if (cmd == \"latest\") { /* TODO */ }\n        else if (cmd == \"dropped\") { /* TODO */ }\n        else { /* size: TODO */ }\n    }\n    return 0;\n}\n"
+    }
   }
 ];
