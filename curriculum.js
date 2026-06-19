@@ -209,6 +209,42 @@ const CURRICULUM = [
       { name: "Real-Time Frame Ingest Buffer", pid: "rob-frame-ingest", diff: "Medium", tag: "Systems / Real-Time" },
     ],
   },
+  {
+    week: 10,
+    title: "Zipline — Aerial Perception & 3D Reconstruction",
+    goal: "Role-specific prep for Zipline's Droid team: cloud-side perception that builds 3D + semantic world models from satellite/aerial imagery, predicts deliverability, and ships priors to the onboard stack. Question bank, worked deep-dives (bundle adjustment, DSM vs DTM, semantic-to-3D fusion, deliverability calibration, coordinate frames, eval without ground truth), and solved coding problems.",
+    lecture: "lecture.html?week=10",
+    topics: [
+      "SfM / MVS / NeRF / 3DGS for aerial reconstruction",
+      "Bundle adjustment with GPS/IMU/RTK pose priors",
+      "DSM vs DTM vs nDSM — landing surface & clearance",
+      "Semantic segmentation of delivery zones; 2D→3D label fusion",
+      "Deliverability prediction & probability calibration",
+      "Coordinate frames: WGS84 / ECEF / ENU / camera; geoid pitfalls",
+      "Safety-critical eval without 3D ground truth; per-hazard recall gates",
+    ],
+    leetcode: [
+      { name: "Number of Islands", pid: "number-of-islands", url: "https://leetcode.com/problems/number-of-islands/", diff: "Medium", tag: "BFS/DFS/CC" },
+      { name: "Shortest Path in Binary Matrix", pid: "shortest-path-in-binary-matrix", url: "https://leetcode.com/problems/shortest-path-in-binary-matrix/", diff: "Medium", tag: "Grid BFS/A*" },
+    ],
+    robotics: [],
+  },
+  {
+    week: 11,
+    title: "Zipline — Aerial Perception: Detailed Answers",
+    goal: "Full worked answers to every question in the Week 10 question bank — the 'what a strong senior/staff answer actually says' companion. Covers SfM/MVS tradeoffs, BA with pose priors, DSM/DTM, semantic-to-3D fusion, bootstrapping with little labeled data, domain shift, the onboarding pipeline & onboard trust contract, production MLE judgment, and safety-critical eval with per-hazard gates.",
+    lecture: "lecture.html?week=11",
+    topics: [
+      "A1 — Reconstruction & multi-view geometry, answered",
+      "A2 — Semantic segmentation & learned perception, answered",
+      "A3 — Cloud-side pipeline & world models, answered",
+      "A4 — Production MLE judgment (SOTA vs classical, scale, versioning)",
+      "A5 — Safety-critical evaluation & per-hazard recall gates",
+      "Every answer: technique → failure mode → safety consequence",
+    ],
+    leetcode: [],
+    robotics: [],
+  },
 ];
 
 if (typeof module !== "undefined") module.exports = CURRICULUM;

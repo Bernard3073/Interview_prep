@@ -80,6 +80,46 @@ Goal: bounding boxes + class labels.
 - Deployment: quantization (INT8), pruning, TensorRT/ONNX, latency vs accuracy
   budgets on embedded GPUs. Robotics cares a lot about **real-time** inference.
 
+## 8. BEV transformer architectures — *deep dive*
+
+Multi-camera 3D perception increasingly happens in a shared **bird's-eye-view**
+grid. The hard part is **lifting 2D image features to 3D** — a pixel is a *ray*,
+not a point, so depth is ambiguous. Every method is a different answer to "how do
+I resolve depth." Two paradigms:
+
+- **Forward / "push" (Lift-Splat-Shoot, BEVDet):** predict a **per-pixel depth
+  distribution**, take the outer product with the context feature, and **splat**
+  the result into a voxel/BEV grid using the camera calibration. No queries; depth
+  is explicit but only softly supervised.
+  - *Lift:* per-pixel categorical depth × feature → points along each ray.
+  - *Splat:* scatter into BEV cells with sum-pooling (the **cumsum trick** does
+    this efficiently for variable points per cell).
+  - *Shoot:* a BEV CNN head does detection/segmentation.
+  - **BEVDepth** adds explicit LiDAR depth supervision because implicit depth is weak.
+- **Backward / "pull" (BEVFormer, DETR3D):** start from **BEV (or object) queries**,
+  project their 3D reference points into the images, and **sample** features back.
+  No explicit depth needed; calibration is baked into the projection step.
+
+**BEVFormer** is the most-asked architecture:
+- **Spatial cross-attention:** each BEV-grid query lifts to a vertical pillar of 3D
+  reference points, projects them into whichever cameras they hit, and uses
+  **deformable attention** to sample only those locations — sparse, so it scales to
+  multi-camera high-res inputs (dense global attention would be infeasible).
+- **Temporal self-attention:** current BEV queries attend to the **previous
+  timestep's BEV features** (warped by ego-motion) — a recurrent BEV memory that
+  gives velocity cues and resolves occlusion.
+
+**DETR3D / query-based detection:** sparse object queries predict a 3D reference
+point, project to images, sample features, and iteratively refine. **Set
+prediction + Hungarian (bipartite) matching** removes NMS, at the cost of slower,
+sometimes unstable convergence early in training.
+
+**Fusion & where it's going:** LiDAR/radar rasterize naturally into the same BEV
+grid, so **BEVFusion** concatenates/attends across modalities in BEV. BEV's
+weakness is that it **flattens the z-axis** (bad for tall/overhanging structure and
+arbitrary shapes), which is why the field is shifting toward **3D occupancy
+prediction** that restores height.
+
 ---
 
 ## Interview-style questions
@@ -106,9 +146,38 @@ First **calibrate the extrinsics and time-sync** the sensors, then fuse — proj
 ??? A model is accurate offline but too slow on the robot — what are your options?
 **Profile first** to find the real bottleneck, then: a smaller/efficient architecture (MobileNet, depthwise convs), **pruning + INT8 quantization** with TensorRT/ONNX, lower input resolution or frame rate, an ROI/cascade to skip background, run on a GPU/accelerator (Jetson, DLA), **knowledge distillation** to a smaller student, or temporal tricks (detect every Nth frame and track in between).
 
+### BEV transformer questions
+
+??? Why transform perception into BEV instead of working in image space?
+BEV is **metric, ego-centric, and fusion-friendly**: scale is roughly constant (unlike perspective images where it varies with depth), every sensor — multi-camera, LiDAR, radar — rasterizes into the **same top-down grid**, it's temporally consistent across frames, and the output is directly consumable by tracking and planning. The core challenge is that **lifting 2D pixels to 3D is depth-ambiguous** — a pixel is a ray, not a point — so every BEV method is essentially a different way to resolve depth.
+
+??? Compare forward-projection (lift) vs. backward-projection (query) BEV methods.
+**Forward / "push" (LSS, BEVDet):** predict a per-pixel **depth distribution**, multiply by the feature, and **splat** points into the BEV grid via calibration. Depth is explicit but only softly supervised (hence BEVDepth adds LiDAR depth supervision). **Backward / "pull" (BEVFormer, DETR3D):** start from **BEV/object queries**, project their 3D reference points into the images, and **sample** features back — no explicit depth needed, but it's more sensitive to calibration/extrinsic error since projection is baked in. Push is intuitive and parallel; pull is sparse and scales well to many cameras.
+
+??? Walk me through Lift-Splat-Shoot.
+**Lift:** for each pixel predict a **categorical distribution over depth bins** and a context feature; their outer product places soft features at every candidate depth along the ray. **Splat:** use camera intrinsics/extrinsics to scatter those points into a BEV grid and **sum-pool** per cell — done efficiently with the **cumulative-sum trick** so you avoid a slow scatter-add over variable numbers of points per cell. **Shoot:** a BEV CNN head produces the final detection/segmentation. The depth *distribution* (not a single value) keeps it differentiable and hedges depth uncertainty so gradients flow to all bins.
+
+??? Explain spatial cross-attention and temporal self-attention in BEVFormer.
+**Spatial cross-attention:** each BEV-grid query lifts to a **vertical pillar of 3D reference points**, projects them into whichever cameras they fall in, and uses **deformable attention** to sample features at just those hit locations (averaged over overlapping views). It's sparse because dense global attention over multi-camera high-res features is computationally infeasible. **Temporal self-attention:** the current BEV queries attend to the **previous timestep's BEV features**, aligned by ego-motion — a recurrent BEV memory that supplies velocity cues and helps with occlusion.
+
+??? Why deformable attention rather than vanilla attention in these models?
+Vanilla attention is **quadratic** in the number of tokens; over several high-resolution camera feature maps that's intractable. **Deformable attention** has each query attend to only a **small set of learned sampling offsets** around its reference point, giving roughly linear cost while still focusing on the relevant image regions — which is exactly what's needed when a BEV query only projects to a few pixels in a few views.
+
+??? How does DETR3D avoid dense BEV grids and NMS?
+It uses **sparse object queries**: each predicts a 3D reference point, projects it into the images, samples features, and **iteratively refines** the box. Training uses **set prediction with Hungarian (bipartite) matching** — one prediction is matched to one ground-truth object — so duplicate boxes don't arise and **NMS is unnecessary**. The trade-off is slower, sometimes unstable convergence early on because the matching can be noisy before queries specialize.
+
+??? How critical is camera calibration to BEV methods, and how do you handle drift?
+Very — backward-projection methods **bake intrinsics/extrinsics into the projection**, so extrinsic error directly displaces where features land in BEV and smears objects (worst on moving targets). Mitigations: **per-frame/online calibration**, feeding extrinsics as network input, robustness augmentation (perturbing extrinsics during training), temporal fusion to average out noise, and online extrinsic estimation/monitoring with health checks. Forward-projection methods are somewhat more tolerant but still calibration-dependent.
+
+??? What are BEV's main weaknesses, and why is the field moving to occupancy prediction?
+BEV **flattens the z-axis**, so it loses vertical structure — poor for tall, overhanging, or oddly shaped objects — and it assumes a usable ground plane, quantizes space into a grid, and degrades at long range. **3D occupancy networks** predict whether each voxel in a full 3D grid is occupied (and its semantics), **restoring height** and representing **arbitrary/unknown shapes** without box priors — which is why occupancy has become the natural successor to flat BEV detection.
+
+??? Design a multi-camera 3D detection system for a drone — which paradigm and why?
+Clarify constraints first: **FOV coverage, range, compute budget, and calibration stability** on a vibrating airframe. For tight embedded budgets I'd lean **query-based (BEVFormer/DETR3D)** for its sparse, scalable attention and clean multi-camera overlap handling, with **temporal fusion** for velocity/occlusion — but if extrinsics drift badly in flight I'd favor a **forward-projection** approach (less sensitive to projection error) or add online calibration. Add **explicit depth supervision** if any depth/LiDAR source exists, fuse modalities in BEV, and budget latency via deformable sampling counts, BEV resolution, and INT8/TensorRT deployment. Validate with **nuScenes-style mAP/NDS** (NDS being a composite of mAP plus translation/scale/orientation/velocity/attribute errors).
+
 ## Resources
 - Stanford **CS231n** (CNNs for visual recognition) — notes + lectures.
 - Papers: ResNet, Faster R-CNN, YOLO, U-Net, Mask R-CNN, PointNet, PointPillars, DETR.
 - *Dive into Deep Learning* (d2l.ai) for hands-on.
 
-➡ **Practice (solve in-site):** [w7_nms_iou.py](practice.html?p=rob-iou-nms), [w7_map.py](practice.html?p=rob-average-precision)
+➡ **Practice (solve in-site):** [w7_nms_iou.py](practice.html?p=rob-iou-nms), [w7_map.py](practice.html?p=rob-average-precision), [w7_bev_splat.py](practice.html?p=rob-bev-splat), [w7_bev_project.py](practice.html?p=rob-bev-project)

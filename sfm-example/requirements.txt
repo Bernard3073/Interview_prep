@@ -1,0 +1,12 @@
+# Core (geometry + bundle adjustment + synthetic demo + tests)
+numpy>=1.23
+scipy>=1.9
+
+# Image pipeline (SIFT, essential matrix, PnP, triangulation).
+# opencv-contrib-python ships SIFT; plain opencv-python also has SIFT on recent
+# versions. Either works.
+opencv-python>=4.5
+
+# Optional: running the test suite with pytest (a plain `python tests/...` runner
+# is also built in).
+pytest>=7.0
