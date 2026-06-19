@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="430" viewBox="0 0 780 430" font-family="system-ui, sans-serif">
+  <rect width="780" height="430" fill="#0f1320"/>
+  <text x="20" y="30" fill="#e8ecf6" font-size="16" font-weight="bold">BEV Transformer Pipeline (BEVFormer-style)</text>
+
+  <!-- 1. cameras -->
+  <text x="90" y="62" fill="#9aa6c2" font-size="11" text-anchor="middle">6 surround cameras</text>
+  <rect x="30" y="72" width="50" height="34" rx="5" fill="#1c2236" stroke="#4f8cff" stroke-width="1.5"/>
+  <rect x="42" y="84" width="50" height="34" rx="5" fill="#1c2236" stroke="#4f8cff" stroke-width="1.5"/>
+  <rect x="54" y="96" width="50" height="34" rx="5" fill="#1c2236" stroke="#4f8cff" stroke-width="1.5"/>
+  <text x="79" y="118" fill="#4f8cff" font-size="11" text-anchor="middle">imgs</text>
+
+  <!-- 2. backbone -->
+  <rect x="150" y="80" width="90" height="50" rx="8" fill="#1c2236" stroke="#e8ecf6" stroke-width="1.5"/>
+  <text x="195" y="102" fill="#e8ecf6" font-size="12" text-anchor="middle">CNN</text>
+  <text x="195" y="118" fill="#9aa6c2" font-size="10" text-anchor="middle">backbone</text>
+  <line x1="106" y1="105" x2="148" y2="105" stroke="#e8ecf6" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- image features -->
+  <rect x="280" y="80" width="100" height="50" rx="8" fill="#1c2236" stroke="#22d3a6" stroke-width="1.5"/>
+  <text x="330" y="100" fill="#22d3a6" font-size="11" text-anchor="middle">image feats</text>
+  <text x="330" y="116" fill="#9aa6c2" font-size="10" text-anchor="middle">(K, V source)</text>
+  <line x1="240" y1="105" x2="278" y2="105" stroke="#e8ecf6" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- BEV query grid -->
+  <text x="150" y="220" fill="#4f8cff" font-size="11" text-anchor="middle" font-weight="bold">BEV queries (grid)</text>
+  <g stroke="#4f8cff" stroke-width="1" fill="#1c2236">
+    <rect x="95" y="232" width="22" height="22"/><rect x="117" y="232" width="22" height="22"/><rect x="139" y="232" width="22" height="22"/><rect x="161" y="232" width="22" height="22"/>
+    <rect x="95" y="254" width="22" height="22"/><rect x="117" y="254" width="22" height="22"/><rect x="139" y="254" width="22" height="22"/><rect x="161" y="254" width="22" height="22"/>
+    <rect x="95" y="276" width="22" height="22"/><rect x="117" y="276" width="22" height="22"/><rect x="139" y="276" width="22" height="22"/><rect x="161" y="276" width="22" height="22"/>
+  </g>
+  <text x="150" y="316" fill="#9aa6c2" font-size="10" text-anchor="middle">top-down H×W learnable queries</text>
+
+  <!-- spatial cross-attn -->
+  <rect x="280" y="230" width="170" height="64" rx="10" fill="#1c2236" stroke="#ff8a4c" stroke-width="2"/>
+  <text x="365" y="254" fill="#ff8a4c" font-size="12" text-anchor="middle" font-weight="bold">Spatial Cross-Attention</text>
+  <text x="365" y="272" fill="#9aa6c2" font-size="10" text-anchor="middle">query → 3D pts → project to imgs</text>
+  <text x="365" y="286" fill="#9aa6c2" font-size="10" text-anchor="middle">deformable sampling (K,V)</text>
+  <!-- Q from BEV grid -->
+  <line x1="183" y1="265" x2="278" y2="262" stroke="#4f8cff" stroke-width="2" marker-end="url(#c)"/>
+  <text x="225" y="252" fill="#4f8cff" font-size="10" text-anchor="middle">Q</text>
+  <!-- K,V from image feats -->
+  <line x1="330" y1="130" x2="350" y2="228" stroke="#22d3a6" stroke-width="2" marker-end="url(#b)"/>
+  <text x="352" y="180" fill="#22d3a6" font-size="10">K,V</text>
+
+  <!-- temporal self-attn -->
+  <rect x="280" y="330" width="170" height="56" rx="10" fill="#1c2236" stroke="#4f8cff" stroke-width="2"/>
+  <text x="365" y="354" fill="#4f8cff" font-size="12" text-anchor="middle" font-weight="bold">Temporal Self-Attention</text>
+  <text x="365" y="372" fill="#9aa6c2" font-size="10" text-anchor="middle">attend to prev BEV (ego-warped)</text>
+  <line x1="365" y1="294" x2="365" y2="328" stroke="#e8ecf6" stroke-width="2" marker-end="url(#a)"/>
+  <!-- prev bev memory -->
+  <rect x="95" y="338" width="120" height="40" rx="8" fill="#1c2236" stroke="#9aa6c2" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="155" y="356" fill="#9aa6c2" font-size="10" text-anchor="middle">BEV(t−1)</text>
+  <text x="155" y="370" fill="#9aa6c2" font-size="10" text-anchor="middle">memory</text>
+  <line x1="215" y1="358" x2="278" y2="358" stroke="#9aa6c2" stroke-width="2" marker-end="url(#d)"/>
+
+  <!-- output BEV feats -->
+  <rect x="500" y="250" width="110" height="56" rx="10" fill="#1c2236" stroke="#22d3a6" stroke-width="2"/>
+  <text x="555" y="274" fill="#22d3a6" font-size="12" text-anchor="middle" font-weight="bold">BEV features</text>
+  <text x="555" y="292" fill="#9aa6c2" font-size="10" text-anchor="middle">unified top-down</text>
+  <line x1="450" y1="262" x2="498" y2="270" stroke="#e8ecf6" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="450" y1="356" x2="490" y2="356" stroke="#e8ecf6" stroke-width="2" marker-end="url(#a)"/>
+  <path d="M520 330 C 520 320, 540 312, 548 308" fill="none" stroke="#e8ecf6" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- heads -->
+  <rect x="650" y="220" width="110" height="40" rx="8" fill="#1c2236" stroke="#ff8a4c" stroke-width="1.5"/>
+  <text x="705" y="244" fill="#ff8a4c" font-size="11" text-anchor="middle">3D det head</text>
+  <rect x="650" y="280" width="110" height="40" rx="8" fill="#1c2236" stroke="#ff8a4c" stroke-width="1.5"/>
+  <text x="705" y="304" fill="#ff8a4c" font-size="11" text-anchor="middle">BEV seg / occ</text>
+  <line x1="610" y1="268" x2="648" y2="244" stroke="#e8ecf6" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="610" y1="288" x2="648" y2="300" stroke="#e8ecf6" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- feedback loop label -->
+  <text x="540" y="405" fill="#9aa6c2" font-size="10">BEV(t) becomes next frame's memory →</text>
+
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="5.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#e8ecf6"/></marker>
+    <marker id="b" markerWidth="8" markerHeight="8" refX="5.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#22d3a6"/></marker>
+    <marker id="c" markerWidth="8" markerHeight="8" refX="5.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#4f8cff"/></marker>
+    <marker id="d" markerWidth="8" markerHeight="8" refX="5.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#9aa6c2"/></marker>
+  </defs>
+</svg>

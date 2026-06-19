@@ -245,6 +245,26 @@ const CURRICULUM = [
     leetcode: [],
     robotics: [],
   },
+  {
+    week: 12,
+    title: "BEV Transformers & Attention",
+    goal: "Build the transformer from scratch — tokens, scaled dot-product attention, self vs. cross vs. multi-head, positional encoding — then see exactly how BEVFormer/DETR3D reuse it for multi-camera 3D perception. Diagrams, PyTorch/NumPy code, and the attention questions interviewers actually ask.",
+    lecture: "lecture.html?week=12",
+    topics: [
+      "Tokens, embeddings & the transformer block (attention + FFN + residual/LayerNorm)",
+      "Scaled dot-product attention and the √dₖ scaling",
+      "Self-attention vs. cross-attention (same math, different Q/K/V source)",
+      "Multi-head attention & positional encoding",
+      "ViT & DETR: images as tokens, set prediction without NMS",
+      "BEVFormer spatial cross-attention + temporal self-attention",
+      "Deformable attention & keeping O(N²) tractable for multi-camera BEV",
+    ],
+    leetcode: [],
+    robotics: [
+      { name: "Lift-Splat BEV Pooling", pid: "rob-bev-splat", diff: "Medium", tag: "BEV / 3D Perception" },
+      { name: "Project 3D Points to Camera", pid: "rob-bev-project", diff: "Medium", tag: "BEV / 3D Perception" },
+    ],
+  },
 ];
 
 if (typeof module !== "undefined") module.exports = CURRICULUM;
