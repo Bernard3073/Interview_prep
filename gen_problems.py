@@ -7,7 +7,7 @@ cases are guaranteed correct). C++ starters are compile-checked with g++.
 
 Run:  python3 gen_problems.py
 """
-import io, json, subprocess, sys, tempfile, os, contextlib
+import io, json, subprocess, sys, tempfile, os, contextlib, re
 
 PROBLEMS = []
 
@@ -781,6 +781,41 @@ def ref_rob_frame_ingest():
             out.append(str(count))
     print("\n".join(out))
 
+def ref_rob_bev_splat():
+    import sys, math
+    data = sys.stdin.read().split()
+    x_min = float(data[0]); x_max = float(data[1])
+    y_min = float(data[2]); y_max = float(data[3]); cell = float(data[4])
+    n = int(data[5]); idx = 6
+    W = round((x_max - x_min) / cell)
+    H = round((y_max - y_min) / cell)
+    grid = [[0.0] * W for _ in range(H)]
+    for _ in range(n):
+        x = float(data[idx]); y = float(data[idx+1]); f = float(data[idx+2]); idx += 3
+        col = int(math.floor((x - x_min) / cell))
+        row = int(math.floor((y - y_min) / cell))
+        if 0 <= col < W and 0 <= row < H:
+            grid[row][col] += f
+    print("\n".join(" ".join("%.1f" % v for v in r) for r in grid))
+
+def ref_rob_bev_project():
+    import sys
+    data = sys.stdin.read().split()
+    W = int(data[0]); H = int(data[1]); idx = 2
+    P = [float(data[idx + i]) for i in range(12)]; idx += 12
+    n = int(data[idx]); idx += 1
+    out = []
+    for i in range(n):
+        X = float(data[idx]); Y = float(data[idx+1]); Z = float(data[idx+2]); idx += 3
+        h0 = P[0]*X + P[1]*Y + P[2]*Z + P[3]
+        h1 = P[4]*X + P[5]*Y + P[6]*Z + P[7]
+        depth = P[8]*X + P[9]*Y + P[10]*Z + P[11]
+        if depth > 0:
+            u = h0 / depth; v = h1 / depth
+            if 0 <= u < W and 0 <= v < H:
+                out.append("%d %.2f %.2f" % (i, u, v))
+    print("\n".join(out))
+
 # ----------------------------------------------------------------------------
 # Problem definitions
 # ----------------------------------------------------------------------------
@@ -1192,6 +1227,28 @@ P("rob-frame-ingest", "Real-Time Frame Ingest Buffer", "Medium", "Systems / Real
   "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    idx = 0\n    cap = int(data[idx]); idx += 1\n    q = int(data[idx]); idx += 1\n    out = []\n    # TODO: fixed-capacity ring buffer; keep-latest (drop oldest) when full\n    for _ in range(q):\n        cmd = data[idx]; idx += 1\n        if cmd == \"push\":\n            x = int(data[idx]); idx += 1\n            pass  # TODO\n        elif cmd == \"pop\":\n            pass  # TODO: out.append(oldest id or 'none')\n        elif cmd == \"latest\":\n            pass  # TODO\n        elif cmd == \"dropped\":\n            pass  # TODO\n        else:  # size\n            pass  # TODO\n    print(\"\\n\".join(out))\n\nmain()\n",
   CPP_HEAD + "    int cap, q; cin >> cap >> q;\n    string cmd;\n    // TODO: fixed-capacity ring buffer (no dynamic growth); keep-latest on overflow\n    for (int i = 0; i < q; i++) {\n        cin >> cmd;\n        if (cmd == \"push\") { long long x; cin >> x; /* TODO */ }\n        else if (cmd == \"pop\") { /* TODO: print oldest id or \"none\" */ }\n        else if (cmd == \"latest\") { /* TODO */ }\n        else if (cmd == \"dropped\") { /* TODO */ }\n        else { /* size: TODO */ }\n    }\n    return 0;\n}\n", **ROB_EXACT),
 
+P("rob-bev-splat", "Lift-Splat BEV Pooling", "Medium", "BEV / 3D Perception", 12,
+  "<p>The “splat” step of Lift-Splat-Shoot: scatter lifted 3D points into a top-down BEV grid by <strong>sum-pooling</strong> their features. The grid spans <code>[x_min,x_max) x [y_min,y_max)</code> in cells of side <code>cell</code> (so <code>W=(x_max-x_min)/cell</code> columns, <code>H=(y_max-y_min)/cell</code> rows). Point (x,y) lands in column <code>floor((x-x_min)/cell)</code>, row <code>floor((y-y_min)/cell)</code>; add its feature to that cell. Drop points outside the grid.</p>",
+  "Line 1: x_min x_max y_min y_max cell. Line 2: n. Next n lines: x y f.",
+  "H rows (row 0 = lowest y first), each W summed features formatted to one decimal, space-separated.",
+  ref_rob_bev_splat,
+  [("0 4 0 4 2\n5\n0.5 0.5 1.0\n3.0 0.5 2.0\n1.0 3.0 3.0\n3.5 3.5 0.5\n5.0 1.0 9.0\n", True),
+   ("0 2 0 2 1\n4\n0.1 0.1 1.0\n0.9 0.2 2.0\n1.5 1.5 4.0\n-1.0 0.0 5.0\n", True),
+   ("0 2 0 2 2\n1\n1.0 1.0 7.5\n", False)],
+  "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    x_min = float(data[0]); x_max = float(data[1])\n    y_min = float(data[2]); y_max = float(data[3]); cell = float(data[4])\n    n = int(data[5]); idx = 6\n    W = round((x_max - x_min) / cell)\n    H = round((y_max - y_min) / cell)\n    grid = [[0.0] * W for _ in range(H)]\n    for _ in range(n):\n        x = float(data[idx]); y = float(data[idx+1]); f = float(data[idx+2]); idx += 3\n        # TODO: col,row = cell of (x,y); drop if out of [0,W)x[0,H), else grid[row][col] += f\n    # TODO: print H rows (row 0 = lowest y first), each W sums formatted with one decimal\n\nmain()\n",
+  "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    double xmin, xmax, ymin, ymax, cell;\n    cin >> xmin >> xmax >> ymin >> ymax >> cell;\n    int n; cin >> n;\n    int W = (int)llround((xmax - xmin) / cell);\n    int H = (int)llround((ymax - ymin) / cell);\n    vector<vector<double>> grid(H, vector<double>(W, 0.0));\n    for (int i = 0; i < n; i++) {\n        double x, y, f; cin >> x >> y >> f;\n        // TODO: col,row = cell of (x,y); drop if out of bounds, else grid[row][col] += f\n    }\n    // TODO: print H rows (row 0 first), each W sums via printf(\"%.1f\")\n    return 0;\n}\n", **ROB_EXACT),
+
+P("rob-bev-project", "Project 3D Points to Camera", "Medium", "BEV / 3D Perception", 12,
+  "<p>The backward-projection core of BEVFormer/DETR3D: sample image features by projecting 3D reference points into a camera. Given a 3x4 projection matrix <code>P</code> (row-major), compute <code>h = P*[X,Y,Z,1]</code>. The point is <strong>visible</strong> only if its camera depth <code>h[2] &gt; 0</code> and the pixel <code>(u,v) = (h[0]/h[2], h[1]/h[2])</code> lies inside the image (<code>0 &lt;= u &lt; W</code>, <code>0 &lt;= v &lt; H</code>). Print the visible points in input order.</p>",
+  "Line 1: W H. Line 2: 12 floats = P row-major (3 rows of 4). Line 3: n. Next n lines: X Y Z.",
+  "For each visible point: '<index> <u> <v>' with u,v to two decimals, one per line.",
+  ref_rob_bev_project,
+  [("100 100\n100 0 50 0 0 100 50 0 0 0 1 0\n4\n0 0 10\n1 0 10\n0 0 -5\n10 0 10\n", True),
+   ("100 100\n100 0 50 0 0 100 50 0 0 0 1 0\n2\n0 0 1\n0 0 0\n", True),
+   ("200 200\n100 0 100 0 0 100 100 0 0 0 1 0\n1\n0 0 2\n", False)],
+  "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    W = int(data[0]); H = int(data[1]); idx = 2\n    P = [float(data[idx + i]) for i in range(12)]; idx += 12\n    n = int(data[idx]); idx += 1\n    out = []\n    for i in range(n):\n        X = float(data[idx]); Y = float(data[idx+1]); Z = float(data[idx+2]); idx += 3\n        # h = P @ [X, Y, Z, 1]; depth = h[2]\n        # TODO: if depth > 0 and 0 <= u < W and 0 <= v < H:\n        #           out.append(f\"{i} {u:.2f} {v:.2f}\")\n    print(\"\\n\".join(out))\n\nmain()\n",
+  "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int W, H; cin >> W >> H;\n    double P[12];\n    for (int i = 0; i < 12; i++) cin >> P[i];\n    int n; cin >> n;\n    for (int i = 0; i < n; i++) {\n        double X, Y, Z; cin >> X >> Y >> Z;\n        // h0 = P0*X+P1*Y+P2*Z+P3; h1 = ...; depth = P8*X+P9*Y+P10*Z+P11\n        // TODO: if depth > 0 and pixel inside image, printf(\"%d %.2f %.2f\\n\", i, u, v);\n    }\n    return 0;\n}\n", category="robotics", checker="float", tol=0.01),
+
 # ----------------------------------------------------------------------------
 # Compile-check every C++ starter so users never hit a template compile error
 # ----------------------------------------------------------------------------
@@ -1208,7 +1265,66 @@ def compile_check():
                 failures.append((p["id"], r.stderr.strip().split("\n")[0]))
     return failures
 
+HERE = os.path.dirname(os.path.abspath(__file__))
+PROBLEMS_JS = os.path.join(HERE, "problems.js")
+CURRICULUM_JS = os.path.join(HERE, "curriculum.js")
+
+def ids_in_problems_js(path):
+    """Problem ids currently committed in problems.js (empty if absent)."""
+    if not os.path.exists(path):
+        return set()
+    return set(re.findall(r'"id":\s*"([^"]+)"', open(path).read()))
+
+def pids_in_curriculum(path):
+    """Problem ids the in-site plan links to (curriculum.js `pid:` fields)."""
+    if not os.path.exists(path):
+        return set()
+    return set(re.findall(r'\bpid:\s*"([^"]+)"', open(path).read()))
+
+def validate(force):
+    """Guard the generator<->problems.js<->curriculum.js contract.
+
+    problems.js is fully regenerated from this file, so anything not defined
+    here is lost on the next run, and any curriculum link to a missing id
+    silently falls back to the first problem in the UI. Catch both here.
+    """
+    errors, warnings = [], []
+
+    ids = [p["id"] for p in PROBLEMS]
+    dupes = sorted({i for i in ids if ids.count(i) > 1})
+    if dupes:
+        errors.append("duplicate problem id(s) defined in this file: " + ", ".join(dupes))
+    new_ids = set(ids)
+
+    # Problems present in the committed problems.js that this run would drop.
+    dropped = sorted(ids_in_problems_js(PROBLEMS_JS) - new_ids)
+    if dropped:
+        msg = ("problems.js currently contains id(s) this generator does NOT define, "
+               "so regenerating would delete them: " + ", ".join(dropped) +
+               "\n  -> port them into gen_problems.py, or rerun with --force to drop them.")
+        (warnings if force else errors).append(msg)
+
+    # Curriculum links that would 404 to the practice page's fallback problem.
+    missing = sorted(pids_in_curriculum(CURRICULUM_JS) - new_ids)
+    if missing:
+        errors.append("curriculum.js links to pid(s) with no problem defined here "
+                      "(in-site links silently fall back to the first problem): " + ", ".join(missing))
+
+    return errors, warnings
+
 if __name__ == "__main__":
+    force = "--force" in sys.argv
+    check_only = "--check" in sys.argv
+
+    errors, warnings = validate(force)
+    for w in warnings:
+        print(f"WARNING: {w}")
+    if errors:
+        print("Validation failed:")
+        for e in errors:
+            print(f"  - {e}")
+        sys.exit(1)
+
     fails = compile_check()
     if fails:
         print("C++ starter compile failures:")
@@ -1217,10 +1333,20 @@ if __name__ == "__main__":
         sys.exit(1)
     print(f"All {len(PROBLEMS)} C++ starters compile.")
 
-    banner = "/* AUTO-GENERATED by gen_problems.py. Expected outputs verified by running\n   reference solutions locally. Edit gen_problems.py and rerun to change. */\n"
+    banner = "/* AUTO-GENERATED by gen_problems.py. Expected outputs verified by running\n   reference solutions locally. Edit gen_problems.py and rerun to change.\n   Do NOT hand-edit this file: it is overwritten on every run. */\n"
     out = banner + "const PROBLEMS = " + json.dumps(PROBLEMS, indent=2) + ";\n"
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "problems.js")
-    with open(path, "w") as f:
+
+    if check_only:
+        current = open(PROBLEMS_JS).read() if os.path.exists(PROBLEMS_JS) else ""
+        if current != out:
+            print("Validation failed:")
+            print("  - problems.js is stale: it does not match gen_problems.py output.")
+            print("    -> run `python3 gen_problems.py` and commit the regenerated problems.js.")
+            sys.exit(1)
+        print(f"--check OK: {len(PROBLEMS)} problems; problems.js up to date and consistent with curriculum.js.")
+        sys.exit(0)
+
+    with open(PROBLEMS_JS, "w") as f:
         f.write(out)
     total_tests = sum(len(p["tests"]) for p in PROBLEMS)
     print(f"Wrote problems.js: {len(PROBLEMS)} problems, {total_tests} test cases.")

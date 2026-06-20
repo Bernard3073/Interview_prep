@@ -1,0 +1,18 @@
+#!/bin/sh
+# Validate the gen_problems.py <-> problems.js <-> curriculum.js contract before
+# a commit lands. Only runs when one of those files is staged, so unrelated
+# commits aren't slowed by the C++ compile-check.
+#
+# Enabled with:  git config core.hooksPath .githooks
+# Bypass once with:  git commit --no-verify
+
+changed=$(git diff --cached --name-only)
+echo "$changed" | grep -Eq '^(gen_problems\.py|problems\.js|curriculum\.js)$' || exit 0
+
+echo "pre-commit: validating problems/curriculum consistency..."
+if ! python3 gen_problems.py --check; then
+    echo "" >&2
+    echo "pre-commit: validation failed; commit aborted." >&2
+    echo "  Fix gen_problems.py (and rerun it), or commit with --no-verify to bypass." >&2
+    exit 1
+fi
