@@ -108,6 +108,55 @@ def ref_num_islands():
                 cnt += 1; dfs(i, j)
     print(cnt)
 
+def ref_shortest_path_binary_matrix():
+    import sys
+    from collections import deque
+    lines = sys.stdin.read().split('\n')
+    n = int(lines[0].strip())
+    g = [lines[1+i].strip() for i in range(n)]
+    if g[0][0] != '0' or g[n-1][n-1] != '0':
+        print(-1); return
+    seen = [[False]*n for _ in range(n)]
+    seen[0][0] = True
+    q = deque([(0, 0, 1)])
+    while q:
+        r, c, d = q.popleft()
+        if r == n-1 and c == n-1:
+            print(d); return
+        for dr in (-1, 0, 1):
+            for dc in (-1, 0, 1):
+                if dr == 0 and dc == 0:
+                    continue
+                nr, nc = r+dr, c+dc
+                if 0 <= nr < n and 0 <= nc < n and not seen[nr][nc] and g[nr][nc] == '0':
+                    seen[nr][nc] = True
+                    q.append((nr, nc, d+1))
+    print(-1)
+
+def ref_path_minimum_effort():
+    import sys, heapq
+    data = sys.stdin.read().split()
+    rows = int(data[0]); cols = int(data[1])
+    vals = list(map(int, data[2:2+rows*cols]))
+    h = [vals[i*cols:(i+1)*cols] for i in range(rows)]
+    dist = [[float('inf')]*cols for _ in range(rows)]
+    dist[0][0] = 0
+    pq = [(0, 0, 0)]  # (effort so far, r, c)
+    while pq:
+        d, r, c = heapq.heappop(pq)
+        if r == rows-1 and c == cols-1:
+            print(d); return
+        if d > dist[r][c]:
+            continue
+        for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            nr, nc = r+dr, c+dc
+            if 0 <= nr < rows and 0 <= nc < cols:
+                nd = max(d, abs(h[nr][nc] - h[r][c]))
+                if nd < dist[nr][nc]:
+                    dist[nr][nc] = nd
+                    heapq.heappush(pq, (nd, nr, nc))
+    print(dist[rows-1][cols-1])
+
 def ref_image_smoother():
     import sys
     d = sys.stdin.read().split()
@@ -798,6 +847,25 @@ P("number-of-islands", "Number of Islands", "Medium", "Grid BFS/DFS", 3,
   [("4 5\n11110\n11010\n11000\n00000\n", True), ("3 3\n101\n010\n101\n", True), ("1 1\n0\n", False)],
   PY_HEAD.replace("split()", "split('\\n')") + "    rows, cols = map(int, data[0].split())\n    grid = [list(data[1+i].strip()) for i in range(rows)]\n    # TODO: print the island count\n\nmain()\n",
   CPP_HEAD + "    int rows, cols; cin >> rows >> cols;\n    vector<string> g(rows);\n    for (auto& s : g) cin >> s;\n    // TODO: print the island count\n    return 0;\n}\n"),
+
+P("path-with-minimum-effort", "Path With Minimum Effort", "Medium", "Grid Dijkstra", 10,
+  "<p>Given a <code>rows x cols</code> grid of integer heights, find a path from the top-left to the bottom-right cell moving <b>4-directionally</b>. A path's <b>effort</b> is the maximum absolute height difference between any two consecutive cells on it. Return the minimum possible effort.</p>",
+  "Line 1: rows cols. Next rows lines: cols integers each.",
+  "The minimum effort (an integer).",
+  ref_path_minimum_effort,
+  [("3 3\n1 2 2\n3 8 2\n5 3 5\n", True), ("3 3\n1 2 3\n3 8 4\n5 3 5\n", True),
+   ("5 5\n1 2 1 1 1\n1 2 1 2 1\n1 2 1 2 1\n1 2 1 2 1\n1 1 1 2 1\n", False), ("1 1\n42\n", False)],
+  PY_HEAD + "    rows = int(data[0]); cols = int(data[1])\n    vals = list(map(int, data[2:2+rows*cols]))\n    h = [vals[i*cols:(i+1)*cols] for i in range(rows)]\n    # TODO: print the minimum effort\n\nmain()\n",
+  CPP_HEAD + "    int rows, cols; cin >> rows >> cols;\n    vector<vector<int>> h(rows, vector<int>(cols));\n    for (auto& r : h) for (auto& x : r) cin >> x;\n    // TODO: print the minimum effort\n    return 0;\n}\n"),
+
+P("shortest-path-in-binary-matrix", "Shortest Path in Binary Matrix", "Medium", "Grid BFS/A*", 10,
+  "<p>In an <code>n x n</code> grid of <code>'0'</code> (clear) and <code>'1'</code> (blocked), find the length of the shortest <b>clear path</b> from the top-left to the bottom-right cell, moving <b>8-directionally</b> between clear cells. Path length is the number of visited cells. Return <code>-1</code> if no path exists.</p>",
+  "Line 1: n. Next n lines: a string of n characters ('0'/'1').",
+  "The shortest clear-path length (number of cells), or -1.",
+  ref_shortest_path_binary_matrix,
+  [("2\n00\n00\n", True), ("3\n000\n110\n110\n", True), ("3\n000\n111\n000\n", False), ("1\n0\n", False)],
+  PY_HEAD.replace("split()", "split('\\n')") + "    n = int(data[0].strip())\n    grid = [data[1+i].strip() for i in range(n)]\n    # TODO: print the shortest clear-path length, or -1\n\nmain()\n",
+  CPP_HEAD + "    int n; cin >> n;\n    vector<string> g(n);\n    for (auto& s : g) cin >> s;\n    // TODO: print the shortest clear-path length, or -1\n    return 0;\n}\n"),
 
 P("image-smoother", "Image Smoother", "Easy", "Matrix / Convolution", 3,
   "<p>For each cell output the floor of the average of itself and its (up to 8) neighbors — a 3×3 box filter.</p>",

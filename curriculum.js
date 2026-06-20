@@ -224,7 +224,7 @@ const CURRICULUM = [
       "Safety-critical eval without 3D ground truth; per-hazard recall gates",
     ],
     leetcode: [
-      { name: "Number of Islands", pid: "number-of-islands", url: "https://leetcode.com/problems/number-of-islands/", diff: "Medium", tag: "BFS/DFS/CC" },
+      { name: "Path With Minimum Effort", pid: "path-with-minimum-effort", url: "https://leetcode.com/problems/path-with-minimum-effort/", diff: "Medium", tag: "Grid Dijkstra" },
       { name: "Shortest Path in Binary Matrix", pid: "shortest-path-in-binary-matrix", url: "https://leetcode.com/problems/shortest-path-in-binary-matrix/", diff: "Medium", tag: "Grid BFS/A*" },
     ],
     robotics: [],

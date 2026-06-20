@@ -216,6 +216,84 @@ const PROBLEMS = [
     }
   },
   {
+    "id": "path-with-minimum-effort",
+    "title": "Path With Minimum Effort",
+    "diff": "Medium",
+    "pattern": "Grid Dijkstra",
+    "week": 10,
+    "statement": "<p>Given a <code>rows x cols</code> grid of integer heights, find a path from the top-left to the bottom-right cell moving <b>4-directionally</b>. A path's <b>effort</b> is the maximum absolute height difference between any two consecutive cells on it. Return the minimum possible effort.</p>",
+    "inputFormat": "Line 1: rows cols. Next rows lines: cols integers each.",
+    "outputFormat": "The minimum effort (an integer).",
+    "tests": [
+      {
+        "input": "3 3\n1 2 2\n3 8 2\n5 3 5\n",
+        "expected": "2\n",
+        "sample": true
+      },
+      {
+        "input": "3 3\n1 2 3\n3 8 4\n5 3 5\n",
+        "expected": "1\n",
+        "sample": true
+      },
+      {
+        "input": "5 5\n1 2 1 1 1\n1 2 1 2 1\n1 2 1 2 1\n1 2 1 2 1\n1 1 1 2 1\n",
+        "expected": "0\n",
+        "sample": false
+      },
+      {
+        "input": "1 1\n42\n",
+        "expected": "0\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    rows = int(data[0]); cols = int(data[1])\n    vals = list(map(int, data[2:2+rows*cols]))\n    h = [vals[i*cols:(i+1)*cols] for i in range(rows)]\n    # TODO: print the minimum effort\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int rows, cols; cin >> rows >> cols;\n    vector<vector<int>> h(rows, vector<int>(cols));\n    for (auto& r : h) for (auto& x : r) cin >> x;\n    // TODO: print the minimum effort\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "shortest-path-in-binary-matrix",
+    "title": "Shortest Path in Binary Matrix",
+    "diff": "Medium",
+    "pattern": "Grid BFS/A*",
+    "week": 10,
+    "statement": "<p>In an <code>n x n</code> grid of <code>'0'</code> (clear) and <code>'1'</code> (blocked), find the length of the shortest <b>clear path</b> from the top-left to the bottom-right cell, moving <b>8-directionally</b> between clear cells. Path length is the number of visited cells. Return <code>-1</code> if no path exists.</p>",
+    "inputFormat": "Line 1: n. Next n lines: a string of n characters ('0'/'1').",
+    "outputFormat": "The shortest clear-path length (number of cells), or -1.",
+    "tests": [
+      {
+        "input": "2\n00\n00\n",
+        "expected": "2\n",
+        "sample": true
+      },
+      {
+        "input": "3\n000\n110\n110\n",
+        "expected": "4\n",
+        "sample": true
+      },
+      {
+        "input": "3\n000\n111\n000\n",
+        "expected": "-1\n",
+        "sample": false
+      },
+      {
+        "input": "1\n0\n",
+        "expected": "1\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split('\\n')\n    n = int(data[0].strip())\n    grid = [data[1+i].strip() for i in range(n)]\n    # TODO: print the shortest clear-path length, or -1\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int n; cin >> n;\n    vector<string> g(n);\n    for (auto& s : g) cin >> s;\n    // TODO: print the shortest clear-path length, or -1\n    return 0;\n}\n"
+    }
+  },
+  {
     "id": "image-smoother",
     "title": "Image Smoother",
     "diff": "Easy",
@@ -1306,74 +1384,6 @@ const PROBLEMS = [
     "starter": {
       "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    nd = int(data[0]); ng = int(data[1]); idx = 2\n    dets = []\n    for _ in range(nd):\n        dets.append((tuple(map(float, data[idx:idx+4])), float(data[idx+4]))); idx += 5\n    gts = []\n    for _ in range(ng):\n        gts.append(tuple(map(float, data[idx:idx+4]))); idx += 4\n    thr = float(data[idx])\n    # TODO: print the AP\n\nmain()\n",
       "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    cout << fixed << setprecision(6);\n    int nd, ng; cin >> nd >> ng;\n    vector<array<double,4>> det(nd); vector<double> score(nd);\n    for (int i = 0; i < nd; i++) { cin >> det[i][0] >> det[i][1] >> det[i][2] >> det[i][3] >> score[i]; }\n    vector<array<double,4>> gt(ng);\n    for (auto& g : gt) cin >> g[0] >> g[1] >> g[2] >> g[3];\n    double thr; cin >> thr;\n    // TODO: print the AP\n    return 0;\n}\n"
-    }
-  },
-  {
-    "id": "rob-bev-splat",
-    "title": "Lift-Splat BEV Pooling",
-    "diff": "Medium",
-    "pattern": "BEV / 3D Perception",
-    "week": 7,
-    "statement": "<p>The \u201csplat\u201d step of Lift-Splat-Shoot: scatter lifted 3D points into a top-down BEV grid by <strong>sum-pooling</strong> their features. The grid spans <code>[x_min,x_max) x [y_min,y_max)</code> in cells of side <code>cell</code> (so <code>W=(x_max-x_min)/cell</code> columns, <code>H=(y_max-y_min)/cell</code> rows). Point (x,y) lands in column <code>floor((x-x_min)/cell)</code>, row <code>floor((y-y_min)/cell)</code>; add its feature to that cell. Drop points outside the grid.</p>",
-    "inputFormat": "Line 1: x_min x_max y_min y_max cell. Line 2: n. Next n lines: x y f.",
-    "outputFormat": "H rows (row 0 = lowest y first), each W summed features formatted to one decimal, space-separated.",
-    "tests": [
-      {
-        "input": "0 4 0 4 2\n5\n0.5 0.5 1.0\n3.0 0.5 2.0\n1.0 3.0 3.0\n3.5 3.5 0.5\n5.0 1.0 9.0\n",
-        "expected": "1.0 2.0\n3.0 0.5\n",
-        "sample": true
-      },
-      {
-        "input": "0 2 0 2 1\n4\n0.1 0.1 1.0\n0.9 0.2 2.0\n1.5 1.5 4.0\n-1.0 0.0 5.0\n",
-        "expected": "3.0 0.0\n0.0 4.0\n",
-        "sample": true
-      },
-      {
-        "input": "0 2 0 2 2\n1\n1.0 1.0 7.5\n",
-        "expected": "7.5\n",
-        "sample": false
-      }
-    ],
-    "category": "robotics",
-    "checker": "exact",
-    "tol": 0.0,
-    "starter": {
-      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    x_min = float(data[0]); x_max = float(data[1])\n    y_min = float(data[2]); y_max = float(data[3]); cell = float(data[4])\n    n = int(data[5]); idx = 6\n    W = round((x_max - x_min) / cell)\n    H = round((y_max - y_min) / cell)\n    grid = [[0.0] * W for _ in range(H)]\n    for _ in range(n):\n        x = float(data[idx]); y = float(data[idx+1]); f = float(data[idx+2]); idx += 3\n        # TODO: col,row = cell of (x,y); drop if out of [0,W)x[0,H), else grid[row][col] += f\n    # TODO: print H rows (row 0 = lowest y first), each W sums formatted with one decimal\n\nmain()\n",
-      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    double xmin, xmax, ymin, ymax, cell;\n    cin >> xmin >> xmax >> ymin >> ymax >> cell;\n    int n; cin >> n;\n    int W = (int)llround((xmax - xmin) / cell);\n    int H = (int)llround((ymax - ymin) / cell);\n    vector<vector<double>> grid(H, vector<double>(W, 0.0));\n    for (int i = 0; i < n; i++) {\n        double x, y, f; cin >> x >> y >> f;\n        // TODO: col,row = cell of (x,y); drop if out of bounds, else grid[row][col] += f\n    }\n    // TODO: print H rows (row 0 first), each W sums via printf(\"%.1f\")\n    return 0;\n}\n"
-    }
-  },
-  {
-    "id": "rob-bev-project",
-    "title": "Project 3D Points to Camera",
-    "diff": "Medium",
-    "pattern": "BEV / 3D Perception",
-    "week": 7,
-    "statement": "<p>The backward-projection core of BEVFormer/DETR3D: sample image features by projecting 3D reference points into a camera. Given a 3x4 projection matrix <code>P</code> (row-major), compute <code>h = P*[X,Y,Z,1]</code>. The point is <strong>visible</strong> only if its camera depth <code>h[2] &gt; 0</code> and the pixel <code>(u,v) = (h[0]/h[2], h[1]/h[2])</code> lies inside the image (<code>0 &lt;= u &lt; W</code>, <code>0 &lt;= v &lt; H</code>). Print the visible points in input order.</p>",
-    "inputFormat": "Line 1: W H. Line 2: 12 floats = P row-major (3 rows of 4). Line 3: n. Next n lines: X Y Z.",
-    "outputFormat": "For each visible point: '<index> <u> <v>' with u,v to two decimals, one per line.",
-    "tests": [
-      {
-        "input": "100 100\n100 0 50 0 0 100 50 0 0 0 1 0\n4\n0 0 10\n1 0 10\n0 0 -5\n10 0 10\n",
-        "expected": "0 50.00 50.00\n1 60.00 50.00\n",
-        "sample": true
-      },
-      {
-        "input": "100 100\n100 0 50 0 0 100 50 0 0 0 1 0\n2\n0 0 1\n0 0 0\n",
-        "expected": "0 50.00 50.00\n",
-        "sample": true
-      },
-      {
-        "input": "200 200\n100 0 100 0 0 100 100 0 0 0 1 0\n1\n0 0 2\n",
-        "expected": "0 100.00 100.00\n",
-        "sample": false
-      }
-    ],
-    "category": "robotics",
-    "checker": "float",
-    "tol": 0.01,
-    "starter": {
-      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    W = int(data[0]); H = int(data[1]); idx = 2\n    P = [float(data[idx + i]) for i in range(12)]; idx += 12\n    n = int(data[idx]); idx += 1\n    out = []\n    for i in range(n):\n        X = float(data[idx]); Y = float(data[idx+1]); Z = float(data[idx+2]); idx += 3\n        # h = P @ [X, Y, Z, 1]; depth = h[2]\n        # TODO: if depth > 0 and 0 <= u < W and 0 <= v < H:\n        #           out.append(f\"{i} {u:.2f} {v:.2f}\")\n    print(\"\\n\".join(out))\n\nmain()\n",
-      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int W, H; cin >> W >> H;\n    double P[12];\n    for (int i = 0; i < 12; i++) cin >> P[i];\n    int n; cin >> n;\n    for (int i = 0; i < n; i++) {\n        double X, Y, Z; cin >> X >> Y >> Z;\n        // h0 = P0*X+P1*Y+P2*Z+P3; h1 = ...; depth = P8*X+P9*Y+P10*Z+P11\n        // TODO: if depth > 0 and pixel inside image, printf(\"%d %.2f %.2f\\n\", i, u, v);\n    }\n    return 0;\n}\n"
     }
   },
   {
