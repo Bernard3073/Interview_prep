@@ -1,18 +1,37 @@
 #!/bin/sh
-# Validate the gen_problems.py <-> problems.js <-> curriculum.js contract before
-# a commit lands. Only runs when one of those files is staged, so unrelated
-# commits aren't slowed by the C++ compile-check.
+# Repo pre-commit hook. Two independent checks, each gated on what's staged so
+# unrelated commits aren't slowed down:
+#   1. Rebuild lectures-data.js when any study-materials markdown is staged.
+#   2. Validate the gen_problems.py <-> problems.js <-> curriculum.js contract.
 #
 # Enabled with:  git config core.hooksPath .githooks
 # Bypass once with:  git commit --no-verify
+#
+# NOTE: core.hooksPath is set to .githooks, so git ignores .git/hooks/ entirely.
+# Put all hook logic here, not in .git/hooks/.
 
 changed=$(git diff --cached --name-only)
-echo "$changed" | grep -Eq '^(gen_problems\.py|problems\.js|curriculum\.js)$' || exit 0
 
-echo "pre-commit: validating problems/curriculum consistency..."
-if ! python3 gen_problems.py --check; then
-    echo "" >&2
-    echo "pre-commit: validation failed; commit aborted." >&2
-    echo "  Fix gen_problems.py (and rerun it), or commit with --no-verify to bypass." >&2
-    exit 1
+# 1. Auto-rebuild rendered lecture HTML when source markdown changes, then stage
+#    the regenerated output so the generated file never goes stale in history.
+if echo "$changed" | grep -q '^study-materials/.*\.md$'; then
+    echo "pre-commit: study-materials markdown changed -> rebuilding lectures-data.js"
+    if ! node build_lectures.cjs >/dev/null; then
+        echo "pre-commit: build_lectures.cjs failed; commit aborted." >&2
+        exit 1
+    fi
+    git add lectures-data.js
 fi
+
+# 2. Validate problems/curriculum consistency.
+if echo "$changed" | grep -Eq '^(gen_problems\.py|problems\.js|curriculum\.js)$'; then
+    echo "pre-commit: validating problems/curriculum consistency..."
+    if ! python3 gen_problems.py --check; then
+        echo "" >&2
+        echo "pre-commit: validation failed; commit aborted." >&2
+        echo "  Fix gen_problems.py (and rerun it), or commit with --no-verify to bypass." >&2
+        exit 1
+    fi
+fi
+
+exit 0
