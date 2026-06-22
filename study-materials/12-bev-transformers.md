@@ -72,9 +72,34 @@ Attention(Q, K, V) = softmax( Q Kᵀ / √dₖ ) V
    · V          → (n_q, dᵥ)    → one context vector per query
 ```
 
-> **Why divide by √dₖ?** With `dₖ` large, dot products grow ~`√dₖ` in magnitude,
-> pushing softmax into a region with tiny gradients (one weight ≈ 1, the rest ≈ 0).
-> Scaling keeps variance ~1 so gradients stay healthy. Classic interview question.
+> **Why divide by √dₖ?** Classic interview question — here's the full chain of reasoning.
+>
+> **1. A score is a sum of `dₖ` terms.** Each score is `q·k = Σᵢ qᵢkᵢ`, a sum over the
+> `dₖ` dimensions. Assume the components are independent with mean 0 and variance 1
+> (roughly true right after init/normalization).
+>
+> **2. The spread grows as `√dₖ`.** Each product `qᵢkᵢ` has mean 0 and variance 1, and
+> variances of independent terms *add*, so the score has variance `dₖ` and standard
+> deviation `√dₖ`. It's not the values that grow — it's the *spread* of the dot product.
+> With `dₖ = 64`, scores swing by ~±8 instead of ~±1.
+>
+> **3. Large scores saturate softmax.** When inputs are spread far apart, the exponential
+> blows up the largest one and the output collapses toward a **one-hot vector**
+> (one weight ≈ 1, the rest ≈ 0).
+>
+> **4. Saturation kills gradients.** The softmax Jacobian is `∂pᵢ/∂xⱼ = pᵢ(δᵢⱼ − pⱼ)`.
+> When `p` is nearly one-hot, every `pᵢ(1−pᵢ) ≈ 0`, so gradients vanish — the same
+> vanishing-gradient problem as a saturated sigmoid. The network can barely learn to
+> re-weight attention.
+>
+> **5. The fix.** Dividing a random variable by `√dₖ` divides its standard deviation by
+> `√dₖ`, taking the score variance from `dₖ` back to **1**, *independent of dimension*.
+> Softmax stays in its responsive region, gradients stay healthy, and training behaves
+> the same no matter how large you make `dₖ` — exactly what you want when scaling up.
+>
+> *One-line intuition:* the dot product is a sum, and sums of more terms naturally get
+> bigger in spread; `√dₖ` is precisely that growth rate, so dividing by it cancels the
+> effect and keeps softmax's inputs at a stable scale.
 
 A minimal NumPy implementation:
 

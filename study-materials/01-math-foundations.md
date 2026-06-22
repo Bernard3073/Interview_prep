@@ -77,7 +77,7 @@ you fit a line/plane when *all* coordinates are noisy.
 ## 4. Optimization (nonlinear least squares)
 
 Most perception "solve" steps minimize a sum of squared residuals
-`f(x) = Σ ‖rᵢ(x)‖²`.
+`f(x) = ½‖r(x)‖² = ½ Σ rᵢ(x)²`.
 
 - **Gradient descent:** `x ← x − α ∇f`. Simple, slow, needs step tuning.
 - **Gauss–Newton:** linearize residuals `r(x+Δ) ≈ r + J Δ`, solve
@@ -87,6 +87,62 @@ Most perception "solve" steps minimize a sum of squared residuals
 
 > Know the GN normal equation cold — it's the same `JᵀJ Δ = −Jᵀ r` you'll write
 > for EKF Jacobians, BA, ICP, and pose-graph optimization.
+
+### First-order Taylor expansion (the tool under the hood)
+
+Every method above relies on replacing a nonlinear function with a local linear
+model. For a vector function `r: ℝⁿ → ℝᵐ`, the **first-order Taylor expansion**
+around the current estimate `x` is
+
+```
+r(x + Δ) ≈ r(x) + J Δ        J = ∂r/∂x ∈ ℝ^{m×n}   (the Jacobian)
+```
+
+`J` collects the partial derivatives: row `i` is `∇rᵢ(x)ᵀ`. Geometrically this is
+the **tangent (hyper)plane** to `r` at `x`; it is accurate for small steps `Δ` and
+degrades as `Δ` grows or the function curves sharply. Linearizing the *residual*
+(cheap, first derivatives only) is what makes Gauss–Newton avoid the full Hessian.
+
+### Deriving the Gauss–Newton update
+
+**1. Cost.** Minimize `f(x) = ½‖r(x)‖²` (the ½ just cancels a 2 later).
+
+**2. Linearize the residual** with the first-order Taylor expansion:
+`r(x+Δ) ≈ r(x) + J Δ`.
+
+**3. Substitute** to get a quadratic in the step `Δ`:
+
+```
+f(x+Δ) ≈ ½‖r + J Δ‖² = ½ (rᵀr + 2 rᵀJ Δ + Δᵀ JᵀJ Δ)
+```
+
+**4. Minimize over `Δ`** by setting the gradient to zero:
+
+```
+∂f/∂Δ = Jᵀr + JᵀJ Δ = 0   ⟹   (JᵀJ) Δ = −Jᵀ r     ← GN normal equation
+```
+
+Then update `x ← x + Δ` and re-linearize. Iterate to convergence.
+
+**Why drop the Hessian?** The exact Newton step uses
+`H = JᵀJ + Σᵢ rᵢ ∇²rᵢ`. Gauss–Newton **approximates `H ≈ JᵀJ`**, discarding the
+`Σᵢ rᵢ ∇²rᵢ` term. That term is negligible when residuals `rᵢ` are small or the
+problem is nearly linear — exactly the regime near a good solution — so GN
+converges almost as fast as Newton while needing only first derivatives. Bonus:
+`JᵀJ` is automatically symmetric PSD.
+
+**When GN breaks → Levenberg–Marquardt.** Far from the optimum `JᵀJ` can be
+ill-conditioned/singular and the step overshoots. LM damps it:
+
+```
+(JᵀJ + λI) Δ = −Jᵀ r
+   λ→0   : recovers Gauss–Newton (fast near the solution)
+   λ→∞   : Δ ≈ −(1/λ) Jᵀr, a small gradient-descent step (safe, slow)
+```
+
+LM adapts `λ` per iteration (shrink it after a successful step, grow it after a
+rejected one) — a trust-region strategy that keeps you in the region where the
+linearization is trustworthy.
 
 ---
 
