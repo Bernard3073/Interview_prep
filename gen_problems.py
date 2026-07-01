@@ -7,7 +7,7 @@ cases are guaranteed correct). C++ starters are compile-checked with g++.
 
 Run:  python3 gen_problems.py
 """
-import io, json, subprocess, sys, tempfile, os, contextlib, re
+import io, json, subprocess, sys, tempfile, os, contextlib, re, shutil
 
 PROBLEMS = []
 
@@ -1250,16 +1250,303 @@ P("rob-bev-project", "Project 3D Points to Camera", "Medium", "BEV / 3D Percepti
   "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int W, H; cin >> W >> H;\n    double P[12];\n    for (int i = 0; i < 12; i++) cin >> P[i];\n    int n; cin >> n;\n    for (int i = 0; i < n; i++) {\n        double X, Y, Z; cin >> X >> Y >> Z;\n        // h0 = P0*X+P1*Y+P2*Z+P3; h1 = ...; depth = P8*X+P9*Y+P10*Z+P11\n        // TODO: if depth > 0 and pixel inside image, printf(\"%d %.2f %.2f\\n\", i, u, v);\n    }\n    return 0;\n}\n", category="robotics", checker="float", tol=0.01),
 
 # ----------------------------------------------------------------------------
+# Week 13 — LeetCode patterns: one canonical, most-asked problem per technique
+# ----------------------------------------------------------------------------
+def ref_three_sum():
+    import sys
+    d = sys.stdin.read().split()
+    n = int(d[0]); a = sorted(map(int, d[1:1+n]))
+    res = []
+    for i in range(n):
+        if i > 0 and a[i] == a[i-1]:
+            continue
+        l, r = i+1, n-1
+        while l < r:
+            s = a[i] + a[l] + a[r]
+            if s < 0:
+                l += 1
+            elif s > 0:
+                r -= 1
+            else:
+                res.append((a[i], a[l], a[r])); l += 1; r -= 1
+                while l < r and a[l] == a[l-1]: l += 1
+                while l < r and a[r] == a[r+1]: r -= 1
+    print("\n".join("%d %d %d" % t for t in res))
+
+def ref_longest_substring():
+    import sys
+    d = sys.stdin.read().split()
+    s = d[0]
+    seen = {}; left = best = 0
+    for r, c in enumerate(s):
+        if c in seen and seen[c] >= left:
+            left = seen[c] + 1
+        seen[c] = r
+        best = max(best, r - left + 1)
+    print(best)
+
+def ref_rotting_oranges():
+    import sys
+    from collections import deque
+    d = sys.stdin.read().split()
+    rows = int(d[0]); cols = int(d[1]); vals = list(map(int, d[2:2+rows*cols]))
+    g = [vals[i*cols:(i+1)*cols] for i in range(rows)]
+    q = deque(); fresh = 0
+    for r in range(rows):
+        for c in range(cols):
+            if g[r][c] == 2: q.append((r, c, 0))
+            elif g[r][c] == 1: fresh += 1
+    t = 0
+    while q:
+        r, c, tt = q.popleft(); t = max(t, tt)
+        for dr, dc in ((1,0),(-1,0),(0,1),(0,-1)):
+            nr, nc = r+dr, c+dc
+            if 0 <= nr < rows and 0 <= nc < cols and g[nr][nc] == 1:
+                g[nr][nc] = 2; fresh -= 1; q.append((nr, nc, tt+1))
+    print(-1 if fresh > 0 else t)
+
+def ref_course_schedule_ii():
+    import sys, heapq
+    d = sys.stdin.read().split()
+    n = int(d[0]); m = int(d[1]); idx = 2
+    adj = [[] for _ in range(n)]; indeg = [0]*n
+    for _ in range(m):
+        a = int(d[idx]); b = int(d[idx+1]); idx += 2
+        adj[b].append(a); indeg[a] += 1
+    h = [i for i in range(n) if indeg[i] == 0]; heapq.heapify(h)
+    order = []
+    while h:
+        u = heapq.heappop(h); order.append(u)
+        for v in adj[u]:
+            indeg[v] -= 1
+            if indeg[v] == 0: heapq.heappush(h, v)
+    print(" ".join(map(str, order)) if len(order) == n else -1)
+
+def ref_search_rotated():
+    import sys
+    d = sys.stdin.read().split()
+    n = int(d[0]); a = list(map(int, d[1:1+n])); target = int(d[1+n])
+    lo, hi = 0, n-1
+    while lo <= hi:
+        mid = (lo + hi) // 2
+        if a[mid] == target:
+            print(mid); return
+        if a[lo] <= a[mid]:
+            if a[lo] <= target < a[mid]: hi = mid - 1
+            else: lo = mid + 1
+        else:
+            if a[mid] < target <= a[hi]: lo = mid + 1
+            else: hi = mid - 1
+    print(-1)
+
+def ref_merge_k_lists():
+    import sys
+    d = sys.stdin.read().split()
+    k = int(d[0]); idx = 1; res = []
+    for _ in range(k):
+        L = int(d[idx]); idx += 1
+        res.extend(int(d[idx+j]) for j in range(L)); idx += L
+    res.sort()
+    print(" ".join(map(str, res)))
+
+def ref_coin_change():
+    import sys
+    d = sys.stdin.read().split()
+    n = int(d[0]); coins = list(map(int, d[1:1+n])); amount = int(d[1+n])
+    INF = amount + 1
+    dp = [0] + [INF]*amount
+    for x in range(1, amount+1):
+        for c in coins:
+            if c <= x:
+                dp[x] = min(dp[x], dp[x-c] + 1)
+    print(dp[amount] if dp[amount] != INF else -1)
+
+def ref_subsets():
+    import sys
+    d = sys.stdin.read().split()
+    n = int(d[0]); a = list(map(int, d[1:1+n]))
+    subs = []
+    for mask in range(1 << n):
+        subs.append(sorted(a[i] for i in range(n) if mask >> i & 1))
+    subs.sort(key=lambda s: (len(s), s))
+    print("\n".join(" ".join(map(str, s)) for s in subs))
+
+def ref_top_k_frequent():
+    import sys
+    from collections import Counter
+    d = sys.stdin.read().split()
+    n = int(d[0]); k = int(d[1]); a = list(map(int, d[2:2+n]))
+    cnt = Counter(a)
+    order = sorted(cnt, key=lambda v: (-cnt[v], v))
+    print(" ".join(map(str, order[:k])))
+
+def ref_number_of_provinces():
+    import sys
+    d = sys.stdin.read().split()
+    n = int(d[0]); vals = list(map(int, d[1:1+n*n]))
+    M = [vals[i*n:(i+1)*n] for i in range(n)]
+    p = list(range(n))
+    def find(x):
+        while p[x] != x: p[x] = p[p[x]]; x = p[x]
+        return x
+    for i in range(n):
+        for j in range(i+1, n):
+            if M[i][j] == 1:
+                ri, rj = find(i), find(j)
+                if ri != rj: p[ri] = rj
+    print(len({find(i) for i in range(n)}))
+
+def ref_jump_game():
+    import sys
+    d = sys.stdin.read().split()
+    n = int(d[0]); a = list(map(int, d[1:1+n]))
+    reach = 0
+    for i in range(n):
+        if i > reach:
+            print("false"); return
+        reach = max(reach, i + a[i])
+    print("true")
+
+P("3sum", "3Sum", "Medium", "Two Pointers", 13,
+  "<p>Given an integer array, return <b>all unique triplets</b> <code>(a, b, c)</code> with <code>a + b + c = 0</code>. Print each triplet on its own line with its values in <b>non-decreasing order</b>, and order the triplets in ascending (lexicographic) order. Print nothing if there are none.</p>",
+  "Line 1: n. Line 2: n integers.",
+  "Each triplet 'a b c' (a<=b<=c) on its own line, triplets sorted ascending.",
+  ref_three_sum,
+  [("6\n-1 0 1 2 -1 -4\n", True), ("3\n0 0 0\n", True), ("3\n1 2 -1\n", False),
+   ("5\n-2 0 1 1 2\n", False), ("4\n1 2 3 4\n", False)],
+  PY_HEAD + "    n = int(data[0])\n    a = list(map(int, data[1:1+n]))\n    # TODO: print each unique triplet summing to 0 (see statement for ordering)\n\nmain()\n",
+  CPP_HEAD + "    int n; cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    // TODO: print each unique triplet summing to 0 (see statement for ordering)\n    return 0;\n}\n"),
+
+P("longest-substring-no-repeat", "Longest Substring Without Repeating Characters", "Medium", "Sliding Window", 13,
+  "<p>Given a string (no spaces), return the <b>length</b> of the longest substring without repeating characters.</p>",
+  "Line 1: the string s (no spaces, length >= 1).",
+  "The length (an integer).",
+  ref_longest_substring,
+  [("abcabcbb\n", True), ("bbbbb\n", True), ("pwwkew\n", True), ("dvdf\n", False), ("abba\n", False)],
+  PY_HEAD + "    s = data[0]\n    # TODO: print the length of the longest substring without repeats\n\nmain()\n",
+  CPP_HEAD + "    string s; cin >> s;\n    // TODO: print the length of the longest substring without repeats\n    return 0;\n}\n"),
+
+P("rotting-oranges", "Rotting Oranges", "Medium", "BFS (multi-source)", 13,
+  "<p>In a grid, <code>0</code> = empty, <code>1</code> = fresh orange, <code>2</code> = rotten. Each minute, every fresh orange 4-directionally adjacent to a rotten one becomes rotten. Return the minutes until no fresh orange remains, or <code>-1</code> if some can never rot.</p>",
+  "Line 1: rows cols. Next rows lines: cols integers (0/1/2).",
+  "The number of minutes, or -1.",
+  ref_rotting_oranges,
+  [("3 3\n2 1 1\n1 1 0\n0 1 1\n", True), ("3 3\n2 1 1\n0 1 1\n1 0 1\n", True),
+   ("1 2\n0 2\n", True), ("1 1\n1\n", False), ("2 2\n2 2\n2 2\n", False)],
+  PY_HEAD + "    rows = int(data[0]); cols = int(data[1])\n    vals = list(map(int, data[2:2+rows*cols]))\n    g = [vals[i*cols:(i+1)*cols] for i in range(rows)]\n    # TODO: multi-source BFS; print minutes or -1\n\nmain()\n",
+  CPP_HEAD + "    int rows, cols; cin >> rows >> cols;\n    vector<vector<int>> g(rows, vector<int>(cols));\n    for (auto& r : g) for (auto& x : r) cin >> x;\n    // TODO: multi-source BFS; print minutes or -1\n    return 0;\n}\n"),
+
+P("course-schedule-ii", "Course Schedule II", "Medium", "DFS / Topological Sort", 13,
+  "<p>There are <code>n</code> courses (0..n-1). Each prerequisite pair <code>a b</code> means course <code>b</code> must be taken before course <code>a</code>. Return a valid order to finish all courses; if several exist, return the <b>lexicographically smallest</b> (always take the available course with the smallest index next). Print <code>-1</code> if it is impossible (a cycle).</p>",
+  "Line 1: n m (courses, number of prerequisite pairs). Next m lines: 'a b' (take b before a).",
+  "The order on one line (space-separated), or -1.",
+  ref_course_schedule_ii,
+  [("2 1\n1 0\n", True), ("4 4\n1 0\n2 0\n3 1\n3 2\n", True), ("2 2\n1 0\n0 1\n", True),
+   ("3 0\n", False), ("1 0\n", False)],
+  PY_HEAD + "    n = int(data[0]); m = int(data[1]); idx = 2\n    edges = []\n    for _ in range(m):\n        a = int(data[idx]); b = int(data[idx+1]); idx += 2\n        edges.append((a, b))  # take b before a\n    # TODO: lexicographically smallest topological order, or -1\n\nmain()\n",
+  CPP_HEAD + "    int n, m; cin >> n >> m;\n    vector<vector<int>> adj(n);\n    vector<int> indeg(n, 0);\n    for (int i = 0; i < m; i++) {\n        int a, b; cin >> a >> b; // take b before a\n        adj[b].push_back(a); indeg[a]++;\n    }\n    // TODO: lexicographically smallest topological order, or -1\n    return 0;\n}\n"),
+
+P("search-in-rotated-sorted-array", "Search in Rotated Sorted Array", "Medium", "Binary Search", 13,
+  "<p>An ascending array of <b>distinct</b> integers was rotated at an unknown pivot. Given a target, return its <b>index</b>, or <code>-1</code> if absent. Aim for O(log n).</p>",
+  "Line 1: n. Line 2: n integers (rotated sorted). Line 3: target.",
+  "The index of target, or -1.",
+  ref_search_rotated,
+  [("7\n4 5 6 7 0 1 2\n0\n", True), ("7\n4 5 6 7 0 1 2\n3\n", True), ("5\n3 4 5 1 2\n1\n", True),
+   ("1\n5\n5\n", False), ("1\n5\n6\n", False)],
+  PY_HEAD + "    n = int(data[0])\n    a = list(map(int, data[1:1+n]))\n    target = int(data[1+n])\n    # TODO: binary search the rotated array; print index or -1\n\nmain()\n",
+  CPP_HEAD + "    int n; cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    int target; cin >> target;\n    // TODO: binary search the rotated array; print index or -1\n    return 0;\n}\n"),
+
+P("merge-k-sorted-lists", "Merge k Sorted Lists", "Hard", "Divide & Conquer / Heap", 13,
+  "<p>Merge <code>k</code> ascending-sorted lists into one ascending-sorted sequence. Print the merged values on one line; print nothing if every list is empty.</p>",
+  "Line 1: k. Next k lines: 'L v1 v2 ... vL' (length then L sorted integers).",
+  "The merged sorted values, space-separated on one line.",
+  ref_merge_k_lists,
+  [("3\n3 1 4 5\n3 1 3 4\n2 2 6\n", True), ("1\n3 -5 0 7\n", True), ("0\n", True),
+   ("2\n0\n0\n", False), ("2\n2 1 2\n3 1 3 5\n", False)],
+  PY_HEAD + "    k = int(data[0]); idx = 1; lists = []\n    for _ in range(k):\n        L = int(data[idx]); idx += 1\n        lists.append(list(map(int, data[idx:idx+L]))); idx += L\n    # TODO: merge all lists in sorted order; print on one line\n\nmain()\n",
+  CPP_HEAD + "    int k; cin >> k;\n    vector<int> all;\n    for (int i = 0; i < k; i++) {\n        int L; cin >> L;\n        for (int j = 0; j < L; j++) { int v; cin >> v; all.push_back(v); }\n    }\n    // TODO: output all values in sorted (merged) order on one line\n    return 0;\n}\n"),
+
+P("coin-change", "Coin Change", "Medium", "Dynamic Programming", 13,
+  "<p>Given coin denominations and a target <code>amount</code>, return the <b>fewest coins</b> that sum to it (each coin usable unlimited times), or <code>-1</code> if it cannot be made.</p>",
+  "Line 1: n. Line 2: n coin values. Line 3: amount.",
+  "The minimum number of coins, or -1.",
+  ref_coin_change,
+  [("3\n1 2 5\n11\n", True), ("1\n2\n3\n", True), ("1\n1\n0\n", True),
+   ("4\n2 5 10 1\n27\n", False), ("2\n3 7\n5\n", False)],
+  PY_HEAD + "    n = int(data[0])\n    coins = list(map(int, data[1:1+n]))\n    amount = int(data[1+n])\n    # TODO: DP for fewest coins; print count or -1\n\nmain()\n",
+  CPP_HEAD + "    int n; cin >> n;\n    vector<int> coins(n);\n    for (auto& x : coins) cin >> x;\n    int amount; cin >> amount;\n    // TODO: DP for fewest coins; print count or -1\n    return 0;\n}\n"),
+
+P("subsets", "Subsets", "Medium", "Backtracking", 13,
+  "<p>Given an array of <b>distinct</b> integers, print <b>all</b> subsets (the power set). Print each subset's values in ascending order, space-separated, on its own line; print the empty subset as an empty line. Order the lines by subset <b>size ascending</b>, breaking ties by ascending values (so the empty subset comes first).</p>",
+  "Line 1: n. Line 2: n distinct integers.",
+  "All 2^n subsets, one per line (see statement for ordering).",
+  ref_subsets,
+  [("3\n1 2 3\n", True), ("1\n5\n", True), ("2\n3 1\n", True), ("0\n", False)],
+  PY_HEAD + "    n = int(data[0])\n    a = list(map(int, data[1:1+n]))\n    # TODO: print every subset (see statement for ordering)\n\nmain()\n",
+  CPP_HEAD + "    int n; cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    // TODO: print every subset (see statement for ordering)\n    return 0;\n}\n"),
+
+P("top-k-frequent", "Top K Frequent Elements", "Medium", "Heap / Top-K", 13,
+  "<p>Given an integer array and <code>k</code>, return the <code>k</code> most frequent values. Break frequency ties by the <b>smaller value</b> first, and print the result in order of <b>decreasing frequency</b>, then increasing value.</p>",
+  "Line 1: n k. Line 2: n integers.",
+  "The k values, space-separated on one line.",
+  ref_top_k_frequent,
+  [("6 2\n1 1 1 2 2 3\n", True), ("1 1\n1\n", True), ("6 2\n4 4 5 5 6 6\n", True),
+   ("7 3\n5 3 1 1 1 3 3\n", False)],
+  PY_HEAD + "    n = int(data[0]); k = int(data[1])\n    a = list(map(int, data[2:2+n]))\n    # TODO: print the k most frequent values (see statement for tie-breaking/order)\n\nmain()\n",
+  CPP_HEAD + "    int n, k; cin >> n >> k;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    // TODO: print the k most frequent values (see statement for tie-breaking/order)\n    return 0;\n}\n"),
+
+P("number-of-provinces", "Number of Provinces", "Medium", "Union-Find", 13,
+  "<p>An <code>n x n</code> matrix <code>M</code> has <code>M[i][j] = 1</code> if cities <code>i</code> and <code>j</code> are directly connected. A <b>province</b> is a connected group of cities. Return the number of provinces.</p>",
+  "Line 1: n. Next n lines: n integers (0/1), the isConnected matrix.",
+  "The number of provinces.",
+  ref_number_of_provinces,
+  [("3\n1 1 0\n1 1 0\n0 0 1\n", True), ("3\n1 0 0\n0 1 0\n0 0 1\n", True), ("1\n1\n", True),
+   ("4\n1 1 0 0\n1 1 0 0\n0 0 1 1\n0 0 1 1\n", False)],
+  PY_HEAD + "    n = int(data[0])\n    vals = list(map(int, data[1:1+n*n]))\n    M = [vals[i*n:(i+1)*n] for i in range(n)]\n    # TODO: count connected components (union-find or DFS)\n\nmain()\n",
+  CPP_HEAD + "    int n; cin >> n;\n    vector<vector<int>> M(n, vector<int>(n));\n    for (auto& r : M) for (auto& x : r) cin >> x;\n    // TODO: count connected components (union-find or DFS)\n    return 0;\n}\n"),
+
+P("jump-game", "Jump Game", "Medium", "Greedy", 13,
+  "<p>Each element is the maximum jump length from that index. Starting at index 0, return <code>true</code> if you can reach the last index, else <code>false</code>.</p>",
+  "Line 1: n. Line 2: n non-negative integers.",
+  "'true' or 'false'.",
+  ref_jump_game,
+  [("5\n2 3 1 1 4\n", True), ("5\n3 2 1 0 4\n", True), ("1\n0\n", True),
+   ("3\n0 1 2\n", False), ("2\n1 0\n", False)],
+  PY_HEAD + "    n = int(data[0])\n    a = list(map(int, data[1:1+n]))\n    # TODO: greedily track the farthest reachable index; print 'true'/'false'\n\nmain()\n",
+  CPP_HEAD + "    int n; cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    // TODO: greedily track the farthest reachable index; print true/false\n    return 0;\n}\n"),
+
+# ----------------------------------------------------------------------------
 # Compile-check every C++ starter so users never hit a template compile error
 # ----------------------------------------------------------------------------
+def _find_cxx():
+    """Pick a compiler that ships <bits/stdc++.h> (a GNU libstdc++ header).
+
+    On Linux CI plain `g++` is real GCC and works. On macOS `g++` is an Apple
+    Clang shim over libc++, which lacks that header, so prefer any Homebrew
+    versioned `g++-NN` (highest version wins) and fall back to `g++`.
+    """
+    versioned = []
+    for d in os.environ.get("PATH", "").split(os.pathsep):
+        try:
+            for name in os.listdir(d):
+                m = re.fullmatch(r"g\+\+-(\d+)", name)
+                if m and os.access(os.path.join(d, name), os.X_OK):
+                    versioned.append((int(m.group(1)), name))
+        except OSError:
+            continue
+    if versioned:
+        return max(versioned)[1]
+    return "g++"
+
 def compile_check():
+    cxx = _find_cxx()
     failures = []
     with tempfile.TemporaryDirectory() as tmp:
         for p in PROBLEMS:
             src = os.path.join(tmp, "s.cpp")
             with open(src, "w") as f:
                 f.write(p["starter"]["cpp"])
-            r = subprocess.run(["g++", "-std=c++17", "-O2", "-o", os.path.join(tmp, "a.out"), src],
+            r = subprocess.run([cxx, "-std=c++17", "-O2", "-o", os.path.join(tmp, "a.out"), src],
                                capture_output=True, text=True)
             if r.returncode != 0:
                 failures.append((p["id"], r.stderr.strip().split("\n")[0]))

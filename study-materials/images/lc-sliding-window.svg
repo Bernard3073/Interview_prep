@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="250" viewBox="0 0 640 250" font-family="system-ui, sans-serif">
+  <rect width="640" height="250" fill="#0f1320"/>
+  <text x="20" y="30" fill="#e8ecf6" font-size="16" font-weight="bold">Sliding window — grow right, shrink left on violation</text>
+
+  <!-- characters -->
+  <g font-size="18" text-anchor="middle">
+    <rect x="60"  y="70" width="50" height="50" fill="#1c2236" stroke="#2b3350"/><text x="85"  y="102" fill="#e8ecf6">a</text>
+    <rect x="110" y="70" width="50" height="50" fill="#232b44" stroke="#4f8cff" stroke-width="2"/><text x="135" y="102" fill="#e8ecf6">b</text>
+    <rect x="160" y="70" width="50" height="50" fill="#232b44" stroke="#4f8cff" stroke-width="2"/><text x="185" y="102" fill="#e8ecf6">c</text>
+    <rect x="210" y="70" width="50" height="50" fill="#232b44" stroke="#4f8cff" stroke-width="2"/><text x="235" y="102" fill="#e8ecf6">d</text>
+    <rect x="260" y="70" width="50" height="50" fill="#1c2236" stroke="#2b3350"/><text x="285" y="102" fill="#e8ecf6">b</text>
+    <rect x="310" y="70" width="50" height="50" fill="#1c2236" stroke="#2b3350"/><text x="335" y="102" fill="#e8ecf6">e</text>
+    <rect x="360" y="70" width="50" height="50" fill="#1c2236" stroke="#2b3350"/><text x="385" y="102" fill="#e8ecf6">f</text>
+  </g>
+
+  <!-- window bracket -->
+  <rect x="108" y="64" width="154" height="62" fill="none" stroke="#22d3a6" stroke-width="2" rx="6"/>
+  <text x="185" y="56" fill="#22d3a6" font-size="13" text-anchor="middle" font-weight="bold">current window (no repeats)</text>
+
+  <!-- pointers -->
+  <text x="135" y="148" fill="#22d3a6" font-size="13" text-anchor="middle">left</text>
+  <line x1="135" y1="152" x2="135" y2="124" stroke="#22d3a6" stroke-width="2"/>
+  <text x="235" y="148" fill="#4f8cff" font-size="13" text-anchor="middle">right</text>
+  <line x1="235" y1="152" x2="235" y2="124" stroke="#4f8cff" stroke-width="2"/>
+
+  <!-- rules -->
+  <text x="60" y="190" fill="#9aa6c2" font-size="13">• extend: right++ adds a new element to the window</text>
+  <text x="60" y="212" fill="#9aa6c2" font-size="13">• shrink: while the window is invalid, left++ until it is valid again</text>
+  <text x="60" y="234" fill="#9aa6c2" font-size="13">• each index enters and leaves once → O(n) total</text>
+</svg>

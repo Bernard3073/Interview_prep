@@ -265,6 +265,35 @@ const CURRICULUM = [
       { name: "Project 3D Points to Camera", pid: "rob-bev-project", diff: "Medium", tag: "BEV / 3D Perception" },
     ],
   },
+  {
+    week: 13,
+    title: "LeetCode Patterns & Core Techniques",
+    goal: "The pattern cheat sheet for coding rounds: two pointers, sliding window, BFS, DFS, binary search, divide & conquer, dynamic programming, backtracking, heaps and union-find — when to reach for each, a reusable template, and the complexity. Recognize the pattern, not the problem.",
+    lecture: "lecture.html?week=13",
+    topics: [
+      "Picking the technique from the problem's shape (the decision reflex)",
+      "Two pointers & sliding window (O(n) array/substring scans)",
+      "BFS vs. DFS — shortest path vs. reachability/components/topo-sort",
+      "Binary search, including search-on-the-answer",
+      "Divide & conquer vs. dynamic programming (overlapping subproblems)",
+      "Designing a DP: state, transition, base case, fill order",
+      "Backtracking, heaps/top-k, and union-find",
+    ],
+    leetcode: [
+      { name: "3Sum", pid: "3sum", url: "https://leetcode.com/problems/3sum/", diff: "Medium", tag: "Two Pointers" },
+      { name: "Longest Substring Without Repeating Characters", pid: "longest-substring-no-repeat", url: "https://leetcode.com/problems/longest-substring-without-repeating-characters/", diff: "Medium", tag: "Sliding Window" },
+      { name: "Rotting Oranges", pid: "rotting-oranges", url: "https://leetcode.com/problems/rotting-oranges/", diff: "Medium", tag: "BFS" },
+      { name: "Course Schedule II", pid: "course-schedule-ii", url: "https://leetcode.com/problems/course-schedule-ii/", diff: "Medium", tag: "DFS/Topo Sort" },
+      { name: "Search in Rotated Sorted Array", pid: "search-in-rotated-sorted-array", url: "https://leetcode.com/problems/search-in-rotated-sorted-array/", diff: "Medium", tag: "Binary Search" },
+      { name: "Merge k Sorted Lists", pid: "merge-k-sorted-lists", url: "https://leetcode.com/problems/merge-k-sorted-lists/", diff: "Hard", tag: "Divide & Conquer/Heap" },
+      { name: "Coin Change", pid: "coin-change", url: "https://leetcode.com/problems/coin-change/", diff: "Medium", tag: "DP" },
+      { name: "Subsets", pid: "subsets", url: "https://leetcode.com/problems/subsets/", diff: "Medium", tag: "Backtracking" },
+      { name: "Top K Frequent Elements", pid: "top-k-frequent", url: "https://leetcode.com/problems/top-k-frequent-elements/", diff: "Medium", tag: "Heap/Top-K" },
+      { name: "Number of Provinces", pid: "number-of-provinces", url: "https://leetcode.com/problems/number-of-provinces/", diff: "Medium", tag: "Union-Find" },
+      { name: "Jump Game", pid: "jump-game", url: "https://leetcode.com/problems/jump-game/", diff: "Medium", tag: "Greedy" },
+    ],
+    robotics: [],
+  },
 ];
 
 if (typeof module !== "undefined") module.exports = CURRICULUM;

@@ -4,6 +4,7 @@
 (function () {
   const THEME_KEY = "rp_prep_theme";
   const SOLVED_KEY = "rp_prep_solved";
+  const SCROLL_KEY = "rp_prac_scroll";   // sidebar scroll position, preserved across selects
   const WANDBOX = "https://wandbox.org/api/compile.json";
   const COMPILER = { python: "cpython-3.12.7", cpp: "gcc-13.2.0" };
 
@@ -56,6 +57,37 @@
           <span class="badge ${p.diff}">${p.diff}</span>`;
         nav.appendChild(a);
       });
+    placeSidebar();
+  }
+
+  // Selecting a problem reloads the page. To stop the sidebar jumping each time, we
+  // restore exactly where it was — the item you clicked is already in view, so nothing
+  // moves. We only scroll when the selected item is genuinely off-screen (e.g. a deep
+  // link from a lecture), and then just enough to reveal it, scrolling the sidebar only.
+  const sidebarEl = nav.closest(".prob-sidebar");
+  function placeSidebar() {
+    if (!sidebarEl) return;
+    const saved = sessionStorage.getItem(SCROLL_KEY);
+    if (saved != null) sidebarEl.scrollTop = parseFloat(saved) || 0;  // preserve → no jump
+    requestAnimationFrame(() => {
+      const active = nav.querySelector(".prob-item.active");
+      if (!active) return;
+      const sb = sidebarEl.getBoundingClientRect();
+      const a = active.getBoundingClientRect();
+      if (a.top >= sb.top && a.bottom <= sb.bottom) return;  // already visible: don't move
+      // Off-screen: center it. Rect math works regardless of the offset parent.
+      const activeTopInContent = (a.top - sb.top) + sidebarEl.scrollTop;
+      const target = activeTopInContent - (sidebarEl.clientHeight - a.height) / 2;
+      const max = sidebarEl.scrollHeight - sidebarEl.clientHeight;
+      sidebarEl.scrollTop = Math.max(0, Math.min(target, max));
+    });
+  }
+  // Remember the sidebar's scroll position as the user scrolls, so it survives the
+  // reload that happens when they click a different problem.
+  if (sidebarEl) {
+    sidebarEl.addEventListener("scroll", () => {
+      sessionStorage.setItem(SCROLL_KEY, sidebarEl.scrollTop);
+    }, { passive: true });
   }
   document.querySelectorAll(".filt-btn").forEach((b) => {
     b.classList.toggle("active", b.dataset.filt === filter);

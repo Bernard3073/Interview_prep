@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="240" viewBox="0 0 640 240" font-family="system-ui, sans-serif">
+  <rect width="640" height="240" fill="#0f1320"/>
+  <text x="20" y="30" fill="#e8ecf6" font-size="16" font-weight="bold">Two pointers — converging on a sorted array</text>
+
+  <!-- array boxes -->
+  <g>
+    <rect x="60"  y="80" width="64" height="56" fill="#1c2236" stroke="#2b3350"/>
+    <rect x="124" y="80" width="64" height="56" fill="#1c2236" stroke="#2b3350"/>
+    <rect x="188" y="80" width="64" height="56" fill="#1c2236" stroke="#2b3350"/>
+    <rect x="252" y="80" width="64" height="56" fill="#1c2236" stroke="#2b3350"/>
+    <rect x="316" y="80" width="64" height="56" fill="#1c2236" stroke="#2b3350"/>
+    <rect x="380" y="80" width="64" height="56" fill="#1c2236" stroke="#2b3350"/>
+    <rect x="444" y="80" width="64" height="56" fill="#1c2236" stroke="#2b3350"/>
+    <text x="92"  y="115" fill="#e8ecf6" font-size="18" text-anchor="middle">-4</text>
+    <text x="156" y="115" fill="#e8ecf6" font-size="18" text-anchor="middle">-1</text>
+    <text x="220" y="115" fill="#e8ecf6" font-size="18" text-anchor="middle">0</text>
+    <text x="284" y="115" fill="#e8ecf6" font-size="18" text-anchor="middle">2</text>
+    <text x="348" y="115" fill="#e8ecf6" font-size="18" text-anchor="middle">5</text>
+    <text x="412" y="115" fill="#e8ecf6" font-size="18" text-anchor="middle">8</text>
+    <text x="476" y="115" fill="#e8ecf6" font-size="18" text-anchor="middle">11</text>
+  </g>
+
+  <!-- i pointer (left) -->
+  <text x="92" y="68" fill="#22d3a6" font-size="14" font-weight="bold" text-anchor="middle">i</text>
+  <line x1="92" y1="150" x2="150" y2="150" stroke="#22d3a6" stroke-width="2"/>
+  <polygon points="150,150 142,146 142,154" fill="#22d3a6"/>
+  <text x="120" y="172" fill="#22d3a6" font-size="12" text-anchor="middle">move up if sum too small</text>
+
+  <!-- j pointer (right) -->
+  <text x="476" y="68" fill="#ff8a4c" font-size="14" font-weight="bold" text-anchor="middle">j</text>
+  <line x1="476" y1="150" x2="418" y2="150" stroke="#ff8a4c" stroke-width="2"/>
+  <polygon points="418,150 426,146 426,154" fill="#ff8a4c"/>
+  <text x="450" y="172" fill="#ff8a4c" font-size="12" text-anchor="middle">move down if sum too big</text>
+
+  <text x="320" y="210" fill="#9aa6c2" font-size="13" text-anchor="middle">a[i] + a[j] == target ? return  ·  &lt; target → i++  ·  &gt; target → j--   (O(n), O(1) space)</text>
+</svg>

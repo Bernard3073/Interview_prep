@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="270" viewBox="0 0 640 270" font-family="system-ui, sans-serif">
+  <rect width="640" height="270" fill="#0f1320"/>
+  <text x="20" y="30" fill="#e8ecf6" font-size="16" font-weight="bold">Binary search — halve the range each step (target = 9)</text>
+
+  <!-- iteration 1 -->
+  <text x="40" y="76" fill="#9aa6c2" font-size="13">step 1</text>
+  <g font-size="16" text-anchor="middle">
+    <rect x="100" y="58" width="44" height="40" fill="#1c2236" stroke="#2b3350"/><text x="122" y="84" fill="#e8ecf6">1</text>
+    <rect x="144" y="58" width="44" height="40" fill="#1c2236" stroke="#2b3350"/><text x="166" y="84" fill="#e8ecf6">3</text>
+    <rect x="188" y="58" width="44" height="40" fill="#1c2236" stroke="#2b3350"/><text x="210" y="84" fill="#e8ecf6">5</text>
+    <rect x="232" y="58" width="44" height="40" fill="#232b44" stroke="#c084fc" stroke-width="2"/><text x="254" y="84" fill="#e8ecf6">7</text>
+    <rect x="276" y="58" width="44" height="40" fill="#1c2236" stroke="#2b3350"/><text x="298" y="84" fill="#e8ecf6">9</text>
+    <rect x="320" y="58" width="44" height="40" fill="#1c2236" stroke="#2b3350"/><text x="342" y="84" fill="#e8ecf6">11</text>
+    <rect x="364" y="58" width="44" height="40" fill="#1c2236" stroke="#2b3350"/><text x="386" y="84" fill="#e8ecf6">13</text>
+  </g>
+  <text x="122" y="116" fill="#22d3a6" font-size="12" text-anchor="middle">lo</text>
+  <text x="254" y="116" fill="#c084fc" font-size="12" text-anchor="middle">mid=7</text>
+  <text x="386" y="116" fill="#ff8a4c" font-size="12" text-anchor="middle">hi</text>
+  <text x="430" y="84" fill="#9aa6c2" font-size="12">7 &lt; 9 → discard left half, lo = mid+1</text>
+
+  <!-- iteration 2 -->
+  <text x="40" y="170" fill="#9aa6c2" font-size="13">step 2</text>
+  <g font-size="16" text-anchor="middle">
+    <rect x="100" y="152" width="44" height="40" fill="#171c2e" stroke="#2b3350" opacity="0.4"/><text x="122" y="178" fill="#9aa6c2">1</text>
+    <rect x="144" y="152" width="44" height="40" fill="#171c2e" stroke="#2b3350" opacity="0.4"/><text x="166" y="178" fill="#9aa6c2">3</text>
+    <rect x="188" y="152" width="44" height="40" fill="#171c2e" stroke="#2b3350" opacity="0.4"/><text x="210" y="178" fill="#9aa6c2">5</text>
+    <rect x="232" y="152" width="44" height="40" fill="#171c2e" stroke="#2b3350" opacity="0.4"/><text x="254" y="178" fill="#9aa6c2">7</text>
+    <rect x="276" y="152" width="44" height="40" fill="#232b44" stroke="#22d3a6" stroke-width="2"/><text x="298" y="178" fill="#e8ecf6">9</text>
+    <rect x="320" y="152" width="44" height="40" fill="#1c2236" stroke="#2b3350"/><text x="342" y="178" fill="#e8ecf6">11</text>
+    <rect x="364" y="152" width="44" height="40" fill="#1c2236" stroke="#2b3350"/><text x="386" y="178" fill="#e8ecf6">13</text>
+  </g>
+  <text x="298" y="210" fill="#22d3a6" font-size="12" text-anchor="middle">lo=mid</text>
+  <text x="386" y="210" fill="#ff8a4c" font-size="12" text-anchor="middle">hi</text>
+  <text x="430" y="178" fill="#9aa6c2" font-size="12">mid = 9 → found ✓</text>
+
+  <text x="320" y="250" fill="#9aa6c2" font-size="13" text-anchor="middle">each step throws away half the elements → O(log n).  Same idea on an answer range = "binary search on the answer".</text>
+</svg>

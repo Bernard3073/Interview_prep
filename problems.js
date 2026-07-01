@@ -1556,5 +1556,474 @@ const PROBLEMS = [
       "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    W = int(data[0]); H = int(data[1]); idx = 2\n    P = [float(data[idx + i]) for i in range(12)]; idx += 12\n    n = int(data[idx]); idx += 1\n    out = []\n    for i in range(n):\n        X = float(data[idx]); Y = float(data[idx+1]); Z = float(data[idx+2]); idx += 3\n        # h = P @ [X, Y, Z, 1]; depth = h[2]\n        # TODO: if depth > 0 and 0 <= u < W and 0 <= v < H:\n        #           out.append(f\"{i} {u:.2f} {v:.2f}\")\n    print(\"\\n\".join(out))\n\nmain()\n",
       "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int W, H; cin >> W >> H;\n    double P[12];\n    for (int i = 0; i < 12; i++) cin >> P[i];\n    int n; cin >> n;\n    for (int i = 0; i < n; i++) {\n        double X, Y, Z; cin >> X >> Y >> Z;\n        // h0 = P0*X+P1*Y+P2*Z+P3; h1 = ...; depth = P8*X+P9*Y+P10*Z+P11\n        // TODO: if depth > 0 and pixel inside image, printf(\"%d %.2f %.2f\\n\", i, u, v);\n    }\n    return 0;\n}\n"
     }
+  },
+  {
+    "id": "3sum",
+    "title": "3Sum",
+    "diff": "Medium",
+    "pattern": "Two Pointers",
+    "week": 13,
+    "statement": "<p>Given an integer array, return <b>all unique triplets</b> <code>(a, b, c)</code> with <code>a + b + c = 0</code>. Print each triplet on its own line with its values in <b>non-decreasing order</b>, and order the triplets in ascending (lexicographic) order. Print nothing if there are none.</p>",
+    "inputFormat": "Line 1: n. Line 2: n integers.",
+    "outputFormat": "Each triplet 'a b c' (a<=b<=c) on its own line, triplets sorted ascending.",
+    "tests": [
+      {
+        "input": "6\n-1 0 1 2 -1 -4\n",
+        "expected": "-1 -1 2\n-1 0 1\n",
+        "sample": true
+      },
+      {
+        "input": "3\n0 0 0\n",
+        "expected": "0 0 0\n",
+        "sample": true
+      },
+      {
+        "input": "3\n1 2 -1\n",
+        "expected": "\n",
+        "sample": false
+      },
+      {
+        "input": "5\n-2 0 1 1 2\n",
+        "expected": "-2 0 2\n-2 1 1\n",
+        "sample": false
+      },
+      {
+        "input": "4\n1 2 3 4\n",
+        "expected": "\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    n = int(data[0])\n    a = list(map(int, data[1:1+n]))\n    # TODO: print each unique triplet summing to 0 (see statement for ordering)\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int n; cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    // TODO: print each unique triplet summing to 0 (see statement for ordering)\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "longest-substring-no-repeat",
+    "title": "Longest Substring Without Repeating Characters",
+    "diff": "Medium",
+    "pattern": "Sliding Window",
+    "week": 13,
+    "statement": "<p>Given a string (no spaces), return the <b>length</b> of the longest substring without repeating characters.</p>",
+    "inputFormat": "Line 1: the string s (no spaces, length >= 1).",
+    "outputFormat": "The length (an integer).",
+    "tests": [
+      {
+        "input": "abcabcbb\n",
+        "expected": "3\n",
+        "sample": true
+      },
+      {
+        "input": "bbbbb\n",
+        "expected": "1\n",
+        "sample": true
+      },
+      {
+        "input": "pwwkew\n",
+        "expected": "3\n",
+        "sample": true
+      },
+      {
+        "input": "dvdf\n",
+        "expected": "3\n",
+        "sample": false
+      },
+      {
+        "input": "abba\n",
+        "expected": "2\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    s = data[0]\n    # TODO: print the length of the longest substring without repeats\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    string s; cin >> s;\n    // TODO: print the length of the longest substring without repeats\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "rotting-oranges",
+    "title": "Rotting Oranges",
+    "diff": "Medium",
+    "pattern": "BFS (multi-source)",
+    "week": 13,
+    "statement": "<p>In a grid, <code>0</code> = empty, <code>1</code> = fresh orange, <code>2</code> = rotten. Each minute, every fresh orange 4-directionally adjacent to a rotten one becomes rotten. Return the minutes until no fresh orange remains, or <code>-1</code> if some can never rot.</p>",
+    "inputFormat": "Line 1: rows cols. Next rows lines: cols integers (0/1/2).",
+    "outputFormat": "The number of minutes, or -1.",
+    "tests": [
+      {
+        "input": "3 3\n2 1 1\n1 1 0\n0 1 1\n",
+        "expected": "4\n",
+        "sample": true
+      },
+      {
+        "input": "3 3\n2 1 1\n0 1 1\n1 0 1\n",
+        "expected": "-1\n",
+        "sample": true
+      },
+      {
+        "input": "1 2\n0 2\n",
+        "expected": "0\n",
+        "sample": true
+      },
+      {
+        "input": "1 1\n1\n",
+        "expected": "-1\n",
+        "sample": false
+      },
+      {
+        "input": "2 2\n2 2\n2 2\n",
+        "expected": "0\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    rows = int(data[0]); cols = int(data[1])\n    vals = list(map(int, data[2:2+rows*cols]))\n    g = [vals[i*cols:(i+1)*cols] for i in range(rows)]\n    # TODO: multi-source BFS; print minutes or -1\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int rows, cols; cin >> rows >> cols;\n    vector<vector<int>> g(rows, vector<int>(cols));\n    for (auto& r : g) for (auto& x : r) cin >> x;\n    // TODO: multi-source BFS; print minutes or -1\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "course-schedule-ii",
+    "title": "Course Schedule II",
+    "diff": "Medium",
+    "pattern": "DFS / Topological Sort",
+    "week": 13,
+    "statement": "<p>There are <code>n</code> courses (0..n-1). Each prerequisite pair <code>a b</code> means course <code>b</code> must be taken before course <code>a</code>. Return a valid order to finish all courses; if several exist, return the <b>lexicographically smallest</b> (always take the available course with the smallest index next). Print <code>-1</code> if it is impossible (a cycle).</p>",
+    "inputFormat": "Line 1: n m (courses, number of prerequisite pairs). Next m lines: 'a b' (take b before a).",
+    "outputFormat": "The order on one line (space-separated), or -1.",
+    "tests": [
+      {
+        "input": "2 1\n1 0\n",
+        "expected": "0 1\n",
+        "sample": true
+      },
+      {
+        "input": "4 4\n1 0\n2 0\n3 1\n3 2\n",
+        "expected": "0 1 2 3\n",
+        "sample": true
+      },
+      {
+        "input": "2 2\n1 0\n0 1\n",
+        "expected": "-1\n",
+        "sample": true
+      },
+      {
+        "input": "3 0\n",
+        "expected": "0 1 2\n",
+        "sample": false
+      },
+      {
+        "input": "1 0\n",
+        "expected": "0\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    n = int(data[0]); m = int(data[1]); idx = 2\n    edges = []\n    for _ in range(m):\n        a = int(data[idx]); b = int(data[idx+1]); idx += 2\n        edges.append((a, b))  # take b before a\n    # TODO: lexicographically smallest topological order, or -1\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int n, m; cin >> n >> m;\n    vector<vector<int>> adj(n);\n    vector<int> indeg(n, 0);\n    for (int i = 0; i < m; i++) {\n        int a, b; cin >> a >> b; // take b before a\n        adj[b].push_back(a); indeg[a]++;\n    }\n    // TODO: lexicographically smallest topological order, or -1\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "search-in-rotated-sorted-array",
+    "title": "Search in Rotated Sorted Array",
+    "diff": "Medium",
+    "pattern": "Binary Search",
+    "week": 13,
+    "statement": "<p>An ascending array of <b>distinct</b> integers was rotated at an unknown pivot. Given a target, return its <b>index</b>, or <code>-1</code> if absent. Aim for O(log n).</p>",
+    "inputFormat": "Line 1: n. Line 2: n integers (rotated sorted). Line 3: target.",
+    "outputFormat": "The index of target, or -1.",
+    "tests": [
+      {
+        "input": "7\n4 5 6 7 0 1 2\n0\n",
+        "expected": "4\n",
+        "sample": true
+      },
+      {
+        "input": "7\n4 5 6 7 0 1 2\n3\n",
+        "expected": "-1\n",
+        "sample": true
+      },
+      {
+        "input": "5\n3 4 5 1 2\n1\n",
+        "expected": "3\n",
+        "sample": true
+      },
+      {
+        "input": "1\n5\n5\n",
+        "expected": "0\n",
+        "sample": false
+      },
+      {
+        "input": "1\n5\n6\n",
+        "expected": "-1\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    n = int(data[0])\n    a = list(map(int, data[1:1+n]))\n    target = int(data[1+n])\n    # TODO: binary search the rotated array; print index or -1\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int n; cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    int target; cin >> target;\n    // TODO: binary search the rotated array; print index or -1\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "merge-k-sorted-lists",
+    "title": "Merge k Sorted Lists",
+    "diff": "Hard",
+    "pattern": "Divide & Conquer / Heap",
+    "week": 13,
+    "statement": "<p>Merge <code>k</code> ascending-sorted lists into one ascending-sorted sequence. Print the merged values on one line; print nothing if every list is empty.</p>",
+    "inputFormat": "Line 1: k. Next k lines: 'L v1 v2 ... vL' (length then L sorted integers).",
+    "outputFormat": "The merged sorted values, space-separated on one line.",
+    "tests": [
+      {
+        "input": "3\n3 1 4 5\n3 1 3 4\n2 2 6\n",
+        "expected": "1 1 2 3 4 4 5 6\n",
+        "sample": true
+      },
+      {
+        "input": "1\n3 -5 0 7\n",
+        "expected": "-5 0 7\n",
+        "sample": true
+      },
+      {
+        "input": "0\n",
+        "expected": "\n",
+        "sample": true
+      },
+      {
+        "input": "2\n0\n0\n",
+        "expected": "\n",
+        "sample": false
+      },
+      {
+        "input": "2\n2 1 2\n3 1 3 5\n",
+        "expected": "1 1 2 3 5\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    k = int(data[0]); idx = 1; lists = []\n    for _ in range(k):\n        L = int(data[idx]); idx += 1\n        lists.append(list(map(int, data[idx:idx+L]))); idx += L\n    # TODO: merge all lists in sorted order; print on one line\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int k; cin >> k;\n    vector<int> all;\n    for (int i = 0; i < k; i++) {\n        int L; cin >> L;\n        for (int j = 0; j < L; j++) { int v; cin >> v; all.push_back(v); }\n    }\n    // TODO: output all values in sorted (merged) order on one line\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "coin-change",
+    "title": "Coin Change",
+    "diff": "Medium",
+    "pattern": "Dynamic Programming",
+    "week": 13,
+    "statement": "<p>Given coin denominations and a target <code>amount</code>, return the <b>fewest coins</b> that sum to it (each coin usable unlimited times), or <code>-1</code> if it cannot be made.</p>",
+    "inputFormat": "Line 1: n. Line 2: n coin values. Line 3: amount.",
+    "outputFormat": "The minimum number of coins, or -1.",
+    "tests": [
+      {
+        "input": "3\n1 2 5\n11\n",
+        "expected": "3\n",
+        "sample": true
+      },
+      {
+        "input": "1\n2\n3\n",
+        "expected": "-1\n",
+        "sample": true
+      },
+      {
+        "input": "1\n1\n0\n",
+        "expected": "0\n",
+        "sample": true
+      },
+      {
+        "input": "4\n2 5 10 1\n27\n",
+        "expected": "4\n",
+        "sample": false
+      },
+      {
+        "input": "2\n3 7\n5\n",
+        "expected": "-1\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    n = int(data[0])\n    coins = list(map(int, data[1:1+n]))\n    amount = int(data[1+n])\n    # TODO: DP for fewest coins; print count or -1\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int n; cin >> n;\n    vector<int> coins(n);\n    for (auto& x : coins) cin >> x;\n    int amount; cin >> amount;\n    // TODO: DP for fewest coins; print count or -1\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "subsets",
+    "title": "Subsets",
+    "diff": "Medium",
+    "pattern": "Backtracking",
+    "week": 13,
+    "statement": "<p>Given an array of <b>distinct</b> integers, print <b>all</b> subsets (the power set). Print each subset's values in ascending order, space-separated, on its own line; print the empty subset as an empty line. Order the lines by subset <b>size ascending</b>, breaking ties by ascending values (so the empty subset comes first).</p>",
+    "inputFormat": "Line 1: n. Line 2: n distinct integers.",
+    "outputFormat": "All 2^n subsets, one per line (see statement for ordering).",
+    "tests": [
+      {
+        "input": "3\n1 2 3\n",
+        "expected": "\n1\n2\n3\n1 2\n1 3\n2 3\n1 2 3\n",
+        "sample": true
+      },
+      {
+        "input": "1\n5\n",
+        "expected": "\n5\n",
+        "sample": true
+      },
+      {
+        "input": "2\n3 1\n",
+        "expected": "\n1\n3\n1 3\n",
+        "sample": true
+      },
+      {
+        "input": "0\n",
+        "expected": "\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    n = int(data[0])\n    a = list(map(int, data[1:1+n]))\n    # TODO: print every subset (see statement for ordering)\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int n; cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    // TODO: print every subset (see statement for ordering)\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "top-k-frequent",
+    "title": "Top K Frequent Elements",
+    "diff": "Medium",
+    "pattern": "Heap / Top-K",
+    "week": 13,
+    "statement": "<p>Given an integer array and <code>k</code>, return the <code>k</code> most frequent values. Break frequency ties by the <b>smaller value</b> first, and print the result in order of <b>decreasing frequency</b>, then increasing value.</p>",
+    "inputFormat": "Line 1: n k. Line 2: n integers.",
+    "outputFormat": "The k values, space-separated on one line.",
+    "tests": [
+      {
+        "input": "6 2\n1 1 1 2 2 3\n",
+        "expected": "1 2\n",
+        "sample": true
+      },
+      {
+        "input": "1 1\n1\n",
+        "expected": "1\n",
+        "sample": true
+      },
+      {
+        "input": "6 2\n4 4 5 5 6 6\n",
+        "expected": "4 5\n",
+        "sample": true
+      },
+      {
+        "input": "7 3\n5 3 1 1 1 3 3\n",
+        "expected": "1 3 5\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    n = int(data[0]); k = int(data[1])\n    a = list(map(int, data[2:2+n]))\n    # TODO: print the k most frequent values (see statement for tie-breaking/order)\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int n, k; cin >> n >> k;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    // TODO: print the k most frequent values (see statement for tie-breaking/order)\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "number-of-provinces",
+    "title": "Number of Provinces",
+    "diff": "Medium",
+    "pattern": "Union-Find",
+    "week": 13,
+    "statement": "<p>An <code>n x n</code> matrix <code>M</code> has <code>M[i][j] = 1</code> if cities <code>i</code> and <code>j</code> are directly connected. A <b>province</b> is a connected group of cities. Return the number of provinces.</p>",
+    "inputFormat": "Line 1: n. Next n lines: n integers (0/1), the isConnected matrix.",
+    "outputFormat": "The number of provinces.",
+    "tests": [
+      {
+        "input": "3\n1 1 0\n1 1 0\n0 0 1\n",
+        "expected": "2\n",
+        "sample": true
+      },
+      {
+        "input": "3\n1 0 0\n0 1 0\n0 0 1\n",
+        "expected": "3\n",
+        "sample": true
+      },
+      {
+        "input": "1\n1\n",
+        "expected": "1\n",
+        "sample": true
+      },
+      {
+        "input": "4\n1 1 0 0\n1 1 0 0\n0 0 1 1\n0 0 1 1\n",
+        "expected": "2\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    n = int(data[0])\n    vals = list(map(int, data[1:1+n*n]))\n    M = [vals[i*n:(i+1)*n] for i in range(n)]\n    # TODO: count connected components (union-find or DFS)\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int n; cin >> n;\n    vector<vector<int>> M(n, vector<int>(n));\n    for (auto& r : M) for (auto& x : r) cin >> x;\n    // TODO: count connected components (union-find or DFS)\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "jump-game",
+    "title": "Jump Game",
+    "diff": "Medium",
+    "pattern": "Greedy",
+    "week": 13,
+    "statement": "<p>Each element is the maximum jump length from that index. Starting at index 0, return <code>true</code> if you can reach the last index, else <code>false</code>.</p>",
+    "inputFormat": "Line 1: n. Line 2: n non-negative integers.",
+    "outputFormat": "'true' or 'false'.",
+    "tests": [
+      {
+        "input": "5\n2 3 1 1 4\n",
+        "expected": "true\n",
+        "sample": true
+      },
+      {
+        "input": "5\n3 2 1 0 4\n",
+        "expected": "false\n",
+        "sample": true
+      },
+      {
+        "input": "1\n0\n",
+        "expected": "true\n",
+        "sample": true
+      },
+      {
+        "input": "3\n0 1 2\n",
+        "expected": "false\n",
+        "sample": false
+      },
+      {
+        "input": "2\n1 0\n",
+        "expected": "true\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    n = int(data[0])\n    a = list(map(int, data[1:1+n]))\n    # TODO: greedily track the farthest reachable index; print 'true'/'false'\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int n; cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    // TODO: greedily track the farthest reachable index; print true/false\n    return 0;\n}\n"
+    }
   }
 ];

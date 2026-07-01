@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="280" viewBox="0 0 640 280" font-family="system-ui, sans-serif">
+  <rect width="640" height="280" fill="#0f1320"/>
+  <text x="20" y="30" fill="#e8ecf6" font-size="16" font-weight="bold">Heap (min-heap) — parent ≤ children; O(log n) push/pop</text>
+
+  <!-- tree -->
+  <g stroke="#2b3350" stroke-width="2">
+    <line x1="200" y1="80" x2="120" y2="140"/>
+    <line x1="200" y1="80" x2="280" y2="140"/>
+    <line x1="120" y1="140" x2="80"  y2="200"/>
+    <line x1="120" y1="140" x2="160" y2="200"/>
+    <line x1="280" y1="140" x2="240" y2="200"/>
+  </g>
+  <g font-size="15" text-anchor="middle">
+    <circle cx="200" cy="80"  r="20" fill="#232b44" stroke="#22d3a6" stroke-width="2"/><text x="200" y="86" fill="#e8ecf6">2</text>
+    <circle cx="120" cy="140" r="20" fill="#232b44" stroke="#2b3350"/><text x="120" y="146" fill="#e8ecf6">5</text>
+    <circle cx="280" cy="140" r="20" fill="#232b44" stroke="#2b3350"/><text x="280" y="146" fill="#e8ecf6">4</text>
+    <circle cx="80"  cy="200" r="20" fill="#232b44" stroke="#2b3350"/><text x="80"  y="206" fill="#e8ecf6">9</text>
+    <circle cx="160" cy="200" r="20" fill="#232b44" stroke="#2b3350"/><text x="160" y="206" fill="#e8ecf6">7</text>
+    <circle cx="240" cy="200" r="20" fill="#232b44" stroke="#2b3350"/><text x="240" y="206" fill="#e8ecf6">6</text>
+  </g>
+  <text x="200" y="60" fill="#22d3a6" font-size="12" text-anchor="middle">min at the root → pop in O(log n)</text>
+
+  <!-- array view -->
+  <text x="380" y="86" fill="#9aa6c2" font-size="13">array view (index i → children 2i+1, 2i+2):</text>
+  <g font-size="15" text-anchor="middle">
+    <rect x="380" y="100" width="40" height="36" fill="#1c2236" stroke="#22d3a6"/><text x="400" y="124" fill="#e8ecf6">2</text>
+    <rect x="420" y="100" width="40" height="36" fill="#1c2236" stroke="#2b3350"/><text x="440" y="124" fill="#e8ecf6">5</text>
+    <rect x="460" y="100" width="40" height="36" fill="#1c2236" stroke="#2b3350"/><text x="480" y="124" fill="#e8ecf6">4</text>
+    <rect x="500" y="100" width="40" height="36" fill="#1c2236" stroke="#2b3350"/><text x="520" y="124" fill="#e8ecf6">9</text>
+    <rect x="540" y="100" width="40" height="36" fill="#1c2236" stroke="#2b3350"/><text x="560" y="124" fill="#e8ecf6">7</text>
+    <rect x="580" y="100" width="40" height="36" fill="#1c2236" stroke="#2b3350"/><text x="600" y="124" fill="#e8ecf6">6</text>
+  </g>
+
+  <text x="380" y="186" fill="#e8ecf6" font-size="13" font-weight="bold">Top-K trick</text>
+  <text x="380" y="208" fill="#9aa6c2" font-size="12">keep a heap of size k: push each item,</text>
+  <text x="380" y="226" fill="#9aa6c2" font-size="12">pop the smallest when size &gt; k.</text>
+  <text x="380" y="244" fill="#9aa6c2" font-size="12">→ k largest in O(n log k), O(k) memory.</text>
+  <text x="200" y="252" fill="#9aa6c2" font-size="12" text-anchor="middle">(max-heap: push negated values)</text>
+</svg>

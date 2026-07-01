@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="260" viewBox="0 0 640 260" font-family="system-ui, sans-serif">
+  <rect width="640" height="260" fill="#0f1320"/>
+  <text x="20" y="30" fill="#e8ecf6" font-size="16" font-weight="bold">Dynamic programming — coin change DP table (coins = {1,3,4})</text>
+
+  <text x="60" y="74" fill="#9aa6c2" font-size="13">amount x:</text>
+  <text x="60" y="120" fill="#9aa6c2" font-size="13">dp[x]:</text>
+  <text x="60" y="150" fill="#9aa6c2" font-size="11">(fewest coins)</text>
+
+  <!-- index row -->
+  <g font-size="15" text-anchor="middle" fill="#9aa6c2">
+    <text x="170" y="74">0</text><text x="218" y="74">1</text><text x="266" y="74">2</text>
+    <text x="314" y="74">3</text><text x="362" y="74">4</text><text x="410" y="74">5</text><text x="458" y="74">6</text>
+  </g>
+  <!-- dp cells -->
+  <g font-size="16" text-anchor="middle">
+    <rect x="148" y="92" width="44" height="38" fill="#1c2236" stroke="#2b3350"/><text x="170" y="117" fill="#e8ecf6">0</text>
+    <rect x="196" y="92" width="44" height="38" fill="#1c2236" stroke="#2b3350"/><text x="218" y="117" fill="#e8ecf6">1</text>
+    <rect x="244" y="92" width="44" height="38" fill="#1c2236" stroke="#2b3350"/><text x="266" y="117" fill="#e8ecf6">2</text>
+    <rect x="292" y="92" width="44" height="38" fill="#1c2236" stroke="#2b3350"/><text x="314" y="117" fill="#e8ecf6">1</text>
+    <rect x="340" y="92" width="44" height="38" fill="#1c2236" stroke="#2b3350"/><text x="362" y="117" fill="#e8ecf6">1</text>
+    <rect x="388" y="92" width="44" height="38" fill="#1c2236" stroke="#2b3350"/><text x="410" y="117" fill="#e8ecf6">2</text>
+    <rect x="436" y="92" width="44" height="38" fill="#232b44" stroke="#22d3a6" stroke-width="2"/><text x="458" y="117" fill="#e8ecf6">2</text>
+  </g>
+
+  <!-- transition arrows into dp[6] from dp[5],dp[3],dp[2] -->
+  <g stroke="#c084fc" stroke-width="2" fill="none">
+    <path d="M410,92 C420,64 448,64 458,90" marker-end="url(#ar)"/>
+    <path d="M314,86 C360,52 430,52 458,88" marker-end="url(#ar)"/>
+    <path d="M266,86 C330,40 430,46 458,86" marker-end="url(#ar)"/>
+  </g>
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#c084fc"/>
+    </marker>
+  </defs>
+
+  <text x="320" y="180" fill="#c084fc" font-size="14" text-anchor="middle">dp[6] = 1 + min( dp[6-1], dp[6-3], dp[6-4] ) = 1 + min(2, 1, 1) = 2</text>
+  <text x="320" y="212" fill="#9aa6c2" font-size="13" text-anchor="middle">State = subproblem, transition reuses smaller states → fill 0…amount once.</text>
+  <text x="320" y="234" fill="#9aa6c2" font-size="13" text-anchor="middle">Overlapping subproblems + optimal substructure = DP (O(amount × #coins)).</text>
+</svg>
