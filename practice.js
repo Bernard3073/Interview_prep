@@ -336,6 +336,7 @@
       document.getElementById("prob-solved").hidden = false;
       buildNav();
       resultsEl.insertAdjacentHTML("afterbegin", `<div class="run-status ok">🎉 Marked as solved! Your accepted solution is saved — restore it anytime with “✓ My solution”.</div>`);
+      autoExport();   // persist all solutions to the linked file (or download) for cross-device / git sync
     }
   }
 
@@ -364,6 +365,140 @@
       loadCode();
     });
   });
+
+  // ---------- solution sync (export / import / auto-save-to-file) ----------
+  // Browsers can't silently write into your repo, so we support two paths:
+  //   • File System Access API (served over http/localhost, Chromium): link a file
+  //     once and every accepted submit overwrites it silently → just commit & push.
+  //   • Otherwise: auto-download my-solutions.json on submit; move it into the repo.
+  // Import reads such a file back into this browser (for a second device after a pull).
+  const IDB_DB = "rp_sync", IDB_STORE = "fh", HANDLE_KEY = "solutionsFile";
+  let fileHandle = null;
+  let lastExportSig = localStorage.getItem("rp_sync_last") || "";
+
+  function collectData() {
+    const solutions = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith("rp_soln_")) solutions[k] = localStorage.getItem(k);
+    }
+    // stable key order so signatures are comparable across calls
+    const ordered = {};
+    Object.keys(solutions).sort().forEach((k) => (ordered[k] = solutions[k]));
+    return { app: "rp-prep-solutions", version: 1, savedAt: new Date().toISOString(),
+             solved: loadSolved(), solutions: ordered };
+  }
+  const signature = () => { const d = collectData(); return JSON.stringify({ s: d.solved, c: d.solutions }); };
+
+  function applyData(data, overwrite) {
+    if (!data || typeof data !== "object" || !data.solutions) throw new Error("not a solutions file");
+    let n = 0;
+    for (const [k, v] of Object.entries(data.solutions)) {
+      if (!k.startsWith("rp_soln_") || typeof v !== "string") continue;
+      if (overwrite || localStorage.getItem(k) == null) { localStorage.setItem(k, v); n++; }
+      const codeK = "rp_code_" + k.slice("rp_soln_".length);   // seed the editor draft if empty
+      if (localStorage.getItem(codeK) == null) localStorage.setItem(codeK, v);
+    }
+    if (data.solved) { const s = loadSolved(); for (const [k, val] of Object.entries(data.solved)) if (val) s[k] = true; saveSolved(s); }
+    return n;
+  }
+
+  function downloadFile(text, name) {
+    const url = URL.createObjectURL(new Blob([text], { type: "application/json" }));
+    const a = document.createElement("a");
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
+  }
+  const note = (html) => resultsEl.insertAdjacentHTML("afterbegin", `<div class="run-status ok">${html}</div>`);
+
+  // --- IndexedDB: persist the file handle across reloads ---
+  function idb() {
+    return new Promise((res, rej) => {
+      const r = indexedDB.open(IDB_DB, 1);
+      r.onupgradeneeded = () => r.result.createObjectStore(IDB_STORE);
+      r.onsuccess = () => res(r.result);
+      r.onerror = () => rej(r.error);
+    });
+  }
+  async function idbGet(key) { const db = await idb(); return new Promise((res, rej) => { const t = db.transaction(IDB_STORE, "readonly").objectStore(IDB_STORE).get(key); t.onsuccess = () => res(t.result); t.onerror = () => rej(t.error); }); }
+  async function idbSet(key, val) { const db = await idb(); return new Promise((res, rej) => { const tx = db.transaction(IDB_STORE, "readwrite"); tx.objectStore(IDB_STORE).put(val, key); tx.oncomplete = () => res(); tx.onerror = () => rej(tx.error); }); }
+
+  async function writeToHandle() {
+    if (!fileHandle) return false;
+    try {
+      if ((await fileHandle.queryPermission({ mode: "readwrite" })) !== "granted" &&
+          (await fileHandle.requestPermission({ mode: "readwrite" })) !== "granted") return false;
+      const w = await fileHandle.createWritable();
+      await w.write(JSON.stringify(collectData(), null, 2));
+      await w.close();
+      return true;
+    } catch { return false; }
+  }
+
+  const linkBtn = document.getElementById("sync-link");
+  function refreshLinkBtn() { if (linkBtn && window.showSaveFilePicker) linkBtn.textContent = fileHandle ? "🔗 Auto-save: on" : "🔗 Auto-save: off"; }
+
+  async function autoExport() {
+    try {
+      if (fileHandle && (await writeToHandle())) { note("💾 Saved to your linked file — <code>git add · commit · push</code> to sync."); return; }
+      const sig = signature();
+      if (sig === lastExportSig) return;                 // nothing changed since last export
+      lastExportSig = sig; localStorage.setItem("rp_sync_last", sig);
+      downloadFile(JSON.stringify(collectData(), null, 2), "my-solutions.json");
+      note("💾 Exported <code>my-solutions.json</code> → move it into the repo, commit &amp; push. Tip: click <b>🔗 Auto-save</b> to write the file directly.");
+    } catch { /* never let sync break the run */ }
+  }
+
+  // Manual export
+  document.getElementById("sync-export").addEventListener("click", () => {
+    lastExportSig = signature(); localStorage.setItem("rp_sync_last", lastExportSig);
+    downloadFile(JSON.stringify(collectData(), null, 2), "my-solutions.json");
+  });
+  // Import
+  document.getElementById("sync-import").addEventListener("click", () => document.getElementById("sync-file").click());
+  document.getElementById("sync-file").addEventListener("change", async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      try {
+        const n = applyData(JSON.parse(await file.text()), true);
+        solved = loadSolved(); buildNav(); renderProblem();
+        alert(`Imported ${n} solution${n === 1 ? "" : "s"} into this browser.`);
+      } catch (err) { alert("Import failed: " + err.message); }
+    }
+    e.target.value = "";
+  });
+  // Link a file for silent auto-save (Chromium + served over http/localhost)
+  if (linkBtn && window.showSaveFilePicker) {
+    linkBtn.hidden = false;
+    refreshLinkBtn();
+    linkBtn.addEventListener("click", async () => {
+      try {
+        fileHandle = await window.showSaveFilePicker({ suggestedName: "my-solutions.json",
+          types: [{ description: "JSON", accept: { "application/json": [".json"] } }] });
+        await idbSet(HANDLE_KEY, fileHandle);
+        await writeToHandle();
+        refreshLinkBtn();
+        alert("Linked. Every accepted submit now writes to that file automatically — commit & push it to sync across devices.");
+      } catch { /* user cancelled the picker */ }
+    });
+    // restore a previously linked handle
+    (async () => { try { const h = await idbGet(HANDLE_KEY); if (h) { fileHandle = h; refreshLinkBtn(); } } catch { /* none */ } })();
+  }
+
+  // When the site is served (not file://), auto-load a committed my-solutions.json,
+  // adding only solutions this browser doesn't already have. This is what makes a
+  // `git pull` on another device surface your solutions with no manual import.
+  if (location.protocol === "http:" || location.protocol === "https:") {
+    fetch("my-solutions.json", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!data) return;
+        const added = applyData(data, false);   // fill-missing-only: never overwrite local
+        if (added > 0) { solved = loadSolved(); buildNav(); renderProblem(); }
+      })
+      .catch(() => { /* no committed file, or blocked — fine */ });
+  }
 
   buildNav();
   renderProblem();
