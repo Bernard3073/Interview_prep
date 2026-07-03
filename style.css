@@ -314,7 +314,13 @@ a.logo { text-decoration: none; }
 #code, .editor-hl {
   position: absolute; inset: 0; margin: 0; border: 0; padding: 16px;
   font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  font-size: 13.5px; line-height: 1.55; tab-size: 4;
+  /* Integer font-size AND line-height are required so the textarea and the
+     highlight <pre> produce pixel-identical line boxes; a fractional line-height
+     (e.g. 1.55 × 13.5px) rounds differently between the two and the caret drifts
+     off the code further down the file. Disable ligatures/kerning so glyph
+     advances can't differ between the layers either. */
+  font-size: 14px; line-height: 21px; tab-size: 4;
+  font-variant-ligatures: none; font-kerning: none; letter-spacing: 0;
   white-space: pre; overflow-wrap: normal; word-break: normal;
 }
 #code {
