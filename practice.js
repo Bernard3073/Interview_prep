@@ -111,7 +111,8 @@
     const saved = localStorage.getItem(codeKey(pid, lang));
     codeEl.value = saved != null ? saved : byId(pid).starter[lang];
     updateSolnBtn();
-    renderHL(); syncScroll();
+    renderHL();
+    if (editorWrap) { editorWrap.scrollTop = 0; editorWrap.scrollLeft = 0; }
   }
   function updateSolnBtn() {
     solnBtn.hidden = localStorage.getItem(solnKey(pid, lang)) == null;
@@ -123,19 +124,42 @@
     localStorage.setItem(codeKey(pid, lang), sol);
     renderHL();
   });
-  const hlInner = document.getElementById("code-hl-inner");
-  function renderHL() { if (window.highlightCode) hlInner.innerHTML = highlightCode(codeEl.value, lang); }
-  // Move the highlight layer with a sub-pixel transform that exactly matches the
-  // textarea's (possibly fractional) scroll. Transforms are sub-pixel accurate and
-  // never touch the textarea's own scroll — so dragging the scrollbar stays smooth
-  // AND the caret stays glued to the highlighted code, at any zoom / DPI.
-  function syncScroll() {
-    hlInner.style.transform = `translate(${-codeEl.scrollLeft}px, ${-codeEl.scrollTop}px)`;
+  const hlEl = document.getElementById("code-hl");
+  const editorWrap = document.querySelector(".editor-wrap");
+  function renderHL() { if (window.highlightCode) hlEl.innerHTML = highlightCode(codeEl.value, lang); }
+
+  // The textarea no longer scrolls itself (the wrap scrolls both layers together),
+  // so the browser won't auto-reveal the caret when you type past the visible edge.
+  // Do it here — but only on caret-moving actions, never on scroll, so it can never
+  // fight a manual scrollbar/trackpad drag.
+  const EPAD = 16, ELINE = 21;   // must match the editor's padding & line-height
+  let charW = 0;
+  function ensureCaretVisible() {
+    if (document.activeElement !== codeEl || !editorWrap) return;
+    const pos = codeEl.selectionStart;
+    const before = codeEl.value.slice(0, pos);
+    const line = (before.match(/\n/g) || []).length;
+    const col = pos - (before.lastIndexOf("\n") + 1);
+    if (!charW) {                                  // measure the monospace advance once
+      const probe = document.createElement("span");
+      probe.textContent = "0000000000";
+      probe.style.cssText = "position:absolute;visibility:hidden;white-space:pre";
+      hlEl.appendChild(probe);
+      charW = (probe.getBoundingClientRect().width / 10) || 8.4;
+      probe.remove();
+    }
+    const top = EPAD + line * ELINE, bottom = top + ELINE;
+    if (top < editorWrap.scrollTop + EPAD) editorWrap.scrollTop = Math.max(0, top - EPAD);
+    else if (bottom > editorWrap.scrollTop + editorWrap.clientHeight - EPAD) editorWrap.scrollTop = bottom - editorWrap.clientHeight + EPAD;
+    const left = EPAD + col * charW;
+    if (left < editorWrap.scrollLeft + EPAD) editorWrap.scrollLeft = Math.max(0, left - EPAD);
+    else if (left > editorWrap.scrollLeft + editorWrap.clientWidth - EPAD) editorWrap.scrollLeft = left - editorWrap.clientWidth + EPAD + charW;
   }
 
   const persist = () => localStorage.setItem(codeKey(pid, lang), codeEl.value);
-  codeEl.addEventListener("input", () => { persist(); renderHL(); });
-  codeEl.addEventListener("scroll", syncScroll);
+  codeEl.addEventListener("input", () => { persist(); renderHL(); ensureCaretVisible(); });
+  codeEl.addEventListener("keyup", ensureCaretVisible);
+  codeEl.addEventListener("click", ensureCaretVisible);
 
   const UNIT = "    "; // one indent level = 4 spaces
 
