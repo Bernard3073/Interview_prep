@@ -1,4 +1,4 @@
-# Week 12 — BEV Transformers & Attention
+# Week 13 — BEV Transformers & Attention
 
 > Modern multi-camera 3D perception runs on transformers. To understand
 > BEVFormer/DETR3D you first need the transformer itself: **tokens, attention,

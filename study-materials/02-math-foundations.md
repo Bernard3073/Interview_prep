@@ -1,4 +1,4 @@
-# Week 1 — Math Foundations
+# Week 2 — Math Foundations
 
 > The goal of week 1 is not to relearn all of math, but to make the handful of
 > operations that show up *everywhere* in perception feel automatic: SVD, least

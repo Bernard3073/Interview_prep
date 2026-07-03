@@ -1,4 +1,4 @@
-# Week 2 — 3D Geometry & Rigid-Body Transforms
+# Week 3 — 3D Geometry & Rigid-Body Transforms
 
 > Every robot question eventually becomes: *"what frame is this in, and how do I
 > get it into the frame I care about?"* Master rotations and SE(3) and half of

@@ -65,11 +65,13 @@ function renderBlocks(lines, toc, titleRef) {
 
     // code fence
     if (line.trim().startsWith("```")) {
+      const lang = line.trim().slice(3).trim().toLowerCase();
       i++;
       const buf = [];
       while (i < lines.length && !lines[i].trim().startsWith("```")) { buf.push(lines[i]); i++; }
       i++;
-      out.push(`<pre class="lec-pre"><code>${esc(buf.join("\n"))}</code></pre>`);
+      const langAttr = lang ? ` data-lang="${esc(lang)}"` : "";
+      out.push(`<pre class="lec-pre"${langAttr}><code>${esc(buf.join("\n"))}</code></pre>`);
       continue;
     }
 

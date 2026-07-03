@@ -40,6 +40,44 @@
     `<span class="lec-week-badge">Week ${week}</span>${cleanTitle}`;
   document.getElementById("lec-body").innerHTML = data.html;
 
+  // ---- VS Code-style code blocks (window chrome + Dark+ syntax highlighting) ----
+  (function styleCodeBlocks() {
+    const LABELS = {
+      python: "Python", py: "Python",
+      cpp: "C++", "c++": "C++", cc: "C++", cxx: "C++", c: "C",
+      text: "pseudocode", plaintext: "pseudocode", pseudocode: "pseudocode",
+      bash: "bash", sh: "shell", js: "JavaScript", javascript: "JavaScript",
+    };
+    const HL = { python: "python", py: "python", cpp: "cpp", "c++": "cpp", cc: "cpp", cxx: "cpp" };
+    document.querySelectorAll("#lec-body pre.lec-pre").forEach((pre) => {
+      const lang = (pre.getAttribute("data-lang") || "").toLowerCase();
+      const code = pre.querySelector("code");
+      const raw = code ? code.textContent : "";
+      if (HL[lang] && code && window.highlightCode) {
+        code.innerHTML = window.highlightCode(raw, HL[lang]);   // text unchanged; adds tok-* spans
+      }
+      const win = document.createElement("div");
+      win.className = "code-window";
+      const bar = document.createElement("div");
+      bar.className = "code-titlebar";
+      bar.innerHTML =
+        `<span class="code-dots"><i></i><i></i><i></i></span>` +
+        `<span class="code-lang">${LABELS[lang] || lang || "code"}</span>` +
+        `<button class="code-copy" type="button" title="Copy code">Copy</button>`;
+      pre.parentNode.insertBefore(win, pre);
+      win.appendChild(bar);
+      win.appendChild(pre);
+      bar.querySelector(".code-copy").addEventListener("click", (e) => {
+        const btn = e.currentTarget;
+        if (!navigator.clipboard) return;
+        navigator.clipboard.writeText(raw).then(() => {
+          btn.textContent = "Copied ✓";
+          setTimeout(() => { btn.textContent = "Copy"; }, 1200);
+        });
+      });
+    });
+  })();
+
   // ---- "Practice for this week" panel (links to the in-site coding playground) ----
   (function addPracticePanel() {
     const all = [].concat(cur.leetcode || [], cur.robotics || []).filter((p) => p.pid);

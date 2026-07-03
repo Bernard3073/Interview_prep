@@ -6,10 +6,10 @@
 > the onboard autonomy stack. **Not a research role** — emphasis is on shipping
 > robust, production-grade systems at fleet scale in a safety-critical setting.
 >
-> Builds on: [02 — 3D Geometry & Transforms](02-3d-geometry-transforms.md),
-> [04 — Features & Multi-View Geometry](04-features-multiview-geometry.md),
-> [06 — SLAM & Odometry](06-slam-odometry.md),
-> [07 — Deep Learning Perception](07-deep-learning-perception.md).
+> Builds on: [03 — 3D Geometry & Transforms](03-3d-geometry-transforms.md),
+> [05 — Features & Multi-View Geometry](05-features-multiview-geometry.md),
+> [07 — SLAM & Odometry](07-slam-odometry.md),
+> [08 — Deep Learning Perception](08-deep-learning-perception.md).
 
 ---
 

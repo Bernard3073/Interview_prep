@@ -1,8 +1,8 @@
-# Week 6 — SLAM, Odometry & Sensor Fusion
+# Week 7 — SLAM, Odometry & Sensor Fusion
 
 > SLAM = **S**imultaneous **L**ocalization **a**nd **M**apping: build a map of an
 > unknown environment while tracking your pose within it. It ties together
-> geometry (Week 4) and estimation (Week 5).
+> geometry (Week 5) and estimation (Week 6).
 
 ---
 
@@ -46,7 +46,7 @@ changes/calibration.
 - **Nodes** = poses (and/or landmarks). **Edges** = constraints (odometry between
   consecutive poses; loop closures between revisited places).
 - Each edge contributes a residual `‖ẑᵢⱼ ⊖ h(xᵢ, xⱼ)‖²_Σ`; minimize the sum with
-  Gauss–Newton/LM (your Week 1 math, on the SE(3) manifold from Week 2).
+  Gauss–Newton/LM (your Week 2 math, on the SE(3) manifold from Week 3).
 - **Loop closure**: recognize a previously seen place (e.g. **bag-of-words** /
   DBoW2, or learned place recognition) → add an edge that snaps accumulated drift
   back into alignment.

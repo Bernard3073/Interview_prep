@@ -1,4 +1,4 @@
-# Week 13 — LeetCode Patterns & Core Techniques
+# Week 1 — LeetCode Patterns & Core Techniques
 
 > You don't memorize problems — you recognize **patterns**. Almost every coding-round
 > question is one of a dozen techniques wearing a costume. This week is the cheat lsheet:
@@ -21,6 +21,7 @@ When you read a problem, map its *shape* to a pattern before writing code:
 - **"All combinations / permutations / subsets"** → backtracking.
 - **"k largest / smallest / running median / merge k"** → heap.
 - **Dynamic connectivity / grouping** → union-find.
+- **"Next greater/smaller element", matching brackets, expression parsing, undo** → stack (monotonic stack).
 - **"Locally optimal = globally optimal" (intervals, scheduling)** → greedy.
 
 > Interview reflex: say the **brute force + its complexity out loud first**, name the
@@ -478,7 +479,97 @@ class DSU:
 
 ---
 
-## 10. Greedy
+## 10. Stack & monotonic stack
+
+A **stack** is a LIFO ("last in, first out") container: you only ever touch the **top**.
+`push`, `pop`, `peek`, `isEmpty`, and `size` are all **O(1)**. In Python a plain list *is* a
+stack — `append` to push, `pop()` to pop, `a[-1]` to peek. Reach for it whenever the
+**most recent** unresolved thing is the one you need next: matching brackets, undo/redo,
+DFS's explicit frontier, expression evaluation, or "what happened just before this."
+
+**Use when:** balanced-brackets / nesting validation, evaluating or parsing expressions
+(RPN, calculators), backtracking an explicit call stack, or the **next greater/smaller
+element** family (that's the monotonic-stack special case below).
+
+**🎯 Drill (in-site):** [Sliding Window Maximum](practice.html?p=sliding-window-maximum)
+— the monotonic-**deque** cousin of the monotonic stack (pop smaller values off the back
+before pushing, so the front is always the window max); then drill the two canonical stack
+questions [Valid Parentheses](https://leetcode.com/problems/valid-parentheses/) and
+[Daily Temperatures](https://leetcode.com/problems/daily-temperatures/) on leetcode.com.
+
+![Stack LIFO operations and a decreasing monotonic stack resolving next-greater-element](images/lc-stack.svg)
+
+**Pseudocode — balanced brackets (the "match the most recent open" reflex):**
+
+```text
+function isBalanced(s):
+    stack ← empty
+    pairs ← { ')':'(', ']':'[', '}':'{' }
+    for ch in s:
+        if ch is an opening bracket:
+            stack.push(ch)
+        else:                                 # closing bracket
+            if stack empty or stack.pop() ≠ pairs[ch]:
+                return false                  # mismatch or nothing to close
+    return stack is empty                     # nothing left dangling
+```
+
+```python
+# Valid Parentheses — O(n) time, O(n) space
+def is_valid(s):
+    pairs = {")": "(", "]": "[", "}": "{"}
+    stack = []
+    for ch in s:
+        if ch not in pairs:
+            stack.append(ch)                  # opening → push
+        elif not stack or stack.pop() != pairs[ch]:
+            return False                      # closing with wrong/absent match
+    return not stack                          # all opens were closed
+```
+
+### Monotonic stack — the "next greater/smaller element" pattern
+
+Keep the stack's values in sorted (increasing *or* decreasing) order by **popping violators
+before you push**. Each index is pushed and popped **at most once → O(n)** for a whole class
+of problems that look `O(n²)`. Store **indices** (not just values) when you need distances.
+
+**Reflex:** "for each element, find the nearest larger/smaller one to its left/right" →
+monotonic stack. A **decreasing** stack finds *next greater*; an **increasing** stack finds
+*next smaller*.
+
+```text
+function nextGreater(a):                       # decreasing monotonic stack of indices
+    res ← array of 0s, size len(a)
+    stack ← empty
+    for i, x in enumerate(a):
+        while stack not empty and a[stack.top] < x:
+            j ← stack.pop()
+            res[j] ← i − j                     # x at i is j's next-greater
+        stack.push(i)
+    return res                                 # unresolved indices keep their 0
+```
+
+```python
+# Daily Temperatures: days until a warmer temperature — O(n)
+def daily_temperatures(temps):
+    res = [0] * len(temps)
+    stack = []                                 # indices, temps decreasing down the stack
+    for i, t in enumerate(temps):
+        while stack and temps[stack[-1]] < t:
+            j = stack.pop()
+            res[j] = i - j                     # i is the first warmer day for day j
+        stack.append(i)
+    return res
+```
+
+Same skeleton powers **Next Greater Element**, **Largest Rectangle in Histogram**,
+**Trapping Rain Water**, and stock-span problems — swap the comparison and what you record on
+each pop. A companion trick is the **two-stack** idea (a *data* stack plus an *auxiliary*
+stack of running minima) that gives **Min Stack**: O(1) `push`/`pop`/`top`/`getMin`.
+
+---
+
+## 11. Greedy
 
 Make the **locally optimal choice** at each step and never reconsider it. Fast (usually one
 pass) — but only **correct when the greedy choice is provably part of some global optimum**.
@@ -510,7 +601,7 @@ function greedy(items):
 
 ---
 
-## 11. Complexity cheat sheet
+## 12. Complexity cheat sheet
 
 | Pattern | Typical time | Space | Tell-tale phrasing |
 |---|---|---|---|
@@ -524,6 +615,7 @@ function greedy(items):
 | Backtracking | O(branch^depth) | O(depth) | "all combinations/permutations/subsets" |
 | Heap / top-k | O(n log k) | O(k) | "k largest", "merge k", "median of stream" |
 | Union-find | ~O(α(n)) | O(n) | "connected", "groups", "redundant edge" |
+| Stack / monotonic stack | O(n) | O(n) | "matching brackets", "next greater/smaller", "nested" |
 
 ---
 
@@ -548,6 +640,9 @@ When the answer is a number and you can cheaply test **`feasible(x)`** — and f
 ??? Why mark grid/graph nodes as visited on enqueue in BFS, not on dequeue?
 If you only mark a node visited when you **dequeue** it, the same node can be **enqueued multiple times** before it's first processed (several neighbors push it), blowing up the queue and possibly the time complexity. Marking it **the moment you enqueue** guarantees each node enters the queue at most once, keeping BFS O(V+E). The same applies to the start node — mark it before the loop.
 
+??? What is a monotonic stack, and how does it turn an O(n²) scan into O(n)?
+A **monotonic stack** keeps its contents sorted (all-increasing or all-decreasing) by **popping every element that would break the order before pushing the new one**. It solves the "**next/previous greater or smaller element**" family: as you scan left to right, each element that finally gets a "next greater" is the one being popped when a larger value arrives. The cost argument is amortized — **every index is pushed once and popped at most once**, so the total work across the whole scan is O(n) even though there's a nested `while` loop. A *decreasing* stack (top is smallest) resolves *next greater*; an *increasing* stack resolves *next smaller*. Store **indices** rather than values when the answer is a distance (e.g. Daily Temperatures) or a width (Largest Rectangle in Histogram). It's the same core loop behind Next Greater Element, Trapping Rain Water, and stock-span.
+
 ??? When is greedy correct, and how would you justify it in an interview?
 Greedy is correct only when a **locally optimal choice is provably part of some global optimum** (the "greedy-choice property") and the problem has optimal substructure. Justify it with an **exchange argument**: assume an optimal solution differs from the greedy one, then show you can swap in the greedy choice without making the solution worse — so a greedy-consistent optimum exists. Classic safe greedies: interval scheduling (earliest finish time), Huffman coding, Dijkstra. If you can't make that argument, fall back to DP, which considers all choices.
 
@@ -563,7 +658,7 @@ Greedy is correct only when a **locally optimal choice is provably part of some 
 
 If you do nothing else, do **one canonical question per pattern** until it's automatic.
 These are the highest-frequency interview questions for each technique (and deliberately
-*don't* repeat any problem from earlier weeks). **Every "most-asked" question below is
+*don't* repeat any problem from other weeks). **Every "most-asked" question below is
 solvable right here in the in-site editor** (Python or C++) — use the links, or the
 "💻 Practice for this week" panel. The "good second" links go out to leetcode.com.
 
@@ -579,6 +674,7 @@ solvable right here in the in-site editor** (Python or C++) — use the links, o
 | Backtracking | [Subsets](practice.html?p=subsets) | Medium | [Combination Sum](https://leetcode.com/problems/combination-sum/) · [Word Search](https://leetcode.com/problems/word-search/) |
 | Heap / top-k | [Top K Frequent Elements](practice.html?p=top-k-frequent) | Medium | [Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/) |
 | Union-find | [Number of Provinces](practice.html?p=number-of-provinces) | Medium | [Redundant Connection](https://leetcode.com/problems/redundant-connection/) |
+| Stack / monotonic | [Sliding Window Maximum](practice.html?p=sliding-window-maximum) (monotonic deque) | Hard | [Valid Parentheses](https://leetcode.com/problems/valid-parentheses/) · [Daily Temperatures](https://leetcode.com/problems/daily-temperatures/) |
 | Greedy | [Jump Game](practice.html?p=jump-game) | Medium | [Gas Station](https://leetcode.com/problems/gas-station/) |
 
 > Note: [Clone Graph](https://leetcode.com/problems/clone-graph/) is the other classic DFS
@@ -586,7 +682,7 @@ solvable right here in the in-site editor** (Python or C++) — use the links, o
 > stdin/stdout, so the in-site DFS drill is **Course Schedule II** (topological sort)
 > instead — study Clone Graph on leetcode.com.
 
-> 💡 All eleven run on real CPython / g++ in the in-site editor with verified test cases —
+> 💡 Every in-site drill above runs on real CPython / g++ in the editor with verified test cases —
 > write the brute force, name the bottleneck, then code the pattern. For more reps on the
-> same patterns, earlier weeks also have Two Sum, Number of Islands, Word Ladder, Course
+> same patterns, other weeks also have Two Sum, Number of Islands, Word Ladder, Course
 > Schedule, Maximum Subarray, and Maximal Square in-site.
