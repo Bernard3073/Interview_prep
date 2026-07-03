@@ -123,9 +123,15 @@
     localStorage.setItem(codeKey(pid, lang), sol);
     renderHL();
   });
-  const hlEl = document.getElementById("code-hl");
-  function renderHL() { if (window.highlightCode) hlEl.innerHTML = highlightCode(codeEl.value, lang); }
-  function syncScroll() { hlEl.scrollTop = codeEl.scrollTop; hlEl.scrollLeft = codeEl.scrollLeft; }
+  const hlInner = document.getElementById("code-hl-inner");
+  function renderHL() { if (window.highlightCode) hlInner.innerHTML = highlightCode(codeEl.value, lang); }
+  // Move the highlight layer with a sub-pixel transform that exactly matches the
+  // textarea's (possibly fractional) scroll. Transforms are sub-pixel accurate and
+  // never touch the textarea's own scroll — so dragging the scrollbar stays smooth
+  // AND the caret stays glued to the highlighted code, at any zoom / DPI.
+  function syncScroll() {
+    hlInner.style.transform = `translate(${-codeEl.scrollLeft}px, ${-codeEl.scrollTop}px)`;
+  }
 
   const persist = () => localStorage.setItem(codeKey(pid, lang), codeEl.value);
   codeEl.addEventListener("input", () => { persist(); renderHL(); });

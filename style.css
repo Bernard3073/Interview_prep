@@ -329,6 +329,10 @@ a.logo { text-decoration: none; }
 }
 #code::selection { background: rgba(38, 79, 120, 0.6); }
 .editor-hl { z-index: 1; overflow: hidden; pointer-events: none; color: #d4d4d4; }
+/* Inner layer that gets transformed to match the textarea's sub-pixel scroll.
+   Same padding origin as the textarea, so translate(-scrollLeft,-scrollTop) lines
+   the two up exactly without ever scrolling the <pre> itself. */
+#code-hl-inner { display: block; margin: 0; padding: 0; font: inherit; white-space: pre; will-change: transform; }
 
 /* VS Code Dark+ token colors */
 .tok-comment { color: #6a9955; font-style: italic; }
