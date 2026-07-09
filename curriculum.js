@@ -294,6 +294,23 @@ const CURRICULUM = [
       { name: "Project 3D Points to Camera", pid: "rob-bev-project", diff: "Medium", tag: "BEV / 3D Perception" },
     ],
   },
+  {
+    week: 14,
+    title: "Concurrency for Robotics (async/await + sensor streams)",
+    goal: "Python async/await done right for data/perception infra — diagnose I/O- vs CPU-bound, run concurrent tasks with sequential steps, bound concurrency with semaphores and backpressure. Then the same reasoning applied to multi-rate sensor streams, time sync, and ROS2 executors — and where async is the wrong tool (the hard-real-time control loop).",
+    lecture: "lecture.html?week=14",
+    topics: [
+      "The two worlds: hard-real-time C++/ROS2 vs offline Python/asyncio infra",
+      "async/await, gather, create_task; total time = max, not sum",
+      "Diagnosing I/O- vs CPU-bound (and the asyncio.to_thread / process-pool escape)",
+      "The pipeline problem: concurrent tasks with sequential steps",
+      "Bounded concurrency: semaphores, bounded queues, backpressure, failure handling",
+      "async vs threads vs multiprocessing vs message queue",
+      "Multi-rate sensor streams, time sync (ExactTime/ApproximateTime), ROS2 executors",
+    ],
+    leetcode: [],
+    robotics: [],
+  },
 ];
 
 if (typeof module !== "undefined") module.exports = CURRICULUM;
