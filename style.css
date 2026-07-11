@@ -213,6 +213,25 @@ a.logo { text-decoration: none; }
 .code-window .lec-pre { margin: 0; border: none; border-radius: 0; background: transparent; }
 .code-window .lec-pre code { color: #cfe3ff; }   /* keep code light on the dark window in any theme */
 
+/* Python / C++ tabbed solution widget (topic deep-dive subpages) */
+.sol { margin: 18px 0; }
+.sol-title {
+  font-weight: 600; font-size: 14.5px; color: var(--text); margin-bottom: 8px;
+}
+.sol-tabs {
+  display: inline-flex; gap: 2px; background: var(--card);
+  border: 1px solid var(--border); border-radius: 8px; padding: 2px; margin-bottom: 8px;
+}
+.sol-tab {
+  background: transparent; border: none; color: var(--muted);
+  padding: 5px 16px; cursor: pointer; font-size: 13px; border-radius: 6px;
+  transition: background .12s, color .12s;
+}
+.sol-tab:hover { color: var(--text); }
+.sol-tab.active { background: var(--accent); color: #fff; }
+.sol-pane[hidden] { display: none; }
+.sol-pane .code-window { margin: 0; }
+
 .lec-callout {
   margin: 16px 0; padding: 14px 18px;
   background: color-mix(in srgb, var(--accent) 10%, var(--card));
