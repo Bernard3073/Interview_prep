@@ -311,6 +311,41 @@ const CURRICULUM = [
     leetcode: [],
     robotics: [],
   },
+  {
+    week: 15,
+    title: "Sensor Fusion & Multi-Object Tracking (Autonomous Trucking)",
+    goal: "Turn per-sensor detections into stable, evaluated tracks for a highway-speed truck. Tracking-by-detection end to end: fusion architecture (early vs late), data association (gating, GNN/Hungarian, JPDA, MHT), track lifecycle (birth, M-of-N confirm, coasting through occlusion, death), and fusing camera/radar/lidar/thermal/IMU by their complementary failure modes. Plus learned+classical fusion, tracking metrics (MOTA/IDF1/HOTA) and their blind spots, and the trucking domain (long stopping distance, long range, articulation). Prep for Kodiak — Senior Autonomy Engineer, Perception.",
+    lecture: "lecture.html?week=15",
+    topics: [
+      "Tracking-by-detection: predict → associate → update → lifecycle",
+      "Fusion architecture: early vs mid (BEV) vs late/track-level; graceful degradation",
+      "Data association: Mahalanobis gating, GNN/Hungarian, JPDA, MHT",
+      "Track lifecycle: birth, M-of-N confirm, coasting through occlusion, death",
+      "Per-sensor roles: camera, radar (Doppler), lidar, thermal, IMU; calibration & time sync",
+      "Learned + classical: calibrated NN covariance into a filter, OOD fallbacks",
+      "Metrics: MOTA/MOTP/IDF1/HOTA blind spots; range-stratified evaluation; pipeline debugging",
+      "Trucking domain: stopping distance, long-range reliability, trailer articulation",
+    ],
+    leetcode: [],
+    robotics: [],
+  },
+  {
+    week: 16,
+    title: "Perception Coding Drills (KF · IoU/NMS · Association · SORT)",
+    goal: "The write-the-code companion to weeks 6 and 15. The six perception coding problems that recur in sensor-fusion/MOT interviews, each with approach, a clean reference solution, complexity, and the follow-ups interviewers push on: a 1D + constant-velocity Kalman filter, IoU + NMS, greedy vs Hungarian data association, a minimal SORT tracker, Mahalanobis gating, and two-pointer time-sync of sensor streams. Prep for Kodiak — Senior Autonomy Engineer, Perception.",
+    lecture: "lecture.html?week=16",
+    topics: [
+      "Kalman filter from scratch: 1D then constant-velocity (Joseph-form update)",
+      "IoU + Non-Max Suppression; the clamp bug and soft-NMS",
+      "Data association: greedy vs Hungarian (linear_sum_assignment); gating first",
+      "Minimal SORT tracker: predict → associate → update → lifecycle",
+      "Mahalanobis gating with a chi-square threshold",
+      "Time-sync two sensor streams with two pointers (O(n+m))",
+      "Interview reflex: brute force + complexity out loud, then edge cases",
+    ],
+    leetcode: [],
+    robotics: [],
+  },
 ];
 
 if (typeof module !== "undefined") module.exports = CURRICULUM;
