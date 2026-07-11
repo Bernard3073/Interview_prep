@@ -38,16 +38,58 @@ function slug(text) {
   slugCount[base]++; return `${base}-${slugCount[base]}`;
 }
 
+// Pull a single ```lang fenced block out of `lines` starting at index i.
+function grabFence(lines, i) {
+  if (!lines[i] || !lines[i].trim().startsWith("```")) return null;
+  const lang = lines[i].trim().slice(3).trim().toLowerCase();
+  const buf = []; let j = i + 1;
+  while (j < lines.length && !lines[j].trim().startsWith("```")) { buf.push(lines[j]); j++; }
+  return { lang, code: buf.join("\n"), next: j + 1 };
+}
+
+function solPre(lang, code, hidden) {
+  return `<div class="sol-pane" data-lang="${lang}"${hidden ? " hidden" : ""}>` +
+    `<pre class="lec-pre" data-lang="${lang}"><code>${esc(code)}</code></pre></div>`;
+}
+
 // Render an array of markdown lines into HTML. `toc` (array) and `titleRef` (obj)
 // are only populated at the top level; nested calls pass null/{}.
 function renderBlocks(lines, toc, titleRef) {
   const out = [];
   let i = 0;
-  const isBreak = (ln) => /^(#{1,4}\s|>|\s*[-*]\s|\d+\.\s|```|\||\?\?\?\s)/.test(ln) || /^-{3,}$/.test(ln.trim());
+  const isBreak = (ln) => /^(#{1,4}\s|>|\s*[-*]\s|\d+\.\s|```|\||\?\?\?\s|:::)/.test(ln) || /^-{3,}$/.test(ln.trim());
 
   while (i < lines.length) {
     let line = lines[i];
     if (line.trim() === "") { i++; continue; }
+
+    // solution tabs: ":::solution [optional title]" ... python + cpp fences ... ":::"
+    if (/^:::solution\b/.test(line.trim())) {
+      const title = line.trim().replace(/^:::solution\s*/, "").trim();
+      i++;
+      const langs = {};                         // grab python then cpp (order-independent)
+      let guard = 0;
+      while (i < lines.length && !/^:::\s*$/.test(lines[i].trim()) && guard++ < 10) {
+        if (lines[i].trim() === "") { i++; continue; }
+        const g = grabFence(lines, i);
+        if (!g) { i++; continue; }
+        langs[g.lang === "py" ? "python" : (g.lang === "c++" ? "cpp" : g.lang)] = g.code;
+        i = g.next;
+      }
+      if (i < lines.length && /^:::\s*$/.test(lines[i].trim())) i++;   // consume closing :::
+      const hasPy = langs.python != null, hasCpp = langs.cpp != null;
+      let html = `<div class="sol">`;
+      if (title) html += `<div class="sol-title">${inline(title)}</div>`;
+      html += `<div class="sol-tabs" role="tablist">` +
+        (hasPy ? `<button class="sol-tab active" data-lang="python" type="button">Python</button>` : "") +
+        (hasCpp ? `<button class="sol-tab${hasPy ? "" : " active"}" data-lang="cpp" type="button">C++</button>` : "") +
+        `</div>`;
+      if (hasPy) html += solPre("python", langs.python, false);
+      if (hasCpp) html += solPre("cpp", langs.cpp, hasPy);
+      html += `</div>`;
+      out.push(html);
+      continue;
+    }
 
     // Q&A collapsible
     if (line.startsWith("??? ")) {

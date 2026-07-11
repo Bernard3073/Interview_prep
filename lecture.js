@@ -78,6 +78,39 @@
     });
   })();
 
+  // ---- Python / C++ solution tabs (shared preference switches all at once) ----
+  (function wireSolutionTabs() {
+    const LANG_KEY = "rp_topic_lang";   // shared with the topic deep-dive pages
+    const sols = Array.from(document.querySelectorAll("#lec-body .sol"));
+    if (!sols.length) return;
+    let lang = localStorage.getItem(LANG_KEY) || "python";
+
+    function show(l) {
+      lang = l;
+      localStorage.setItem(LANG_KEY, l);
+      sols.forEach((sol) => {
+        // fall back to whatever pane exists if a solution lacks one language
+        const has = Array.from(sol.querySelectorAll(".sol-pane")).some(
+          (p) => p.getAttribute("data-lang") === l
+        );
+        const target = has ? l : sol.querySelector(".sol-pane").getAttribute("data-lang");
+        sol.querySelectorAll(".sol-tab").forEach((b) =>
+          b.classList.toggle("active", b.dataset.lang === target)
+        );
+        sol.querySelectorAll(".sol-pane").forEach((p) =>
+          (p.hidden = p.getAttribute("data-lang") !== target)
+        );
+      });
+    }
+
+    sols.forEach((sol) => {
+      sol.querySelectorAll(".sol-tab").forEach((btn) => {
+        btn.addEventListener("click", () => show(btn.dataset.lang));
+      });
+    });
+    show(lang);
+  })();
+
   // ---- "Practice for this week" panel (links to the in-site coding playground) ----
   (function addPracticePanel() {
     const all = [].concat(cur.leetcode || [], cur.robotics || []).filter((p) => p.pid);
