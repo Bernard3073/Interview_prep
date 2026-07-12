@@ -55,6 +55,81 @@ Weighted edges break BFS's shortest-path guarantee → use **Dijkstra** (a heap-
 
 ---
 
+## Leveled BFS — when and how
+
+**Leveled** (a.k.a. level-order) BFS processes the queue **one full layer at a time** instead of
+node by node. Reach for it whenever the answer depends on *distance/depth*, not just on whether a
+node was visited.
+
+**How to spot it** — look for any of these tells:
+
+1. **"Level" / "depth" is in the output shape.** You must return or reason about nodes grouped by
+   how far they are from the start — level-order traversal (`List[List[int]]`), right-side view,
+   average of levels, zigzag.
+2. **"Minimum steps / fewest moves / shortest time"** on an *unweighted* graph or grid. Each sweep
+   equals one unit of distance, so the level counter *is* the answer — Word Ladder, Open the Lock,
+   01 Matrix.
+3. **Simultaneous / multi-source spread.** "Everything spreads one step at a time, how long until
+   X" — seed all sources at level 0 and count sweeps: Rotting Oranges, Walls and Gates.
+
+If you only need "is B reachable?" or a plain count with no notion of distance, you don't need
+leveling — but it costs nothing extra, so when in doubt, level.
+
+**The one trick:** snapshot `len(q)` *before* the inner loop and pop exactly that many nodes.
+Everything left in the queue after the sweep is the next level — the children you pushed during
+the sweep won't be touched until the next `while` iteration.
+
+```python
+from collections import deque
+
+def leveled_bfs(start):
+    q = deque([start]); seen = {start}; level = 0
+    while q:
+        for _ in range(len(q)):        # freeze size = exactly this level's nodes
+            node = q.popleft()
+            # ... process node at depth `level` ...
+            for nb in neighbors(node):
+                if nb not in seen:
+                    seen.add(nb)        # mark on ENQUEUE
+                    q.append(nb)
+        level += 1                      # one full sweep done → advance a level
+    return level
+```
+
+**Two ways to track distance — pick one, don't mix:**
+
+| Style | How | Best for |
+| --- | --- | --- |
+| **Level sweep** | `for _ in range(len(q))`, bump counter after each sweep | when you need nodes *grouped* per level (level-order, right-side view, zigzag) |
+| **Distance in the tuple** | store `(node, dist)` in the queue, no inner loop | when you just need the number, not the grouping (the `bfs_shortest` template above) |
+
+Both give correct shortest distances. Use the sweep whenever a whole layer must act at once — e.g.
+**Rotting Oranges**, where each sweep = one minute and a full ring of oranges rots together:
+
+```python
+def oranges_rotting(grid: list[list[int]]) -> int:
+    R, C = len(grid), len(grid[0])
+    q, fresh = deque(), 0
+    for r in range(R):
+        for c in range(C):
+            if grid[r][c] == 2: q.append((r, c))    # all sources, level 0
+            elif grid[r][c] == 1: fresh += 1
+    minutes = 0
+    while q and fresh:                              # guard avoids a trailing empty minute
+        for _ in range(len(q)):                     # one minute = one sweep
+            r, c = q.popleft()
+            for dr, dc in ((1,0),(-1,0),(0,1),(0,-1)):
+                nr, nc = r + dr, c + dc
+                if 0 <= nr < R and 0 <= nc < C and grid[nr][nc] == 1:
+                    grid[nr][nc] = 2
+                    fresh -= 1
+                    q.append((nr, nc))
+        minutes += 1                                # advance only after a full ring rots
+    return -1 if fresh else minutes
+```
+
+---
+
 ## 1. Binary Tree Level Order Traversal
 
 Return node values grouped by level. Process the queue one **level at a time**: record the
