@@ -1,8 +1,11 @@
 #!/bin/sh
-# Repo pre-commit hook. Two independent checks, each gated on what's staged so
-# unrelated commits aren't slowed down:
-#   1. Rebuild lectures-data.js when any study-materials markdown is staged.
-#   2. Validate the gen_problems.py <-> problems.js <-> curriculum.js contract.
+# Repo pre-commit hook. Independent checks, each gated on what's staged so
+# unrelated commits aren't slowed down. Each markdown tree feeds its own build;
+# the regenerated output is staged so generated files never go stale in history:
+#   study-materials/*.md (top level)            -> build_lectures.cjs  -> lectures-data.js
+#   study-materials/leetcode-topics/*.md        -> build_topics.cjs    -> topics-data.js
+#   study-materials/data-structure-topics/*.md  -> build_ds_topics.cjs -> ds-topics-data.js
+# Plus: validate the gen_problems.py <-> problems.js <-> curriculum.js contract.
 #
 # Enabled with:  git config core.hooksPath .githooks
 # Bypass once with:  git commit --no-verify
@@ -12,16 +15,27 @@
 
 changed=$(git diff --cached --name-only)
 
-# 1. Auto-rebuild rendered lecture HTML when source markdown changes, then stage
-#    the regenerated output so the generated file never goes stale in history.
-if echo "$changed" | grep -q '^study-materials/.*\.md$'; then
-    echo "pre-commit: study-materials markdown changed -> rebuilding lectures-data.js"
-    if ! node build_lectures.cjs >/dev/null; then
-        echo "pre-commit: build_lectures.cjs failed; commit aborted." >&2
-        exit 1
+# rebuild <pattern> <build-script> <output-file>: if any staged path matches the
+# pattern, run the build and stage its output; abort the commit if the build fails.
+rebuild() {
+    pattern=$1 script=$2 output=$3
+    if echo "$changed" | grep -q "$pattern"; then
+        echo "pre-commit: $pattern changed -> rebuilding $output"
+        if ! node "$script" >/dev/null; then
+            echo "pre-commit: $script failed; commit aborted." >&2
+            exit 1
+        fi
+        git add "$output"
     fi
-    git add lectures-data.js
-fi
+}
+
+# 1. Auto-rebuild rendered pages when their source markdown changes. Gate each
+#    build on its own tree so an edit only rebuilds the file it actually feeds.
+#    leetcode-topics/ and data-structure-topics/ are matched (and excluded) first
+#    so the lectures pattern picks up only top-level study-materials/*.md.
+rebuild '^study-materials/leetcode-topics/.*\.md$'       build_topics.cjs    topics-data.js
+rebuild '^study-materials/data-structure-topics/.*\.md$' build_ds_topics.cjs ds-topics-data.js
+rebuild '^study-materials/[^/]*\.md$'                     build_lectures.cjs  lectures-data.js
 
 # 2. Validate problems/curriculum consistency.
 if echo "$changed" | grep -Eq '^(gen_problems\.py|problems\.js|curriculum\.js)$'; then
