@@ -1,4 +1,4 @@
-# Week 9 — Systems, ROS & Interview Prep
+# Week 10 — Systems, ROS & Interview Prep
 
 > Algorithms are necessary but not sufficient. Robotics roles test whether you can
 > build a *system*: real-time, multi-sensor, debuggable. This week wires it all

@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340" font-family="system-ui, sans-serif">
+  <rect width="640" height="340" fill="#0f1320"/>
+  <text x="20" y="30" fill="#e8ecf6" font-size="16" font-weight="bold">Tree anatomy — terminology every tree shares</text>
+
+  <!-- edges -->
+  <g stroke="#2b3350" stroke-width="2">
+    <line x1="300" y1="90"  x2="210" y2="160"/>
+    <line x1="300" y1="90"  x2="390" y2="160"/>
+    <line x1="210" y1="160" x2="160" y2="230"/>
+    <line x1="210" y1="160" x2="265" y2="230"/>
+    <line x1="390" y1="160" x2="455" y2="230"/>
+  </g>
+  <!-- nodes -->
+  <g font-size="15" text-anchor="middle">
+    <circle cx="300" cy="90"  r="22" fill="#232b44" stroke="#22d3a6" stroke-width="2"/><text x="300" y="96" fill="#e8ecf6">A</text>
+    <circle cx="210" cy="160" r="22" fill="#232b44" stroke="#6b8afd" stroke-width="2"/><text x="210" y="166" fill="#e8ecf6">B</text>
+    <circle cx="390" cy="160" r="22" fill="#232b44" stroke="#2b3350"/><text x="390" y="166" fill="#e8ecf6">C</text>
+    <circle cx="160" cy="230" r="22" fill="#232b44" stroke="#2b3350"/><text x="160" y="236" fill="#e8ecf6">D</text>
+    <circle cx="265" cy="230" r="22" fill="#232b44" stroke="#2b3350"/><text x="265" y="236" fill="#e8ecf6">E</text>
+    <circle cx="455" cy="230" r="22" fill="#232b44" stroke="#2b3350"/><text x="455" y="236" fill="#e8ecf6">F</text>
+  </g>
+
+  <!-- labels -->
+  <text x="300" y="60"  fill="#22d3a6" font-size="12" text-anchor="middle">root (no parent)</text>
+  <text x="258" y="118" fill="#9aa6c2" font-size="11" text-anchor="middle">edge</text>
+  <text x="25"  y="156" fill="#6b8afd" font-size="12">B: child of A,</text>
+  <text x="25"  y="173" fill="#6b8afd" font-size="12">parent of D, E</text>
+  <text x="160" y="268" fill="#9aa6c2" font-size="12" text-anchor="middle">leaf</text>
+  <text x="265" y="268" fill="#9aa6c2" font-size="12" text-anchor="middle">leaf</text>
+  <text x="455" y="268" fill="#9aa6c2" font-size="12" text-anchor="middle">leaf</text>
+
+  <!-- depth ruler -->
+  <g stroke="#2b3350" stroke-width="1" stroke-dasharray="3 3">
+    <line x1="505" y1="90"  x2="625" y2="90"/>
+    <line x1="505" y1="160" x2="625" y2="160"/>
+    <line x1="505" y1="230" x2="625" y2="230"/>
+  </g>
+  <g fill="#9aa6c2" font-size="11">
+    <text x="512" y="86">depth 0</text>
+    <text x="512" y="156">depth 1</text>
+    <text x="512" y="226">depth 2</text>
+  </g>
+  <text x="512" y="185" fill="#22d3a6" font-size="12">height = 2</text>
+  <text x="512" y="202" fill="#9aa6c2" font-size="11">(longest path)</text>
+
+  <line x1="20" y1="292" x2="620" y2="292" stroke="#2b3350" stroke-width="1"/>
+  <text x="20" y="312" fill="#9aa6c2" font-size="12">Subtree = a node + all its descendants (e.g. B, D, E). n nodes ⇒ n−1 edges; one root; no cycles.</text>
+  <text x="20" y="332" fill="#22d3a6" font-size="12">Binary tree: ≤ 2 children per node. Most operations cost O(height) — so keeping height small matters.</text>
+</svg>

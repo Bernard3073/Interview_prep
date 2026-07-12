@@ -1,4 +1,4 @@
-# Week 5 — Features & Multi-View Geometry
+# Week 6 — Features & Multi-View Geometry
 
 > This is the heart of classical perception: find repeatable points, match them
 > across images, and use the matches to recover camera motion and 3D structure.

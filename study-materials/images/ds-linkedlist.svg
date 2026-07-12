@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="330" viewBox="0 0 640 330" font-family="system-ui, sans-serif">
+  <rect width="640" height="330" fill="#0f1320"/>
+  <text x="20" y="30" fill="#e8ecf6" font-size="16" font-weight="bold">Linked list — O(1) insert/delete given the node; no random access</text>
+
+  <!-- SINGLY -->
+  <text x="20" y="64" fill="#22d3a6" font-size="13" font-weight="bold">Singly linked</text>
+  <g font-size="15" text-anchor="middle">
+    <rect x="40"  y="76" width="90" height="40" fill="#232b44" stroke="#2b3350"/>
+    <line x1="100" y1="76" x2="100" y2="116" stroke="#2b3350"/>
+    <text x="70" y="101" fill="#e8ecf6">1</text><circle cx="115" cy="96" r="4" fill="#22d3a6"/>
+    <rect x="200" y="76" width="90" height="40" fill="#232b44" stroke="#2b3350"/>
+    <line x1="260" y1="76" x2="260" y2="116" stroke="#2b3350"/>
+    <text x="230" y="101" fill="#e8ecf6">2</text><circle cx="275" cy="96" r="4" fill="#22d3a6"/>
+    <rect x="360" y="76" width="90" height="40" fill="#232b44" stroke="#2b3350"/>
+    <line x1="420" y1="76" x2="420" y2="116" stroke="#2b3350"/>
+    <text x="390" y="101" fill="#e8ecf6">3</text><circle cx="435" cy="96" r="4" fill="#22d3a6"/>
+    <text x="500" y="101" fill="#9aa6c2" font-size="13">null</text>
+  </g>
+  <g stroke="#22d3a6" stroke-width="2" fill="none" marker-end="url(#arr2)">
+    <path d="M115 96 H198"/>
+    <path d="M275 96 H358"/>
+    <path d="M435 96 H480"/>
+  </g>
+
+  <!-- DOUBLY -->
+  <text x="20" y="168" fill="#22d3a6" font-size="13" font-weight="bold">Doubly linked — prev + next → O(1) middle removal (LRU)</text>
+  <g font-size="15" text-anchor="middle">
+    <rect x="40"  y="184" width="90" height="40" fill="#232b44" stroke="#2b3350"/><text x="85" y="209" fill="#e8ecf6">A</text>
+    <rect x="200" y="184" width="90" height="40" fill="#1c2236" stroke="#22d3a6" stroke-dasharray="4 3"/><text x="245" y="209" fill="#e8ecf6">B</text>
+    <rect x="360" y="184" width="90" height="40" fill="#232b44" stroke="#2b3350"/><text x="405" y="209" fill="#e8ecf6">C</text>
+  </g>
+  <!-- next arrows (top) -->
+  <g stroke="#22d3a6" stroke-width="2" fill="none" marker-end="url(#arr2)">
+    <path d="M130 195 H198"/>
+    <path d="M290 195 H358"/>
+  </g>
+  <!-- prev arrows (bottom) -->
+  <g stroke="#6b8afd" stroke-width="2" fill="none" marker-end="url(#arr3)">
+    <path d="M200 213 H132"/>
+    <path d="M360 213 H292"/>
+  </g>
+  <!-- legend -->
+  <circle cx="475" cy="191" r="4" fill="#22d3a6"/><text x="486" y="196" fill="#9aa6c2" font-size="12">next</text>
+  <circle cx="475" cy="211" r="4" fill="#6b8afd"/><text x="486" y="216" fill="#9aa6c2" font-size="12">prev</text>
+
+  <!-- splice-out B: arc UNDER the nodes, well clear of everything -->
+  <path d="M130 234 C210 272, 280 272, 360 234" stroke="#f0a742" stroke-width="2" fill="none" marker-end="url(#arr4)"/>
+  <text x="245" y="292" fill="#f0a742" font-size="12" text-anchor="middle">remove B: relink A ↔ C in O(1)</text>
+
+  <line x1="20" y1="306" x2="620" y2="306" stroke="#2b3350" stroke-width="1"/>
+  <text x="20" y="324" fill="#22d3a6" font-size="12">Fast/slow pointers · dummy head removes edge cases · Python: manual nodes / C++: std::list</text>
+
+  <defs>
+    <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#22d3a6"/></marker>
+    <marker id="arr3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#6b8afd"/></marker>
+    <marker id="arr4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#f0a742"/></marker>
+  </defs>
+</svg>

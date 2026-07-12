@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="300" viewBox="0 0 640 300" font-family="system-ui, sans-serif">
+  <rect width="640" height="300" fill="#0f1320"/>
+  <text x="20" y="30" fill="#e8ecf6" font-size="16" font-weight="bold">Tree traversals — same tree, four visit orders</text>
+
+  <!-- tree -->
+  <g stroke="#2b3350" stroke-width="2">
+    <line x1="130" y1="70"  x2="80"  y2="130"/>
+    <line x1="130" y1="70"  x2="180" y2="130"/>
+    <line x1="80"  y1="130" x2="45"  y2="195"/>
+    <line x1="80"  y1="130" x2="115" y2="195"/>
+  </g>
+  <g font-size="15" text-anchor="middle">
+    <circle cx="130" cy="70"  r="20" fill="#232b44" stroke="#22d3a6" stroke-width="2"/><text x="130" y="76" fill="#e8ecf6">1</text>
+    <circle cx="80"  cy="130" r="20" fill="#232b44" stroke="#2b3350"/><text x="80"  y="136" fill="#e8ecf6">2</text>
+    <circle cx="180" cy="130" r="20" fill="#232b44" stroke="#2b3350"/><text x="180" y="136" fill="#e8ecf6">3</text>
+    <circle cx="45"  cy="195" r="20" fill="#232b44" stroke="#2b3350"/><text x="45"  y="201" fill="#e8ecf6">4</text>
+    <circle cx="115" cy="195" r="20" fill="#232b44" stroke="#2b3350"/><text x="115" y="201" fill="#e8ecf6">5</text>
+  </g>
+
+  <!-- orders -->
+  <g font-size="14">
+    <text x="270" y="80"  fill="#22d3a6" font-weight="bold">Pre-order</text>
+    <text x="270" y="98"  fill="#9aa6c2" font-size="11">node → left → right   (copy/serialize a tree)</text>
+    <text x="270" y="118" fill="#e8ecf6">1 · 2 · 4 · 5 · 3</text>
+
+    <text x="270" y="150" fill="#22d3a6" font-weight="bold">In-order</text>
+    <text x="270" y="168" fill="#9aa6c2" font-size="11">left → node → right   (BST ⇒ sorted output)</text>
+    <text x="270" y="188" fill="#e8ecf6">4 · 2 · 5 · 1 · 3</text>
+
+    <text x="270" y="220" fill="#22d3a6" font-weight="bold">Post-order</text>
+    <text x="270" y="238" fill="#9aa6c2" font-size="11">left → right → node   (delete / evaluate expr)</text>
+    <text x="270" y="258" fill="#e8ecf6">4 · 5 · 2 · 3 · 1</text>
+
+    <text x="270" y="290" fill="#22d3a6" font-weight="bold" font-size="14">Level-order (BFS): <tspan fill="#e8ecf6" font-weight="normal">1 · 2 · 3 · 4 · 5</tspan></text>
+  </g>
+
+  <text x="90" y="250" fill="#9aa6c2" font-size="11" text-anchor="middle">DFS (pre/in/post) = a stack</text>
+  <text x="90" y="266" fill="#9aa6c2" font-size="11" text-anchor="middle">or recursion.</text>
+  <text x="90" y="286" fill="#9aa6c2" font-size="11" text-anchor="middle">Level-order = a queue.</text>
+</svg>

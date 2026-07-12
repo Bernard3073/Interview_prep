@@ -1,9 +1,9 @@
 # Zipline — Aerial Perception: Detailed Answers
 
 > Full worked answers to every question in the
-> [Week 11 question bank](11-zipline-aerial-perception-interview.md). Read this as
+> [Week 12 question bank](12-zipline-aerial-perception-interview.md). Read this as
 > the "what would a strong senior/staff answer actually say" companion. Where a topic
-> already has a deep-dive in Week 11 Part B, this links rather than repeats.
+> already has a deep-dive in Week 12 Part B, this links rather than repeats.
 >
 > Through-line for every answer: **state the failure mode and whether it's a hazard.**
 > A false "deliver here" can drop a package on a person, pool, or power line — so name
@@ -26,7 +26,7 @@
 5. **Incremental registration** — register new images via PnP against known 3D points,
    triangulate new points, repeat.
 6. **Bundle adjustment** — jointly refine all poses + points by minimizing
-   reprojection error (see [Week 11 §B1](11-zipline-aerial-perception-interview.md#b1-bundle-adjustment-with-a-pose-prior)).
+   reprojection error (see [Week 12 §B1](12-zipline-aerial-perception-interview.md#b1-bundle-adjustment-with-a-pose-prior)).
 7. **Dense MVS** — after sparse SfM gives poses, run multi-view stereo for a dense
    cloud → mesh / DSM.
 
@@ -95,7 +95,7 @@ model-selection idea) to decide if the scene is degenerate-planar.
 ## A1.4 — Fusing a pose prior into bundle adjustment
 
 Covered in full in
-[Week 11 §B1](11-zipline-aerial-perception-interview.md#b1-bundle-adjustment-with-a-pose-prior).
+[Week 12 §B1](12-zipline-aerial-perception-interview.md#b1-bundle-adjustment-with-a-pose-prior).
 Summary of the key points to say out loud:
 - Add a residual `r = Log(C̄ⱼ⁻¹ Cⱼ) ∈ ℝ⁶` per camera (SE(3) tangent space), weighted by
   the pose covariance `Σ_pose`.
@@ -110,7 +110,7 @@ Summary of the key points to say out loud:
 ## A1.5 — Satellite imagery → metric elevation; DSM vs DTM
 
 Full deep-dive:
-[Week 11 §B2](11-zipline-aerial-perception-interview.md#b2-dsm-vs-dtm--and-why-landing-cares).
+[Week 12 §B2](12-zipline-aerial-perception-interview.md#b2-dsm-vs-dtm--and-why-landing-cares).
 Key points:
 - Multi-view stereo across overlapping frames → dense cloud → rasterize to a **DSM**
   (top of everything).
@@ -128,7 +128,7 @@ Key points:
 ## A1.6 — Bundle adjustment: what's optimized, sparsity, Schur
 
 Full deep-dive in
-[Week 11 §B1](11-zipline-aerial-perception-interview.md#b1-bundle-adjustment-with-a-pose-prior).
+[Week 12 §B1](12-zipline-aerial-perception-interview.md#b1-bundle-adjustment-with-a-pose-prior).
 The three-sentence version: BA minimizes total reprojection error over all camera
 params and 3D points. Its Hessian `JᵀJ` is sparse because each observation touches
 exactly one camera and one point, giving block-diagonal camera (`U`) and point (`V`)
@@ -146,7 +146,7 @@ Goal: align today's reconstruction to the stored prior so you can diff them.
 2. **Feature-based global alignment** — FPFH or learned 3D descriptors + RANSAC to get
    a coarse rigid transform when georeferencing is weak.
 3. **ICP refinement** — point-to-plane ICP (see
-   [Week 11 §C1](11-zipline-aerial-perception-interview.md#c1-point-to-plane-icp-robust))
+   [Week 12 §C1](12-zipline-aerial-perception-interview.md#c1-point-to-plane-icp-robust))
    for the final fine alignment. Use **trimmed/robust** ICP because the scenes
    genuinely differ (that's the point — you're detecting change), so a vanilla ICP
    would try to "explain" real changes as misalignment.
@@ -284,7 +284,7 @@ and downsampling destroys the thin safety-critical structures.
 ## A2.3 — Fusing 2D semantics into a 3D world model
 
 Full deep-dive in
-[Week 11 §B3](11-zipline-aerial-perception-interview.md#b3-projecting-2d-semantics-into-the-3d-model-multi-view-label-fusion).
+[Week 12 §B3](12-zipline-aerial-perception-interview.md#b3-projecting-2d-semantics-into-the-3d-model-multi-view-label-fusion).
 The points to hit:
 - Project each 3D primitive into every camera that sees it; **occlusion-test against
   the rendered depth** (the #1 bug — otherwise you paint roof labels onto the ground
@@ -378,7 +378,7 @@ surface:**
 
 Design the system that takes a new address from "signed up" to "safe to serve." Stages
 (also summarized in
-[Week 11 Part D](11-zipline-aerial-perception-interview.md#part-d--behavioral--system-design-framing)):
+[Week 12 Part D](12-zipline-aerial-perception-interview.md#part-d--behavioral--system-design-framing)):
 
 1. **Ingest** — pull satellite + schedule/collect an aerial survey; store raw imagery +
    metadata (camera pose, GSD, timestamp, sensor calibration) in immutable,
@@ -434,7 +434,7 @@ to override a live hazard detection.
 ## A3.3 — Deliverability confidence: build + calibrate
 
 Full deep-dive in
-[Week 11 §B4](11-zipline-aerial-perception-interview.md#b4-deliverability-confidence--building-and-calibrating-it).
+[Week 12 §B4](12-zipline-aerial-perception-interview.md#b4-deliverability-confidence--building-and-calibrating-it).
 Hit these:
 - **Features:** largest inscribed clearance radius (C5), min 3D clearance along the
   descent corridor, slope/roughness, canopy coverage, semantic hazards + distances,
@@ -451,7 +451,7 @@ Hit these:
 ## A3.4 — Coordinate frames; ground point into aircraft frame
 
 Full deep-dive in
-[Week 11 §B5](11-zipline-aerial-perception-interview.md#b5-coordinate-frames--getting-a-ground-point-into-the-aircraft-frame).
+[Week 12 §B5](12-zipline-aerial-perception-interview.md#b5-coordinate-frames--getting-a-ground-point-into-the-aircraft-frame).
 The chain: `WGS84 → ECEF → ENU/UTM → body → camera`. The bug list to recite:
 - **Datum/geoid mismatch** — GPS height is **ellipsoidal**, maps/DSMs often
   **orthometric (MSL)**; mixing them = tens of meters vertical error → fatal for
@@ -544,7 +544,7 @@ Safety-critical → you must reproduce and roll back any shipped prior.
 ## A5.1 — Building a validation set with no 3D ground truth
 
 Full deep-dive in
-[Week 11 §B6](11-zipline-aerial-perception-interview.md#b6-evaluation-when-there-is-no-3d-ground-truth).
+[Week 12 §B6](12-zipline-aerial-perception-interview.md#b6-evaluation-when-there-is-no-3d-ground-truth).
 The complementary signals:
 - **Held-out views:** reconstruct from a subset, measure **reprojection / photometric
   consistency** on held-out frames — geometrically wrong models don't reproject cleanly.
@@ -630,7 +630,7 @@ misses them, yet they're a top flight hazard. Treat them as a **dedicated sub-pr
 # A6 — Coding
 
 All solved with runnable Python in
-[Week 11 Part C](11-zipline-aerial-perception-interview.md#part-c--solved-coding-problems):
+[Week 12 Part C](12-zipline-aerial-perception-interview.md#part-c--solved-coding-problems):
 robust point-to-plane ICP (C1), normalized-DLT homography + RANSAC (C2), z-buffered
 point-cloud projection (C3), DLT triangulation (C4), largest inscribed empty circle =
 max clearance (C5), connected-component drop zones (C6). Practice articulating the

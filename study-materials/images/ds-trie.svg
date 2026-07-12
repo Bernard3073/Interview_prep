@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="300" viewBox="0 0 640 300" font-family="system-ui, sans-serif">
+  <rect width="640" height="300" fill="#0f1320"/>
+  <text x="20" y="30" fill="#e8ecf6" font-size="16" font-weight="bold">Trie — shared prefixes; O(L) insert/lookup (L = key length)</text>
+  <text x="20" y="50" fill="#9aa6c2" font-size="12">storing: "cat", "car", "can", "dog"    (● = end of word)</text>
+
+  <!-- edges -->
+  <g stroke="#2b3350" stroke-width="2">
+    <line x1="300" y1="80"  x2="200" y2="130"/>
+    <line x1="300" y1="80"  x2="440" y2="130"/>
+    <line x1="200" y1="130" x2="200" y2="180"/>
+    <line x1="200" y1="180" x2="130" y2="230"/>
+    <line x1="200" y1="180" x2="200" y2="230"/>
+    <line x1="200" y1="180" x2="270" y2="230"/>
+    <line x1="440" y1="130" x2="440" y2="180"/>
+    <line x1="440" y1="180" x2="440" y2="230"/>
+  </g>
+
+  <!-- root -->
+  <circle cx="300" cy="80" r="18" fill="#1c2236" stroke="#22d3a6" stroke-width="2"/>
+  <text x="300" y="85" fill="#9aa6c2" font-size="12" text-anchor="middle">root</text>
+
+  <!-- c-a branch -->
+  <g font-size="15" text-anchor="middle">
+    <circle cx="200" cy="130" r="18" fill="#232b44" stroke="#2b3350"/><text x="200" y="135" fill="#e8ecf6">c</text>
+    <circle cx="200" cy="180" r="18" fill="#232b44" stroke="#2b3350"/><text x="200" y="185" fill="#e8ecf6">a</text>
+    <circle cx="130" cy="230" r="18" fill="#232b44" stroke="#22d3a6" stroke-width="2"/><text x="130" y="235" fill="#e8ecf6">t</text>
+    <circle cx="200" cy="230" r="18" fill="#232b44" stroke="#22d3a6" stroke-width="2"/><text x="200" y="235" fill="#e8ecf6">r</text>
+    <circle cx="270" cy="230" r="18" fill="#232b44" stroke="#22d3a6" stroke-width="2"/><text x="270" y="235" fill="#e8ecf6">n</text>
+  </g>
+  <!-- d-o-g branch -->
+  <g font-size="15" text-anchor="middle">
+    <circle cx="440" cy="130" r="18" fill="#232b44" stroke="#2b3350"/><text x="440" y="135" fill="#e8ecf6">d</text>
+    <circle cx="440" cy="180" r="18" fill="#232b44" stroke="#2b3350"/><text x="440" y="185" fill="#e8ecf6">o</text>
+    <circle cx="440" cy="230" r="18" fill="#232b44" stroke="#22d3a6" stroke-width="2"/><text x="440" y="235" fill="#e8ecf6">g</text>
+  </g>
+
+  <!-- end-of-word dots -->
+  <g fill="#22d3a6">
+    <circle cx="130" cy="254" r="4"/><circle cx="200" cy="254" r="4"/><circle cx="270" cy="254" r="4"/><circle cx="440" cy="254" r="4"/>
+  </g>
+
+  <text x="200" y="284" fill="#9aa6c2" font-size="11" text-anchor="middle">"cat" "car" "can" share the "ca" path</text>
+  <text x="530" y="150" fill="#22d3a6" font-size="12" text-anchor="middle">answers PREFIX</text>
+  <text x="530" y="168" fill="#22d3a6" font-size="12" text-anchor="middle">queries a hash</text>
+  <text x="530" y="186" fill="#22d3a6" font-size="12" text-anchor="middle">set cannot</text>
+  <text x="530" y="214" fill="#9aa6c2" font-size="11" text-anchor="middle">Python: dict children</text>
+  <text x="530" y="230" fill="#9aa6c2" font-size="11" text-anchor="middle">C++: array&lt;Trie*,26&gt;</text>
+</svg>

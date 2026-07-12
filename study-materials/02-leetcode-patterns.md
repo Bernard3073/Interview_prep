@@ -1,4 +1,4 @@
-# Week 1 — LeetCode Patterns & Core Techniques
+# Week 2 — LeetCode Patterns & Core Techniques
 
 > You don't memorize problems — you recognize **patterns**. Almost every coding-round
 > question is one of a dozen techniques wearing a costume. This week is the cheat lsheet:

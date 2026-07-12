@@ -1,6 +1,6 @@
-# Week 2 — Math Foundations
+# Week 3 — Math Foundations
 
-> The goal of week 1 is not to relearn all of math, but to make the handful of
+> The goal of this week is not to relearn all of math, but to make the handful of
 > operations that show up *everywhere* in perception feel automatic: SVD, least
 > squares, Gaussians, and iterative optimization.
 

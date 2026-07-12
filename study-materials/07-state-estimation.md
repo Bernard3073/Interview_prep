@@ -1,4 +1,4 @@
-# Week 6 — State Estimation & Filtering
+# Week 7 — State Estimation & Filtering
 
 > Sensors are noisy and arrive over time. Filtering fuses a motion model with
 > measurements to maintain a best estimate **and its uncertainty**.

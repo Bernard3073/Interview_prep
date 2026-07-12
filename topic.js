@@ -5,11 +5,32 @@
   const THEME_KEY = "rp_prep_theme";
   const LANG_KEY = "rp_topic_lang";
   const params = new URLSearchParams(location.search);
-  const slugs = TOPICS.map((t) => t.slug);
+
+  // Two subpage collections share this reader, chosen by ?c=. Default is the
+  // LeetCode patterns so existing topic.html?t=… links keep working unchanged.
+  const COLLECTIONS = {
+    patterns: {
+      data: typeof TOPICS !== "undefined" ? TOPICS : [],
+      noun: "Pattern", plural: "Patterns",
+      back: "lecture.html?week=2", backLabel: "← Back to Week 2 patterns",
+    },
+    ds: {
+      data: typeof DS_TOPICS !== "undefined" ? DS_TOPICS : [],
+      noun: "Data structure", plural: "Data Structures",
+      back: "lecture.html?week=1", backLabel: "← Back to Week 1 data structures",
+    },
+  };
+  const cname = COLLECTIONS[params.get("c")] ? params.get("c") : "patterns";
+  const coll = COLLECTIONS[cname];
+  const LIST = coll.data;
+  const qc = cname === "patterns" ? "" : "c=" + cname + "&";   // query prefix that keeps ?c
+  const href = (s) => `topic.html?${qc}t=${s}`;
+
+  const slugs = LIST.map((t) => t.slug);
   let slug = params.get("t");
   if (!slugs.includes(slug)) slug = slugs[0];
   const idx = slugs.indexOf(slug);
-  const topic = TOPICS[idx];
+  const topic = LIST[idx];
 
   // ---- theme (shared with tracker/lecture) ----
   function applyTheme(t) {
@@ -23,12 +44,20 @@
   });
   applyTheme(localStorage.getItem(THEME_KEY) || "dark");
 
-  // ---- left sidebar: all patterns ----
+  // ---- collection-specific chrome (sidebar title, header, back-link) ----
+  const sideTitle = document.querySelector(".lec-sidebar .sidebar-title");
+  if (sideTitle) sideTitle.textContent = coll.plural;
+  const brandH1 = document.querySelector(".brand h1");
+  if (brandH1) brandH1.textContent = `${coll.noun} Deep-Dive`;
+  const backLink = document.querySelector(".subtitle .back-link");
+  if (backLink) { backLink.href = coll.back; backLink.textContent = coll.backLabel; }
+
+  // ---- left sidebar: all entries in this collection ----
   const nav = document.getElementById("topic-nav");
-  TOPICS.forEach((t, i) => {
+  LIST.forEach((t, i) => {
     const a = document.createElement("a");
     a.className = "lec-nav-item" + (t.slug === slug ? " active" : "");
-    a.href = `topic.html?t=${t.slug}`;
+    a.href = href(t.slug);
     const label = t.title.replace(/\s*—.*$/, "");   // drop the "— common …" tail
     a.innerHTML = `<span class="lec-nav-num">${i + 1}</span><span>${label}</span>`;
     nav.appendChild(a);
@@ -36,9 +65,9 @@
 
   // ---- main content ----
   const label = topic.title.replace(/\s*—.*$/, "");
-  document.title = `${label} — Pattern Deep-Dive`;
+  document.title = `${label} — ${coll.noun} Deep-Dive`;
   document.getElementById("lec-title").innerHTML =
-    `<span class="lec-week-badge">Pattern</span>${label}`;
+    `<span class="lec-week-badge">${coll.noun}</span>${label}`;
   document.getElementById("lec-body").innerHTML = topic.html;
 
   // ---- VS Code-style code blocks (window chrome + Dark+ syntax highlighting) ----
@@ -145,13 +174,13 @@
   const prev = document.getElementById("lec-prev");
   const next = document.getElementById("lec-next");
   if (idx > 0) {
-    const p = TOPICS[idx - 1];
-    prev.href = `topic.html?t=${p.slug}`;
+    const p = LIST[idx - 1];
+    prev.href = href(p.slug);
     prev.innerHTML = `← ${p.title.replace(/\s*—.*$/, "")}`;
   } else { prev.classList.add("disabled"); prev.textContent = ""; }
-  if (idx < TOPICS.length - 1) {
-    const n = TOPICS[idx + 1];
-    next.href = `topic.html?t=${n.slug}`;
+  if (idx < LIST.length - 1) {
+    const n = LIST[idx + 1];
+    next.href = href(n.slug);
     next.innerHTML = `${n.title.replace(/\s*—.*$/, "")} →`;
   } else { next.classList.add("disabled"); next.textContent = ""; }
 

@@ -829,7 +829,7 @@ def P(id, title, diff, pattern, week, statement, infmt, outfmt, ref, tests, py, 
 PY_HEAD = "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n"
 CPP_HEAD = "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n"
 
-P("two-sum", "Two Sum", "Easy", "Arrays / Hashing", 2,
+P("two-sum", "Two Sum", "Easy", "Arrays / Hashing", 3,
   "<p>Given an array of integers and a target, return the <b>indices</b> (0-based) of the two numbers that add up to the target. Exactly one solution exists; return the indices in ascending order.</p>",
   "Line 1: n. Line 2: n integers. Line 3: target.",
   "The two indices, space-separated, ascending.",
@@ -838,7 +838,7 @@ P("two-sum", "Two Sum", "Easy", "Arrays / Hashing", 2,
   PY_HEAD + "    n = int(data[0])\n    arr = list(map(int, data[1:1+n]))\n    target = int(data[1+n])\n    # TODO: print the two indices\n\nmain()\n",
   CPP_HEAD + "    int n; cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    int target; cin >> target;\n    // TODO: print the two indices\n    return 0;\n}\n"),
 
-P("maximum-subarray", "Maximum Subarray", "Medium", "DP / Kadane", 2,
+P("maximum-subarray", "Maximum Subarray", "Medium", "DP / Kadane", 3,
   "<p>Find the contiguous subarray with the largest sum and return that sum.</p>",
   "Line 1: n. Line 2: n integers.",
   "The maximum subarray sum.",
@@ -847,7 +847,7 @@ P("maximum-subarray", "Maximum Subarray", "Medium", "DP / Kadane", 2,
   PY_HEAD + "    n = int(data[0])\n    arr = list(map(int, data[1:1+n]))\n    # TODO: print the maximum subarray sum\n\nmain()\n",
   CPP_HEAD + "    int n; cin >> n;\n    vector<long long> a(n);\n    for (auto& x : a) cin >> x;\n    // TODO: print the maximum subarray sum\n    return 0;\n}\n"),
 
-P("product-except-self", "Product of Array Except Self", "Medium", "Arrays / Prefix", 2,
+P("product-except-self", "Product of Array Except Self", "Medium", "Arrays / Prefix", 3,
   "<p>Return an array where each element is the product of all the others, <b>without using division</b>. O(n) time.</p>",
   "Line 1: n. Line 2: n integers.",
   "n integers (the answer), space-separated.",
@@ -856,7 +856,7 @@ P("product-except-self", "Product of Array Except Self", "Medium", "Arrays / Pre
   PY_HEAD + "    n = int(data[0])\n    arr = list(map(int, data[1:1+n]))\n    # TODO: print the result array\n\nmain()\n",
   CPP_HEAD + "    int n; cin >> n;\n    vector<long long> a(n);\n    for (auto& x : a) cin >> x;\n    // TODO: print the result array\n    return 0;\n}\n"),
 
-P("rotate-image", "Rotate Image", "Medium", "Matrix", 3,
+P("rotate-image", "Rotate Image", "Medium", "Matrix", 4,
   "<p>Rotate an n×n matrix by 90° <b>clockwise</b> and print the result.</p>",
   "Line 1: n. Next n lines: n integers each.",
   "The rotated matrix, n lines of n integers.",
@@ -865,7 +865,7 @@ P("rotate-image", "Rotate Image", "Medium", "Matrix", 3,
   PY_HEAD + "    n = int(data[0])\n    vals = list(map(int, data[1:1+n*n]))\n    m = [vals[i*n:(i+1)*n] for i in range(n)]\n    # TODO: rotate 90 deg clockwise and print\n\nmain()\n",
   CPP_HEAD + "    int n; cin >> n;\n    vector<vector<int>> m(n, vector<int>(n));\n    for (auto& r : m) for (auto& x : r) cin >> x;\n    // TODO: rotate 90 deg clockwise and print\n    return 0;\n}\n"),
 
-P("spiral-matrix", "Spiral Matrix", "Medium", "Matrix", 3,
+P("spiral-matrix", "Spiral Matrix", "Medium", "Matrix", 4,
   "<p>Return all elements of the matrix in <b>spiral order</b> (clockwise from top-left).</p>",
   "Line 1: rows cols. Next rows lines: cols integers each.",
   "All elements in spiral order, space-separated on one line.",
@@ -874,7 +874,7 @@ P("spiral-matrix", "Spiral Matrix", "Medium", "Matrix", 3,
   PY_HEAD + "    rows = int(data[0]); cols = int(data[1])\n    vals = list(map(int, data[2:2+rows*cols]))\n    m = [vals[i*cols:(i+1)*cols] for i in range(rows)]\n    # TODO: print spiral order\n\nmain()\n",
   CPP_HEAD + "    int rows, cols; cin >> rows >> cols;\n    vector<vector<int>> m(rows, vector<int>(cols));\n    for (auto& r : m) for (auto& x : r) cin >> x;\n    // TODO: print spiral order\n    return 0;\n}\n"),
 
-P("number-of-islands", "Number of Islands", "Medium", "Grid BFS/DFS", 4,
+P("number-of-islands", "Number of Islands", "Medium", "Grid BFS/DFS", 5,
   "<p>Count the islands in a grid of <code>'1'</code> (land) and <code>'0'</code> (water). Cells connect 4-directionally.</p>",
   "Line 1: rows cols. Next rows lines: a string of cols characters ('0'/'1').",
   "The number of islands.",
@@ -883,7 +883,7 @@ P("number-of-islands", "Number of Islands", "Medium", "Grid BFS/DFS", 4,
   PY_HEAD.replace("split()", "split('\\n')") + "    rows, cols = map(int, data[0].split())\n    grid = [list(data[1+i].strip()) for i in range(rows)]\n    # TODO: print the island count\n\nmain()\n",
   CPP_HEAD + "    int rows, cols; cin >> rows >> cols;\n    vector<string> g(rows);\n    for (auto& s : g) cin >> s;\n    // TODO: print the island count\n    return 0;\n}\n"),
 
-P("path-with-minimum-effort", "Path With Minimum Effort", "Medium", "Grid Dijkstra", 11,
+P("path-with-minimum-effort", "Path With Minimum Effort", "Medium", "Grid Dijkstra", 12,
   "<p>Given a <code>rows x cols</code> grid of integer heights, find a path from the top-left to the bottom-right cell moving <b>4-directionally</b>. A path's <b>effort</b> is the maximum absolute height difference between any two consecutive cells on it. Return the minimum possible effort.</p>",
   "Line 1: rows cols. Next rows lines: cols integers each.",
   "The minimum effort (an integer).",
@@ -893,7 +893,7 @@ P("path-with-minimum-effort", "Path With Minimum Effort", "Medium", "Grid Dijkst
   PY_HEAD + "    rows = int(data[0]); cols = int(data[1])\n    vals = list(map(int, data[2:2+rows*cols]))\n    h = [vals[i*cols:(i+1)*cols] for i in range(rows)]\n    # TODO: print the minimum effort\n\nmain()\n",
   CPP_HEAD + "    int rows, cols; cin >> rows >> cols;\n    vector<vector<int>> h(rows, vector<int>(cols));\n    for (auto& r : h) for (auto& x : r) cin >> x;\n    // TODO: print the minimum effort\n    return 0;\n}\n"),
 
-P("shortest-path-in-binary-matrix", "Shortest Path in Binary Matrix", "Medium", "Grid BFS/A*", 11,
+P("shortest-path-in-binary-matrix", "Shortest Path in Binary Matrix", "Medium", "Grid BFS/A*", 12,
   "<p>In an <code>n x n</code> grid of <code>'0'</code> (clear) and <code>'1'</code> (blocked), find the length of the shortest <b>clear path</b> from the top-left to the bottom-right cell, moving <b>8-directionally</b> between clear cells. Path length is the number of visited cells. Return <code>-1</code> if no path exists.</p>",
   "Line 1: n. Next n lines: a string of n characters ('0'/'1').",
   "The shortest clear-path length (number of cells), or -1.",
@@ -902,7 +902,7 @@ P("shortest-path-in-binary-matrix", "Shortest Path in Binary Matrix", "Medium", 
   PY_HEAD.replace("split()", "split('\\n')") + "    n = int(data[0].strip())\n    grid = [data[1+i].strip() for i in range(n)]\n    # TODO: print the shortest clear-path length, or -1\n\nmain()\n",
   CPP_HEAD + "    int n; cin >> n;\n    vector<string> g(n);\n    for (auto& s : g) cin >> s;\n    // TODO: print the shortest clear-path length, or -1\n    return 0;\n}\n"),
 
-P("image-smoother", "Image Smoother", "Easy", "Matrix / Convolution", 4,
+P("image-smoother", "Image Smoother", "Easy", "Matrix / Convolution", 5,
   "<p>For each cell output the floor of the average of itself and its (up to 8) neighbors — a 3×3 box filter.</p>",
   "Line 1: rows cols. Next rows lines: cols integers each.",
   "The smoothed matrix, rows lines of cols integers.",
@@ -911,7 +911,7 @@ P("image-smoother", "Image Smoother", "Easy", "Matrix / Convolution", 4,
   PY_HEAD + "    rows = int(data[0]); cols = int(data[1])\n    vals = list(map(int, data[2:2+rows*cols]))\n    m = [vals[i*cols:(i+1)*cols] for i in range(rows)]\n    # TODO: print the smoothed matrix\n\nmain()\n",
   CPP_HEAD + "    int rows, cols; cin >> rows >> cols;\n    vector<vector<int>> m(rows, vector<int>(cols));\n    for (auto& r : m) for (auto& x : r) cin >> x;\n    // TODO: print the smoothed matrix\n    return 0;\n}\n"),
 
-P("k-closest-points", "K Closest Points to Origin", "Medium", "Heap / Sorting", 5,
+P("k-closest-points", "K Closest Points to Origin", "Medium", "Heap / Sorting", 6,
   "<p>Return the k points closest to the origin (Euclidean). Break ties by x then y so the answer is deterministic; print sorted by (distance, x, y).</p>",
   "Line 1: n. Next n lines: x y. Last line: k.",
   "k lines, each 'x y', ordered by distance then x then y.",
@@ -920,7 +920,7 @@ P("k-closest-points", "K Closest Points to Origin", "Medium", "Heap / Sorting", 
   PY_HEAD + "    n = int(data[0])\n    pts = []\n    idx = 1\n    for _ in range(n):\n        pts.append((int(data[idx]), int(data[idx+1]))); idx += 2\n    k = int(data[idx])\n    # TODO: print the k closest points\n\nmain()\n",
   CPP_HEAD + "    int n; cin >> n;\n    vector<pair<int,int>> p(n);\n    for (auto& q : p) cin >> q.first >> q.second;\n    int k; cin >> k;\n    // TODO: print the k closest points\n    return 0;\n}\n"),
 
-P("max-points-on-a-line", "Max Points on a Line", "Hard", "Geometry", 5,
+P("max-points-on-a-line", "Max Points on a Line", "Hard", "Geometry", 6,
   "<p>Given n points on a plane, return the maximum number of points that lie on the same straight line.</p>",
   "Line 1: n. Next n lines: x y.",
   "The maximum number of collinear points.",
@@ -929,7 +929,7 @@ P("max-points-on-a-line", "Max Points on a Line", "Hard", "Geometry", 5,
   PY_HEAD + "    n = int(data[0])\n    pts = []\n    idx = 1\n    for _ in range(n):\n        pts.append((int(data[idx]), int(data[idx+1]))); idx += 2\n    # TODO: print max points on a line\n\nmain()\n",
   CPP_HEAD + "    int n; cin >> n;\n    vector<pair<int,int>> p(n);\n    for (auto& q : p) cin >> q.first >> q.second;\n    // TODO: print max points on a line\n    return 0;\n}\n"),
 
-P("moving-average", "Moving Average from Data Stream", "Easy", "Stream / Sliding Window", 6,
+P("moving-average", "Moving Average from Data Stream", "Easy", "Stream / Sliding Window", 7,
   "<p>Maintain a moving average over a sliding window of the given size. For each incoming value, print the current average (5 decimals).</p>",
   "Line 1: window size. Line 2: m (count). Line 3: m integers (the stream).",
   "m lines, each the moving average formatted to 5 decimals.",
@@ -938,7 +938,7 @@ P("moving-average", "Moving Average from Data Stream", "Easy", "Stream / Sliding
   PY_HEAD + "    size = int(data[0]); m = int(data[1])\n    vals = list(map(int, data[2:2+m]))\n    # TODO: print each moving average with '%.5f' % avg\n\nmain()\n",
   CPP_HEAD + "    int size, m; cin >> size >> m;\n    vector<int> v(m);\n    for (auto& x : v) cin >> x;\n    cout << fixed << setprecision(5);\n    // TODO: print each moving average\n    return 0;\n}\n"),
 
-P("sliding-window-maximum", "Sliding Window Maximum", "Hard", "Monotonic Deque", 6,
+P("sliding-window-maximum", "Sliding Window Maximum", "Hard", "Monotonic Deque", 7,
   "<p>Given an array and window size k, output the maximum of each contiguous window.</p>",
   "Line 1: n. Line 2: n integers. Line 3: k.",
   "The window maxima, space-separated.",
@@ -947,7 +947,7 @@ P("sliding-window-maximum", "Sliding Window Maximum", "Hard", "Monotonic Deque",
   PY_HEAD + "    n = int(data[0])\n    a = list(map(int, data[1:1+n]))\n    k = int(data[1+n])\n    # TODO: print the window maxima\n\nmain()\n",
   CPP_HEAD + "    int n; cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    int k; cin >> k;\n    // TODO: print the window maxima\n    return 0;\n}\n"),
 
-P("course-schedule", "Course Schedule", "Medium", "Graph / Topo Sort", 7,
+P("course-schedule", "Course Schedule", "Medium", "Graph / Topo Sort", 8,
   "<p>There are numCourses courses. Each edge 'a b' means course a depends on course b. Determine if all courses can be finished (no cycle).</p>",
   "Line 1: numCourses. Line 2: e (edges). Next e lines: a b.",
   "'true' or 'false'.",
@@ -956,7 +956,7 @@ P("course-schedule", "Course Schedule", "Medium", "Graph / Topo Sort", 7,
   PY_HEAD + "    n = int(data[0]); e = int(data[1])\n    edges = []\n    idx = 2\n    for _ in range(e):\n        edges.append((int(data[idx]), int(data[idx+1]))); idx += 2\n    # TODO: print 'true' or 'false'\n\nmain()\n",
   CPP_HEAD + "    int n, e; cin >> n >> e;\n    vector<pair<int,int>> edges(e);\n    for (auto& p : edges) cin >> p.first >> p.second;\n    // TODO: print \"true\" or \"false\"\n    return 0;\n}\n"),
 
-P("network-delay-time", "Network Delay Time", "Medium", "Dijkstra", 7,
+P("network-delay-time", "Network Delay Time", "Medium", "Dijkstra", 8,
   "<p>A signal starts at node k in a network of n nodes (1-indexed). Each directed edge 'u v w' has travel time w. Return the time for all nodes to receive the signal, or -1 if impossible.</p>",
   "Line 1: n m k. Next m lines: u v w.",
   "The delay time, or -1.",
@@ -965,7 +965,7 @@ P("network-delay-time", "Network Delay Time", "Medium", "Dijkstra", 7,
   PY_HEAD + "    n = int(data[0]); m = int(data[1]); k = int(data[2])\n    edges = []\n    idx = 3\n    for _ in range(m):\n        edges.append((int(data[idx]), int(data[idx+1]), int(data[idx+2]))); idx += 3\n    # TODO: print the delay time or -1\n\nmain()\n",
   CPP_HEAD + "    int n, m, k; cin >> n >> m >> k;\n    vector<array<int,3>> edges(m);\n    for (auto& e : edges) cin >> e[0] >> e[1] >> e[2];\n    // TODO: print the delay time or -1\n    return 0;\n}\n"),
 
-P("maximal-square", "Maximal Square", "Medium", "DP / Grid", 8,
+P("maximal-square", "Maximal Square", "Medium", "DP / Grid", 9,
   "<p>In a binary grid, find the largest square containing only 1s and return its <b>area</b>.</p>",
   "Line 1: rows cols. Next rows lines: a string of cols characters ('0'/'1').",
   "The area of the largest all-ones square.",
@@ -974,7 +974,7 @@ P("maximal-square", "Maximal Square", "Medium", "DP / Grid", 8,
   PY_HEAD.replace("split()", "split('\\n')") + "    rows, cols = map(int, data[0].split())\n    grid = [data[1+i].strip() for i in range(rows)]\n    # TODO: print the maximal square area\n\nmain()\n",
   CPP_HEAD + "    int rows, cols; cin >> rows >> cols;\n    vector<string> g(rows);\n    for (auto& s : g) cin >> s;\n    // TODO: print the maximal square area\n    return 0;\n}\n"),
 
-P("word-ladder", "Word Ladder", "Hard", "BFS", 8,
+P("word-ladder", "Word Ladder", "Hard", "BFS", 9,
   "<p>Return the number of words in the shortest transformation sequence from beginWord to endWord, changing one letter at a time, where each intermediate word must be in the word list. Return 0 if impossible. (Length counts both endpoints.)</p>",
   "Line 1: beginWord. Line 2: endWord. Line 3: count. Next count lines: the word list.",
   "The length of the shortest sequence, or 0.",
@@ -983,7 +983,7 @@ P("word-ladder", "Word Ladder", "Hard", "BFS", 8,
   "import sys\n\ndef main():\n    lines = sys.stdin.read().split('\\n')\n    begin = lines[0].strip(); end = lines[1].strip()\n    cnt = int(lines[2])\n    words = [lines[3+i].strip() for i in range(cnt)]\n    # TODO: print shortest ladder length or 0\n\nmain()\n",
   CPP_HEAD + "    string begin, end; cin >> begin >> end;\n    int cnt; cin >> cnt;\n    vector<string> words(cnt);\n    for (auto& w : words) cin >> w;\n    // TODO: print shortest ladder length or 0\n    return 0;\n}\n"),
 
-P("merge-intervals", "Merge Intervals", "Medium", "Intervals", 9,
+P("merge-intervals", "Merge Intervals", "Medium", "Intervals", 10,
   "<p>Merge all overlapping intervals and print them sorted by start.</p>",
   "Line 1: n. Next n lines: start end.",
   "The merged intervals, one 'start end' per line, sorted by start.",
@@ -992,7 +992,7 @@ P("merge-intervals", "Merge Intervals", "Medium", "Intervals", 9,
   PY_HEAD + "    n = int(data[0])\n    iv = []\n    idx = 1\n    for _ in range(n):\n        iv.append((int(data[idx]), int(data[idx+1]))); idx += 2\n    # TODO: print merged intervals\n\nmain()\n",
   CPP_HEAD + "    int n; cin >> n;\n    vector<pair<int,int>> iv(n);\n    for (auto& p : iv) cin >> p.first >> p.second;\n    // TODO: print merged intervals\n    return 0;\n}\n"),
 
-P("set-matrix-zeroes", "Set Matrix Zeroes", "Medium", "Matrix", 3,
+P("set-matrix-zeroes", "Set Matrix Zeroes", "Medium", "Matrix", 4,
   "<p>If an element is 0, set its entire row and column to 0 — and print the result. (Classic follow-up: do it in O(1) extra space.)</p>",
   "Line 1: rows cols. Next rows lines: cols integers each.",
   "The modified matrix, rows lines of cols integers.",
@@ -1001,7 +1001,7 @@ P("set-matrix-zeroes", "Set Matrix Zeroes", "Medium", "Matrix", 3,
   PY_HEAD + "    rows = int(data[0]); cols = int(data[1])\n    vals = list(map(int, data[2:2+rows*cols]))\n    m = [vals[i*cols:(i+1)*cols] for i in range(rows)]\n    # TODO: zero out rows/cols and print the matrix\n\nmain()\n",
   CPP_HEAD + "    int rows, cols; cin >> rows >> cols;\n    vector<vector<int>> m(rows, vector<int>(cols));\n    for (auto& r : m) for (auto& x : r) cin >> x;\n    // TODO: zero out rows/cols and print the matrix\n    return 0;\n}\n"),
 
-P("pacific-atlantic", "Pacific Atlantic Water Flow", "Medium", "Grid DFS/BFS", 4,
+P("pacific-atlantic", "Pacific Atlantic Water Flow", "Medium", "Grid DFS/BFS", 5,
   "<p>Water flows from a cell to a 4-neighbor with height <b>less than or equal</b> to it. The Pacific touches the top and left edges; the Atlantic touches the bottom and right edges. Print all cells from which water can reach <b>both</b> oceans.</p>",
   "Line 1: m n. Next m lines: n integers (heights).",
   "Each qualifying cell as 'row col' (0-indexed), one per line, sorted by row then col.",
@@ -1010,7 +1010,7 @@ P("pacific-atlantic", "Pacific Atlantic Water Flow", "Medium", "Grid DFS/BFS", 4
   PY_HEAD + "    m = int(data[0]); n = int(data[1])\n    vals = list(map(int, data[2:2+m*n]))\n    h = [vals[i*n:(i+1)*n] for i in range(m)]\n    # TODO: print cells (row col) that reach both oceans, sorted\n\nmain()\n",
   CPP_HEAD + "    int m, n; cin >> m >> n;\n    vector<vector<int>> h(m, vector<int>(n));\n    for (auto& r : h) for (auto& x : r) cin >> x;\n    // TODO: print cells (row col) that reach both oceans, sorted\n    return 0;\n}\n"),
 
-P("find-k-closest-elements", "Find K Closest Elements", "Medium", "Binary Search", 5,
+P("find-k-closest-elements", "Find K Closest Elements", "Medium", "Binary Search", 6,
   "<p>Given a <b>sorted</b> array, return the k elements closest to x, in ascending order. Closeness is |a-x|; ties prefer the smaller value.</p>",
   "Line 1: n. Line 2: n integers (ascending). Line 3: k x.",
   "The k closest elements, ascending, space-separated.",
@@ -1019,7 +1019,7 @@ P("find-k-closest-elements", "Find K Closest Elements", "Medium", "Binary Search
   PY_HEAD + "    n = int(data[0])\n    a = list(map(int, data[1:1+n]))\n    k = int(data[1+n]); x = int(data[2+n])\n    # TODO: print the k closest elements (ascending)\n\nmain()\n",
   CPP_HEAD + "    int n; cin >> n; vector<int> a(n);\n    for (auto& v : a) cin >> v;\n    int k, x; cin >> k >> x;\n    // TODO: print the k closest elements (ascending)\n    return 0;\n}\n"),
 
-P("find-median-from-data-stream", "Find Median from Data Stream", "Hard", "Two Heaps", 6,
+P("find-median-from-data-stream", "Find Median from Data Stream", "Hard", "Two Heaps", 7,
   "<p>Process a stream of operations. <code>add x</code> inserts a number; <code>median</code> queries the current median. For each <code>median</code>, print the median formatted to <b>one decimal</b> (e.g. <code>2.0</code>, <code>2.5</code>).</p>",
   "Line 1: q (operations). Next q lines: 'add x' or 'median'.",
   "One line per 'median' query: the median to 1 decimal.",
@@ -1028,7 +1028,7 @@ P("find-median-from-data-stream", "Find Median from Data Stream", "Hard", "Two H
   "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    idx = 0\n    q = int(data[idx]); idx += 1\n    out = []\n    # TODO: maintain a structure (e.g. two heaps)\n    for _ in range(q):\n        cmd = data[idx]; idx += 1\n        if cmd == \"add\":\n            x = int(data[idx]); idx += 1\n            pass  # TODO: add x\n        else:\n            pass  # TODO: out.append('%.1f' % median)\n    print(\"\\n\".join(out))\n\nmain()\n",
   CPP_HEAD + "    int q; cin >> q;\n    cout << fixed << setprecision(1);\n    string cmd;\n    // TODO: maintain a structure (e.g. two heaps)\n    for (int i = 0; i < q; i++) {\n        cin >> cmd;\n        if (cmd == \"add\") { long long x; cin >> x; /* TODO */ }\n        else { /* TODO: print median */ }\n    }\n    return 0;\n}\n"),
 
-P("graph-valid-tree", "Graph Valid Tree", "Medium", "Union-Find", 7,
+P("graph-valid-tree", "Graph Valid Tree", "Medium", "Union-Find", 8,
   "<p>Given n nodes (0..n-1) and an undirected edge list, decide whether the graph forms a <b>valid tree</b> (fully connected and acyclic).</p>",
   "Line 1: n m. Next m lines: u v.",
   "'true' or 'false'.",
@@ -1037,7 +1037,7 @@ P("graph-valid-tree", "Graph Valid Tree", "Medium", "Union-Find", 7,
   PY_HEAD + "    n = int(data[0]); m = int(data[1])\n    edges = []\n    idx = 2\n    for _ in range(m):\n        edges.append((int(data[idx]), int(data[idx+1]))); idx += 2\n    # TODO: print 'true' if it is a valid tree else 'false'\n\nmain()\n",
   CPP_HEAD + "    int n, m; cin >> n >> m;\n    vector<pair<int,int>> edges(m);\n    for (auto& e : edges) cin >> e.first >> e.second;\n    // TODO: print \"true\" or \"false\"\n    return 0;\n}\n"),
 
-P("lru-cache", "LRU Cache", "Medium", "Design / Hash + List", 8,
+P("lru-cache", "LRU Cache", "Medium", "Design / Hash + List", 9,
   "<p>Implement an LRU cache with the given capacity. <code>put k v</code> inserts/updates; <code>get k</code> returns the value or -1 and marks it most-recently-used. Evict the least-recently-used item when over capacity. Print the result of every <code>get</code>.</p>",
   "Line 1: capacity. Line 2: q. Next q lines: 'put k v' or 'get k'.",
   "One line per 'get': the value, or -1.",
@@ -1046,7 +1046,7 @@ P("lru-cache", "LRU Cache", "Medium", "Design / Hash + List", 8,
   "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    idx = 0\n    cap = int(data[idx]); idx += 1\n    q = int(data[idx]); idx += 1\n    out = []\n    # TODO: build the LRU cache (capacity = cap)\n    for _ in range(q):\n        cmd = data[idx]; idx += 1\n        if cmd == \"put\":\n            k = int(data[idx]); v = int(data[idx+1]); idx += 2\n            pass  # TODO: put k, v\n        else:\n            k = int(data[idx]); idx += 1\n            pass  # TODO: out.append(str(get(k)))\n    print(\"\\n\".join(out))\n\nmain()\n",
   CPP_HEAD + "    int cap, q; cin >> cap >> q;\n    string cmd;\n    // TODO: build the LRU cache (capacity = cap)\n    for (int i = 0; i < q; i++) {\n        cin >> cmd;\n        if (cmd == \"put\") { int k, v; cin >> k >> v; /* TODO */ }\n        else { int k; cin >> k; /* TODO: print get(k) */ }\n    }\n    return 0;\n}\n"),
 
-P("design-circular-queue", "Design Circular Queue", "Medium", "Design / Ring Buffer", 9,
+P("design-circular-queue", "Design Circular Queue", "Medium", "Design / Ring Buffer", 10,
   "<p>Implement a circular queue of capacity k. Operations: <code>enQueue x</code>, <code>deQueue</code>, <code>Front</code>, <code>Rear</code>, <code>isEmpty</code>, <code>isFull</code>. enQueue/deQueue print <code>true</code>/<code>false</code>; Front/Rear print the value or -1; isEmpty/isFull print <code>true</code>/<code>false</code>. Print the result of every operation.</p>",
   "Line 1: k (capacity). Line 2: q. Next q lines: an operation (with an arg for enQueue).",
   "One line per operation: its return value.",
@@ -1055,7 +1055,7 @@ P("design-circular-queue", "Design Circular Queue", "Medium", "Design / Ring Buf
   "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    idx = 0\n    k = int(data[idx]); idx += 1\n    q = int(data[idx]); idx += 1\n    out = []\n    # TODO: build the circular queue (capacity = k)\n    for _ in range(q):\n        cmd = data[idx]; idx += 1\n        if cmd == \"enQueue\":\n            x = int(data[idx]); idx += 1\n            pass  # TODO: out.append('true'/'false')\n        else:\n            pass  # TODO: handle deQueue/Front/Rear/isEmpty/isFull\n    print(\"\\n\".join(out))\n\nmain()\n",
   CPP_HEAD + "    int k, q; cin >> k >> q;\n    string cmd;\n    // TODO: build the circular queue (capacity = k)\n    for (int i = 0; i < q; i++) {\n        cin >> cmd;\n        if (cmd == \"enQueue\") { int x; cin >> x; /* TODO */ }\n        else { /* TODO: deQueue/Front/Rear/isEmpty/isFull */ }\n    }\n    return 0;\n}\n"),
 
-P("time-based-key-value-store", "Time-Based Key-Value Store", "Medium", "Design / Binary Search", 9,
+P("time-based-key-value-store", "Time-Based Key-Value Store", "Medium", "Design / Binary Search", 10,
   "<p>Implement a store where <code>set key value ts</code> stores a value at timestamp ts (timestamps strictly increase per key), and <code>get key ts</code> returns the value with the largest timestamp ≤ ts, or an empty string if none. Print every <code>get</code> result.</p>",
   "Line 1: q. Next q lines: 'set key value ts' or 'get key ts'. (key/value are single tokens.)",
   "One line per 'get': the value, or an empty line if none.",
@@ -1071,7 +1071,7 @@ ROB = dict(category="robotics", checker="float", tol=1e-3)
 ROB_EXACT = dict(category="robotics", checker="exact")
 CPP_F = CPP_HEAD + "    cout << fixed << setprecision(6);\n"
 
-P("rob-least-squares-line", "Least-Squares Line Fit", "Easy", "Linear Algebra", 2,
+P("rob-least-squares-line", "Least-Squares Line Fit", "Easy", "Linear Algebra", 3,
   "<p>Fit the best line <code>y = m·x + b</code> to noisy points by ordinary least squares (closed-form normal equations). Print the slope and intercept.</p>",
   "Line 1: n. Next n lines: x y (floats).",
   "'m b' (slope, intercept) to ~4 decimals.",
@@ -1080,7 +1080,7 @@ P("rob-least-squares-line", "Least-Squares Line Fit", "Easy", "Linear Algebra", 
   PY_HEAD + "    n = int(data[0])\n    pts = [(float(data[1+2*i]), float(data[2+2*i])) for i in range(n)]\n    # TODO: print 'm b' via least squares\n\nmain()\n",
   CPP_F + "    int n; cin >> n;\n    vector<double> x(n), y(n);\n    for (int i = 0; i < n; i++) cin >> x[i] >> y[i];\n    // TODO: print 'm b' via least squares\n    return 0;\n}\n", **ROB),
 
-P("rob-covariance-mahalanobis", "Covariance & Mahalanobis Distance", "Medium", "Probability", 2,
+P("rob-covariance-mahalanobis", "Covariance & Mahalanobis Distance", "Medium", "Probability", 3,
   "<p>From a set of 2D points compute the (sample, divided by n-1) covariance matrix, then the Mahalanobis distance of a query point to the mean.</p>",
   "Line 1: n. Next n lines: x y. Last line: qx qy (the query point).",
   "Line 1: covariance 'c00 c01 c10 c11'. Line 2: Mahalanobis distance.",
@@ -1089,7 +1089,7 @@ P("rob-covariance-mahalanobis", "Covariance & Mahalanobis Distance", "Medium", "
   PY_HEAD + "    n = int(data[0])\n    pts = [(float(data[1+2*i]), float(data[2+2*i])) for i in range(n)]\n    qx = float(data[1+2*n]); qy = float(data[2+2*n])\n    # TODO: print covariance (4 nums) then Mahalanobis distance\n\nmain()\n",
   CPP_F + "    int n; cin >> n;\n    vector<double> x(n), y(n);\n    for (int i = 0; i < n; i++) cin >> x[i] >> y[i];\n    double qx, qy; cin >> qx >> qy;\n    // TODO: print covariance then Mahalanobis distance\n    return 0;\n}\n", **ROB),
 
-P("rob-quaternion-rotate", "Rotate a Vector by a Quaternion", "Easy", "3D Geometry", 3,
+P("rob-quaternion-rotate", "Rotate a Vector by a Quaternion", "Easy", "3D Geometry", 4,
   "<p>Given a (possibly unnormalized) quaternion [w x y z] and a 3D vector, return the rotated vector. Normalize the quaternion first.</p>",
   "Line 1: w x y z. Line 2: vx vy vz.",
   "The rotated vector 'rx ry rz'.",
@@ -1098,7 +1098,7 @@ P("rob-quaternion-rotate", "Rotate a Vector by a Quaternion", "Easy", "3D Geomet
   "import sys\n\ndef main():\n    d = list(map(float, sys.stdin.read().split()))\n    w, x, y, z = d[0:4]\n    vx, vy, vz = d[4:7]\n    # TODO: normalize q and print the rotated vector\n\nmain()\n",
   CPP_F + "    double w, x, y, z, vx, vy, vz;\n    cin >> w >> x >> y >> z >> vx >> vy >> vz;\n    // TODO: normalize q and print the rotated vector\n    return 0;\n}\n", **ROB),
 
-P("rob-transform-point", "Compose SE(3) and Transform a Point", "Medium", "3D Geometry", 3,
+P("rob-transform-point", "Compose SE(3) and Transform a Point", "Medium", "3D Geometry", 4,
   "<p>Given two rigid transforms T1=(R1,t1) and T2=(R2,t2) (rotations are 3×3 row-major), apply the composition <code>T1 ∘ T2</code> to a point p, i.e. compute <code>R1·(R2·p + t2) + t1</code>.</p>",
   "Line 1: R1 (9 numbers, row-major). Line 2: t1 (3). Line 3: R2 (9). Line 4: t2 (3). Line 5: p (3).",
   "The transformed point 'x y z'.",
@@ -1107,7 +1107,7 @@ P("rob-transform-point", "Compose SE(3) and Transform a Point", "Medium", "3D Ge
   "import sys\n\ndef main():\n    d = list(map(float, sys.stdin.read().split()))\n    R1 = d[0:9]; t1 = d[9:12]; R2 = d[12:21]; t2 = d[21:24]; p = d[24:27]\n    # TODO: print R1*(R2*p + t2) + t1\n\nmain()\n",
   CPP_F + "    vector<double> d(27);\n    for (auto& v : d) cin >> v;\n    // d[0:9]=R1, d[9:12]=t1, d[12:21]=R2, d[21:24]=t2, d[24:27]=p\n    // TODO: print R1*(R2*p + t2) + t1\n    return 0;\n}\n", **ROB),
 
-P("rob-convolution-2d", "2D Cross-Correlation", "Easy", "Image Processing", 4,
+P("rob-convolution-2d", "2D Cross-Correlation", "Easy", "Image Processing", 5,
   "<p>Apply a 3×3 kernel to an image by <b>cross-correlation</b> (slide the kernel as-is, no flip) with zero padding. Output the result (same size). Integer arithmetic — e.g. feed a Sobel kernel to get edges.</p>",
   "Line 1: H W. Next H lines: W integers (image). Next 3 lines: 3 integers each (kernel).",
   "The H×W result, integers.",
@@ -1116,7 +1116,7 @@ P("rob-convolution-2d", "2D Cross-Correlation", "Easy", "Image Processing", 4,
   PY_HEAD + "    H = int(data[0]); W = int(data[1]); idx = 2\n    img = [[int(data[idx + i*W + j]) for j in range(W)] for i in range(H)]; idx += H*W\n    ker = [[int(data[idx + i*3 + j]) for j in range(3)] for i in range(3)]\n    # TODO: print the cross-correlated image (zero padding)\n\nmain()\n",
   CPP_HEAD + "    int H, W; cin >> H >> W;\n    vector<vector<int>> img(H, vector<int>(W));\n    for (auto& r : img) for (auto& v : r) cin >> v;\n    vector<vector<int>> ker(3, vector<int>(3));\n    for (auto& r : ker) for (auto& v : r) cin >> v;\n    // TODO: print the cross-correlated image (zero padding)\n    return 0;\n}\n", **ROB_EXACT),
 
-P("rob-project-point", "Project a 3D Point to a Pixel", "Easy", "Camera Model", 4,
+P("rob-project-point", "Project a 3D Point to a Pixel", "Easy", "Camera Model", 5,
   "<p>Project a world point to pixel coordinates with the pinhole model: transform to the camera frame with (R,t), then apply intrinsics. <code>u = fx·X/Z + cx</code>, <code>v = fy·Y/Z + cy</code>.</p>",
   "Line 1: fx fy cx cy. Line 2: R (9, row-major). Line 3: t (3). Line 4: world point (3).",
   "The pixel 'u v'.",
@@ -1125,7 +1125,7 @@ P("rob-project-point", "Project a 3D Point to a Pixel", "Easy", "Camera Model", 
   "import sys\n\ndef main():\n    d = list(map(float, sys.stdin.read().split()))\n    fx, fy, cx, cy = d[0:4]; R = d[4:13]; t = d[13:16]; X = d[16:19]\n    # TODO: print the pixel 'u v'\n\nmain()\n",
   CPP_F + "    double fx, fy, cx, cy; cin >> fx >> fy >> cx >> cy;\n    vector<double> R(9); for (auto& v : R) cin >> v;\n    vector<double> t(3); for (auto& v : t) cin >> v;\n    vector<double> X(3); for (auto& v : X) cin >> v;\n    // TODO: print the pixel 'u v'\n    return 0;\n}\n", **ROB),
 
-P("rob-ransac-line-inliers", "RANSAC Line — Max Inliers", "Medium", "Robust Fitting", 5,
+P("rob-ransac-line-inliers", "RANSAC Line — Max Inliers", "Medium", "Robust Fitting", 6,
   "<p>Find the line (through some pair of the given points) that has the most inliers, where a point is an inlier if its perpendicular distance to the line is ≤ threshold. Print the maximum inlier count. (Deterministic version of RANSAC's scoring — try every pair.)</p>",
   "Line 1: n. Next n lines: x y. Last line: threshold (float).",
   "The maximum number of inliers (an integer).",
@@ -1134,7 +1134,7 @@ P("rob-ransac-line-inliers", "RANSAC Line — Max Inliers", "Medium", "Robust Fi
   PY_HEAD + "    n = int(data[0])\n    pts = [(float(data[1+2*i]), float(data[2+2*i])) for i in range(n)]\n    thresh = float(data[1+2*n])\n    # TODO: print the max inlier count over all candidate lines\n\nmain()\n",
   CPP_HEAD + "    int n; cin >> n;\n    vector<double> x(n), y(n);\n    for (int i = 0; i < n; i++) cin >> x[i] >> y[i];\n    double thresh; cin >> thresh;\n    // TODO: print the max inlier count over all candidate lines\n    return 0;\n}\n", **ROB_EXACT),
 
-P("rob-rigid-align-2d", "2D Rigid Point-Set Alignment (Kabsch)", "Medium", "Registration", 5,
+P("rob-rigid-align-2d", "2D Rigid Point-Set Alignment (Kabsch)", "Medium", "Registration", 6,
   "<p>Given corresponding 2D point pairs (a_i ↔ b_i), find the rotation θ and translation (tx,ty) that best maps A onto B in the least-squares sense (closed-form 2D Kabsch). Print θ (radians), tx, ty.</p>",
   "Line 1: n. Next n lines: ax ay bx by.",
   "'theta tx ty' (theta in radians).",
@@ -1143,7 +1143,7 @@ P("rob-rigid-align-2d", "2D Rigid Point-Set Alignment (Kabsch)", "Medium", "Regi
   PY_HEAD + "    n = int(data[0])\n    A = [(float(data[1+4*i]), float(data[2+4*i])) for i in range(n)]\n    B = [(float(data[3+4*i]), float(data[4+4*i])) for i in range(n)]\n    # TODO: print 'theta tx ty' (2D Kabsch)\n\nmain()\n",
   CPP_F + "    int n; cin >> n;\n    vector<double> ax(n), ay(n), bx(n), by(n);\n    for (int i = 0; i < n; i++) cin >> ax[i] >> ay[i] >> bx[i] >> by[i];\n    // TODO: print 'theta tx ty' (2D Kabsch)\n    return 0;\n}\n", **ROB),
 
-P("rob-kalman-1d", "1D Kalman Filter (scalar)", "Medium", "State Estimation", 6,
+P("rob-kalman-1d", "1D Kalman Filter (scalar)", "Medium", "State Estimation", 7,
   "<p>Filter a noisy 1D signal with a scalar (random-walk) Kalman filter. Use <b>x₀ = 0, P₀ = 1</b>; per step: predict <code>P += q</code>; update <code>K = P/(P+r)</code>, <code>x += K·(z−x)</code>, <code>P = (1−K)·P</code>. Print the estimate after each measurement.</p>",
   "Line 1: q r (process var, measurement var). Line 2: n. Line 3: n measurements.",
   "n lines: the filtered estimate after each measurement.",
@@ -1152,7 +1152,7 @@ P("rob-kalman-1d", "1D Kalman Filter (scalar)", "Medium", "State Estimation", 6,
   PY_HEAD + "    q = float(data[0]); r = float(data[1]); n = int(data[2])\n    z = list(map(float, data[3:3+n]))\n    # TODO: run the scalar Kalman filter; print each estimate\n\nmain()\n",
   CPP_F + "    double q, r; int n; cin >> q >> r >> n;\n    vector<double> z(n); for (auto& v : z) cin >> v;\n    // TODO: run the scalar Kalman filter; print each estimate\n    return 0;\n}\n", **ROB),
 
-P("rob-measurement-fusion", "Inverse-Variance Sensor Fusion", "Easy", "Sensor Fusion", 6,
+P("rob-measurement-fusion", "Inverse-Variance Sensor Fusion", "Easy", "Sensor Fusion", 7,
   "<p>Fuse N independent Gaussian measurements of the same quantity into one estimate by inverse-variance weighting: <code>1/σ² = Σ 1/σᵢ²</code>, <code>μ = (Σ μᵢ/σᵢ²)·σ²</code>. Print the fused mean and variance.</p>",
   "Line 1: n. Next n lines: mean variance.",
   "'mean variance' (fused).",
@@ -1161,7 +1161,7 @@ P("rob-measurement-fusion", "Inverse-Variance Sensor Fusion", "Easy", "Sensor Fu
   PY_HEAD + "    n = int(data[0])\n    obs = [(float(data[1+2*i]), float(data[2+2*i])) for i in range(n)]\n    # TODO: print fused 'mean variance'\n\nmain()\n",
   CPP_F + "    int n; cin >> n;\n    vector<double> m(n), v(n);\n    for (int i = 0; i < n; i++) cin >> m[i] >> v[i];\n    // TODO: print fused 'mean variance'\n    return 0;\n}\n", **ROB),
 
-P("rob-icp-2d-step", "ICP — One Iteration (2D)", "Hard", "SLAM / Registration", 7,
+P("rob-icp-2d-step", "ICP — One Iteration (2D)", "Hard", "SLAM / Registration", 8,
   "<p>Perform one ICP iteration: for each source point find its nearest target point (Euclidean; ties → smallest index), then solve the best rigid transform over those correspondences (2D Kabsch). Print θ, tx, ty.</p>",
   "Line 1: ns. Next ns lines: x y (source). Then nt. Next nt lines: x y (target).",
   "'theta tx ty' for the one-step alignment.",
@@ -1170,7 +1170,7 @@ P("rob-icp-2d-step", "ICP — One Iteration (2D)", "Hard", "SLAM / Registration"
   PY_HEAD + "    ns = int(data[0])\n    S = [(float(data[1+2*i]), float(data[2+2*i])) for i in range(ns)]\n    o = 1 + 2*ns\n    nt = int(data[o]); o += 1\n    T = [(float(data[o+2*i]), float(data[o+1+2*i])) for i in range(nt)]\n    # TODO: nearest-neighbor correspondences + Kabsch; print 'theta tx ty'\n\nmain()\n",
   CPP_F + "    int ns; cin >> ns;\n    vector<double> sx(ns), sy(ns);\n    for (int i = 0; i < ns; i++) cin >> sx[i] >> sy[i];\n    int nt; cin >> nt;\n    vector<double> tx(nt), ty(nt);\n    for (int i = 0; i < nt; i++) cin >> tx[i] >> ty[i];\n    // TODO: nearest-neighbor correspondences + Kabsch; print 'theta tx ty'\n    return 0;\n}\n", **ROB),
 
-P("rob-pose-graph-1d", "1D Pose-Graph Optimization", "Hard", "SLAM / Optimization", 7,
+P("rob-pose-graph-1d", "1D Pose-Graph Optimization", "Hard", "SLAM / Optimization", 8,
   "<p>Optimize 1D poses given relative measurements. Each edge (i, j, d, w) says x_j − x_i ≈ d with weight w. Minimize Σ w·((x_j−x_i)−d)² with the anchor pose fixed to 0. Print the optimized poses x₀…x₍ₙ₋₁₎.</p>",
   "Line 1: n m anchor. Next m lines: i j d w (the edges).",
   "n optimized poses, space-separated.",
@@ -1179,7 +1179,7 @@ P("rob-pose-graph-1d", "1D Pose-Graph Optimization", "Hard", "SLAM / Optimizatio
   PY_HEAD + "    n = int(data[0]); m = int(data[1]); anchor = int(data[2])\n    edges = [(int(data[3+4*i]), int(data[4+4*i]), float(data[5+4*i]), float(data[6+4*i])) for i in range(m)]\n    # TODO: solve the linear system (anchor fixed to 0); print the poses\n\nmain()\n",
   CPP_F + "    int n, m, anchor; cin >> n >> m >> anchor;\n    vector<array<double,4>> e(m);\n    for (auto& a : e) cin >> a[0] >> a[1] >> a[2] >> a[3];\n    // TODO: solve the linear system (anchor fixed to 0); print the poses\n    return 0;\n}\n", **ROB),
 
-P("rob-iou-nms", "IoU + Non-Max Suppression", "Medium", "Detection", 8,
+P("rob-iou-nms", "IoU + Non-Max Suppression", "Medium", "Detection", 9,
   "<p>Run greedy NMS on detection boxes. Sort by score descending (ties → smaller index); repeatedly keep the top box and suppress any remaining box whose IoU with it exceeds the threshold. Print the kept indices in the order kept.</p>",
   "Line 1: n. Next n lines: x1 y1 x2 y2 score. Last line: iou_threshold.",
   "The kept original indices, space-separated, in NMS order.",
@@ -1188,7 +1188,7 @@ P("rob-iou-nms", "IoU + Non-Max Suppression", "Medium", "Detection", 8,
   PY_HEAD + "    n = int(data[0])\n    boxes = [tuple(map(float, data[1+5*i:5+5*i])) for i in range(n)]\n    scores = [float(data[5+5*i]) for i in range(n)]\n    thr = float(data[1+5*n])\n    # TODO: print kept indices after NMS\n\nmain()\n",
   CPP_HEAD + "    int n; cin >> n;\n    vector<array<double,4>> b(n); vector<double> s(n);\n    for (int i = 0; i < n; i++) { cin >> b[i][0] >> b[i][1] >> b[i][2] >> b[i][3] >> s[i]; }\n    double thr; cin >> thr;\n    // TODO: print kept indices after NMS\n    return 0;\n}\n", **ROB_EXACT),
 
-P("rob-average-precision", "Average Precision (detection)", "Hard", "Detection Metrics", 8,
+P("rob-average-precision", "Average Precision (detection)", "Hard", "Detection Metrics", 9,
   "<p>Compute Average Precision for one class. Match detections (high score first) to ground-truth boxes by IoU ≥ threshold (each GT once); build the precision–recall curve and return the all-points AP (area under the monotonic-interpolated curve).</p>",
   "Line 1: nd ng. Next nd lines: x1 y1 x2 y2 score. Next ng lines: x1 y1 x2 y2. Last line: iou_threshold.",
   "The AP value.",
@@ -1197,7 +1197,7 @@ P("rob-average-precision", "Average Precision (detection)", "Hard", "Detection M
   PY_HEAD + "    nd = int(data[0]); ng = int(data[1]); idx = 2\n    dets = []\n    for _ in range(nd):\n        dets.append((tuple(map(float, data[idx:idx+4])), float(data[idx+4]))); idx += 5\n    gts = []\n    for _ in range(ng):\n        gts.append(tuple(map(float, data[idx:idx+4]))); idx += 4\n    thr = float(data[idx])\n    # TODO: print the AP\n\nmain()\n",
   CPP_F + "    int nd, ng; cin >> nd >> ng;\n    vector<array<double,4>> det(nd); vector<double> score(nd);\n    for (int i = 0; i < nd; i++) { cin >> det[i][0] >> det[i][1] >> det[i][2] >> det[i][3] >> score[i]; }\n    vector<array<double,4>> gt(ng);\n    for (auto& g : gt) cin >> g[0] >> g[1] >> g[2] >> g[3];\n    double thr; cin >> thr;\n    // TODO: print the AP\n    return 0;\n}\n", **ROB),
 
-P("rob-ring-buffer", "Sensor Ring Buffer", "Easy", "Systems / Design", 9,
+P("rob-ring-buffer", "Sensor Ring Buffer", "Easy", "Systems / Design", 10,
   "<p>Implement a fixed-capacity ring buffer for sensor messages. <code>push x</code> appends (dropping the oldest when full); <code>latest</code> prints the most recent value (or <code>empty</code>); <code>size</code> prints the current count.</p>",
   "Line 1: capacity. Line 2: q. Next q lines: 'push x', 'latest', or 'size'.",
   "One line per 'latest' / 'size' query.",
@@ -1206,7 +1206,7 @@ P("rob-ring-buffer", "Sensor Ring Buffer", "Easy", "Systems / Design", 9,
   "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    idx = 0\n    cap = int(data[idx]); idx += 1\n    q = int(data[idx]); idx += 1\n    out = []\n    # TODO: maintain a ring buffer of capacity cap\n    for _ in range(q):\n        cmd = data[idx]; idx += 1\n        if cmd == \"push\":\n            x = data[idx]; idx += 1\n            pass  # TODO\n        elif cmd == \"latest\":\n            pass  # TODO: out.append(latest or 'empty')\n        else:\n            pass  # TODO: out.append(str(size))\n    print(\"\\n\".join(out))\n\nmain()\n",
   CPP_HEAD + "    int cap, q; cin >> cap >> q;\n    string cmd;\n    // TODO: maintain a ring buffer of capacity cap\n    for (int i = 0; i < q; i++) {\n        cin >> cmd;\n        if (cmd == \"push\") { long long x; cin >> x; /* TODO */ }\n        else if (cmd == \"latest\") { /* TODO: print latest or 'empty' */ }\n        else { /* TODO: print size */ }\n    }\n    return 0;\n}\n", **ROB_EXACT),
 
-P("rob-time-sync", "Nearest-Timestamp Sensor Sync", "Medium", "Systems / Sync", 9,
+P("rob-time-sync", "Nearest-Timestamp Sensor Sync", "Medium", "Systems / Sync", 10,
   "<p>Two sensors publish timestamps (ascending). For each timestamp in stream A, find the nearest timestamp in stream B; if it's within max_dt, output the matched pair of indices. Use an O(n+m) two-pointer sweep.</p>",
   "Line 1: na. Line 2: na floats (A). Line 3: nb. Line 4: nb floats (B). Line 5: max_dt.",
   "One 'i j' per matched A index (0-based), in A order.",
@@ -1215,7 +1215,7 @@ P("rob-time-sync", "Nearest-Timestamp Sensor Sync", "Medium", "Systems / Sync", 
   "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    idx = 0\n    na = int(data[idx]); idx += 1\n    A = [float(data[idx+i]) for i in range(na)]; idx += na\n    nb = int(data[idx]); idx += 1\n    B = [float(data[idx+i]) for i in range(nb)]; idx += nb\n    max_dt = float(data[idx])\n    # TODO: print matched 'i j' pairs within max_dt\n\nmain()\n",
   CPP_HEAD + "    int na; cin >> na; vector<double> A(na);\n    for (auto& v : A) cin >> v;\n    int nb; cin >> nb; vector<double> B(nb);\n    for (auto& v : B) cin >> v;\n    double max_dt; cin >> max_dt;\n    // TODO: print matched 'i j' pairs within max_dt\n    return 0;\n}\n", **ROB_EXACT),
 
-P("rob-frame-ingest", "Real-Time Frame Ingest Buffer", "Medium", "Systems / Real-Time", 10,
+P("rob-frame-ingest", "Real-Time Frame Ingest Buffer", "Medium", "Systems / Real-Time", 11,
   "<p>On a drone, a camera callback ingests frames at 30&nbsp;Hz while a slower perception model consumes them asynchronously. Implement the <b>fixed-capacity ring buffer</b> between them: bounded memory (no growth in flight) with a <b>keep-latest</b> policy — when full, a <code>push</code> drops the <i>oldest</i> frame so the freshest data survives and latency stays bounded.</p>"
   "<p>Support: <code>push x</code> (ingest frame id x; if full, drop the oldest and count it), <code>pop</code> (consumer takes the oldest buffered frame — print its id or <code>none</code>), <code>latest</code> (newest buffered id or <code>none</code>), <code>dropped</code> (how many were dropped on overflow), <code>size</code> (current count).</p>",
   "Line 1: capacity. Line 2: q. Next q lines: 'push x', 'pop', 'latest', 'dropped', or 'size'.",
@@ -1227,7 +1227,7 @@ P("rob-frame-ingest", "Real-Time Frame Ingest Buffer", "Medium", "Systems / Real
   "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    idx = 0\n    cap = int(data[idx]); idx += 1\n    q = int(data[idx]); idx += 1\n    out = []\n    # TODO: fixed-capacity ring buffer; keep-latest (drop oldest) when full\n    for _ in range(q):\n        cmd = data[idx]; idx += 1\n        if cmd == \"push\":\n            x = int(data[idx]); idx += 1\n            pass  # TODO\n        elif cmd == \"pop\":\n            pass  # TODO: out.append(oldest id or 'none')\n        elif cmd == \"latest\":\n            pass  # TODO\n        elif cmd == \"dropped\":\n            pass  # TODO\n        else:  # size\n            pass  # TODO\n    print(\"\\n\".join(out))\n\nmain()\n",
   CPP_HEAD + "    int cap, q; cin >> cap >> q;\n    string cmd;\n    // TODO: fixed-capacity ring buffer (no dynamic growth); keep-latest on overflow\n    for (int i = 0; i < q; i++) {\n        cin >> cmd;\n        if (cmd == \"push\") { long long x; cin >> x; /* TODO */ }\n        else if (cmd == \"pop\") { /* TODO: print oldest id or \"none\" */ }\n        else if (cmd == \"latest\") { /* TODO */ }\n        else if (cmd == \"dropped\") { /* TODO */ }\n        else { /* size: TODO */ }\n    }\n    return 0;\n}\n", **ROB_EXACT),
 
-P("rob-bev-splat", "Lift-Splat BEV Pooling", "Medium", "BEV / 3D Perception", 13,
+P("rob-bev-splat", "Lift-Splat BEV Pooling", "Medium", "BEV / 3D Perception", 14,
   "<p>The “splat” step of Lift-Splat-Shoot: scatter lifted 3D points into a top-down BEV grid by <strong>sum-pooling</strong> their features. The grid spans <code>[x_min,x_max) x [y_min,y_max)</code> in cells of side <code>cell</code> (so <code>W=(x_max-x_min)/cell</code> columns, <code>H=(y_max-y_min)/cell</code> rows). Point (x,y) lands in column <code>floor((x-x_min)/cell)</code>, row <code>floor((y-y_min)/cell)</code>; add its feature to that cell. Drop points outside the grid.</p>",
   "Line 1: x_min x_max y_min y_max cell. Line 2: n. Next n lines: x y f.",
   "H rows (row 0 = lowest y first), each W summed features formatted to one decimal, space-separated.",
@@ -1238,7 +1238,7 @@ P("rob-bev-splat", "Lift-Splat BEV Pooling", "Medium", "BEV / 3D Perception", 13
   "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    x_min = float(data[0]); x_max = float(data[1])\n    y_min = float(data[2]); y_max = float(data[3]); cell = float(data[4])\n    n = int(data[5]); idx = 6\n    W = round((x_max - x_min) / cell)\n    H = round((y_max - y_min) / cell)\n    grid = [[0.0] * W for _ in range(H)]\n    for _ in range(n):\n        x = float(data[idx]); y = float(data[idx+1]); f = float(data[idx+2]); idx += 3\n        # TODO: col,row = cell of (x,y); drop if out of [0,W)x[0,H), else grid[row][col] += f\n    # TODO: print H rows (row 0 = lowest y first), each W sums formatted with one decimal\n\nmain()\n",
   "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    double xmin, xmax, ymin, ymax, cell;\n    cin >> xmin >> xmax >> ymin >> ymax >> cell;\n    int n; cin >> n;\n    int W = (int)llround((xmax - xmin) / cell);\n    int H = (int)llround((ymax - ymin) / cell);\n    vector<vector<double>> grid(H, vector<double>(W, 0.0));\n    for (int i = 0; i < n; i++) {\n        double x, y, f; cin >> x >> y >> f;\n        // TODO: col,row = cell of (x,y); drop if out of bounds, else grid[row][col] += f\n    }\n    // TODO: print H rows (row 0 first), each W sums via printf(\"%.1f\")\n    return 0;\n}\n", **ROB_EXACT),
 
-P("rob-bev-project", "Project 3D Points to Camera", "Medium", "BEV / 3D Perception", 13,
+P("rob-bev-project", "Project 3D Points to Camera", "Medium", "BEV / 3D Perception", 14,
   "<p>The backward-projection core of BEVFormer/DETR3D: sample image features by projecting 3D reference points into a camera. Given a 3x4 projection matrix <code>P</code> (row-major), compute <code>h = P*[X,Y,Z,1]</code>. The point is <strong>visible</strong> only if its camera depth <code>h[2] &gt; 0</code> and the pixel <code>(u,v) = (h[0]/h[2], h[1]/h[2])</code> lies inside the image (<code>0 &lt;= u &lt; W</code>, <code>0 &lt;= v &lt; H</code>). Print the visible points in input order.</p>",
   "Line 1: W H. Line 2: 12 floats = P row-major (3 rows of 4). Line 3: n. Next n lines: X Y Z.",
   "For each visible point: '<index> <u> <v>' with u,v to two decimals, one per line.",
@@ -1407,7 +1407,7 @@ def ref_jump_game():
         reach = max(reach, i + a[i])
     print("true")
 
-P("3sum", "3Sum", "Medium", "Two Pointers", 1,
+P("3sum", "3Sum", "Medium", "Two Pointers", 2,
   "<p>Given an integer array, return <b>all unique triplets</b> <code>(a, b, c)</code> with <code>a + b + c = 0</code>. Print each triplet on its own line with its values in <b>non-decreasing order</b>, and order the triplets in ascending (lexicographic) order. Print nothing if there are none.</p>",
   "Line 1: n. Line 2: n integers.",
   "Each triplet 'a b c' (a<=b<=c) on its own line, triplets sorted ascending.",
@@ -1417,7 +1417,7 @@ P("3sum", "3Sum", "Medium", "Two Pointers", 1,
   PY_HEAD + "    n = int(data[0])\n    a = list(map(int, data[1:1+n]))\n    # TODO: print each unique triplet summing to 0 (see statement for ordering)\n\nmain()\n",
   CPP_HEAD + "    int n; cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    // TODO: print each unique triplet summing to 0 (see statement for ordering)\n    return 0;\n}\n"),
 
-P("longest-substring-no-repeat", "Longest Substring Without Repeating Characters", "Medium", "Sliding Window", 1,
+P("longest-substring-no-repeat", "Longest Substring Without Repeating Characters", "Medium", "Sliding Window", 2,
   "<p>Given a string (no spaces), return the <b>length</b> of the longest substring without repeating characters.</p>",
   "Line 1: the string s (no spaces, length >= 1).",
   "The length (an integer).",
@@ -1426,7 +1426,7 @@ P("longest-substring-no-repeat", "Longest Substring Without Repeating Characters
   PY_HEAD + "    s = data[0]\n    # TODO: print the length of the longest substring without repeats\n\nmain()\n",
   CPP_HEAD + "    string s; cin >> s;\n    // TODO: print the length of the longest substring without repeats\n    return 0;\n}\n"),
 
-P("rotting-oranges", "Rotting Oranges", "Medium", "BFS (multi-source)", 1,
+P("rotting-oranges", "Rotting Oranges", "Medium", "BFS (multi-source)", 2,
   "<p>In a grid, <code>0</code> = empty, <code>1</code> = fresh orange, <code>2</code> = rotten. Each minute, every fresh orange 4-directionally adjacent to a rotten one becomes rotten. Return the minutes until no fresh orange remains, or <code>-1</code> if some can never rot.</p>",
   "Line 1: rows cols. Next rows lines: cols integers (0/1/2).",
   "The number of minutes, or -1.",
@@ -1436,7 +1436,7 @@ P("rotting-oranges", "Rotting Oranges", "Medium", "BFS (multi-source)", 1,
   PY_HEAD + "    rows = int(data[0]); cols = int(data[1])\n    vals = list(map(int, data[2:2+rows*cols]))\n    g = [vals[i*cols:(i+1)*cols] for i in range(rows)]\n    # TODO: multi-source BFS; print minutes or -1\n\nmain()\n",
   CPP_HEAD + "    int rows, cols; cin >> rows >> cols;\n    vector<vector<int>> g(rows, vector<int>(cols));\n    for (auto& r : g) for (auto& x : r) cin >> x;\n    // TODO: multi-source BFS; print minutes or -1\n    return 0;\n}\n"),
 
-P("course-schedule-ii", "Course Schedule II", "Medium", "DFS / Topological Sort", 1,
+P("course-schedule-ii", "Course Schedule II", "Medium", "DFS / Topological Sort", 2,
   "<p>There are <code>n</code> courses (0..n-1). Each prerequisite pair <code>a b</code> means course <code>b</code> must be taken before course <code>a</code>. Return a valid order to finish all courses; if several exist, return the <b>lexicographically smallest</b> (always take the available course with the smallest index next). Print <code>-1</code> if it is impossible (a cycle).</p>",
   "Line 1: n m (courses, number of prerequisite pairs). Next m lines: 'a b' (take b before a).",
   "The order on one line (space-separated), or -1.",
@@ -1446,7 +1446,7 @@ P("course-schedule-ii", "Course Schedule II", "Medium", "DFS / Topological Sort"
   PY_HEAD + "    n = int(data[0]); m = int(data[1]); idx = 2\n    edges = []\n    for _ in range(m):\n        a = int(data[idx]); b = int(data[idx+1]); idx += 2\n        edges.append((a, b))  # take b before a\n    # TODO: lexicographically smallest topological order, or -1\n\nmain()\n",
   CPP_HEAD + "    int n, m; cin >> n >> m;\n    vector<vector<int>> adj(n);\n    vector<int> indeg(n, 0);\n    for (int i = 0; i < m; i++) {\n        int a, b; cin >> a >> b; // take b before a\n        adj[b].push_back(a); indeg[a]++;\n    }\n    // TODO: lexicographically smallest topological order, or -1\n    return 0;\n}\n"),
 
-P("search-in-rotated-sorted-array", "Search in Rotated Sorted Array", "Medium", "Binary Search", 1,
+P("search-in-rotated-sorted-array", "Search in Rotated Sorted Array", "Medium", "Binary Search", 2,
   "<p>An ascending array of <b>distinct</b> integers was rotated at an unknown pivot. Given a target, return its <b>index</b>, or <code>-1</code> if absent. Aim for O(log n).</p>",
   "Line 1: n. Line 2: n integers (rotated sorted). Line 3: target.",
   "The index of target, or -1.",
@@ -1456,7 +1456,7 @@ P("search-in-rotated-sorted-array", "Search in Rotated Sorted Array", "Medium", 
   PY_HEAD + "    n = int(data[0])\n    a = list(map(int, data[1:1+n]))\n    target = int(data[1+n])\n    # TODO: binary search the rotated array; print index or -1\n\nmain()\n",
   CPP_HEAD + "    int n; cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    int target; cin >> target;\n    // TODO: binary search the rotated array; print index or -1\n    return 0;\n}\n"),
 
-P("merge-k-sorted-lists", "Merge k Sorted Lists", "Hard", "Divide & Conquer / Heap", 1,
+P("merge-k-sorted-lists", "Merge k Sorted Lists", "Hard", "Divide & Conquer / Heap", 2,
   "<p>Merge <code>k</code> ascending-sorted lists into one ascending-sorted sequence. Print the merged values on one line; print nothing if every list is empty.</p>",
   "Line 1: k. Next k lines: 'L v1 v2 ... vL' (length then L sorted integers).",
   "The merged sorted values, space-separated on one line.",
@@ -1466,7 +1466,7 @@ P("merge-k-sorted-lists", "Merge k Sorted Lists", "Hard", "Divide & Conquer / He
   PY_HEAD + "    k = int(data[0]); idx = 1; lists = []\n    for _ in range(k):\n        L = int(data[idx]); idx += 1\n        lists.append(list(map(int, data[idx:idx+L]))); idx += L\n    # TODO: merge all lists in sorted order; print on one line\n\nmain()\n",
   CPP_HEAD + "    int k; cin >> k;\n    vector<int> all;\n    for (int i = 0; i < k; i++) {\n        int L; cin >> L;\n        for (int j = 0; j < L; j++) { int v; cin >> v; all.push_back(v); }\n    }\n    // TODO: output all values in sorted (merged) order on one line\n    return 0;\n}\n"),
 
-P("coin-change", "Coin Change", "Medium", "Dynamic Programming", 1,
+P("coin-change", "Coin Change", "Medium", "Dynamic Programming", 2,
   "<p>Given coin denominations and a target <code>amount</code>, return the <b>fewest coins</b> that sum to it (each coin usable unlimited times), or <code>-1</code> if it cannot be made.</p>",
   "Line 1: n. Line 2: n coin values. Line 3: amount.",
   "The minimum number of coins, or -1.",
@@ -1476,7 +1476,7 @@ P("coin-change", "Coin Change", "Medium", "Dynamic Programming", 1,
   PY_HEAD + "    n = int(data[0])\n    coins = list(map(int, data[1:1+n]))\n    amount = int(data[1+n])\n    # TODO: DP for fewest coins; print count or -1\n\nmain()\n",
   CPP_HEAD + "    int n; cin >> n;\n    vector<int> coins(n);\n    for (auto& x : coins) cin >> x;\n    int amount; cin >> amount;\n    // TODO: DP for fewest coins; print count or -1\n    return 0;\n}\n"),
 
-P("subsets", "Subsets", "Medium", "Backtracking", 1,
+P("subsets", "Subsets", "Medium", "Backtracking", 2,
   "<p>Given an array of <b>distinct</b> integers, print <b>all</b> subsets (the power set). Print each subset's values in ascending order, space-separated, on its own line; print the empty subset as an empty line. Order the lines by subset <b>size ascending</b>, breaking ties by ascending values (so the empty subset comes first).</p>",
   "Line 1: n. Line 2: n distinct integers.",
   "All 2^n subsets, one per line (see statement for ordering).",
@@ -1485,7 +1485,7 @@ P("subsets", "Subsets", "Medium", "Backtracking", 1,
   PY_HEAD + "    n = int(data[0])\n    a = list(map(int, data[1:1+n]))\n    # TODO: print every subset (see statement for ordering)\n\nmain()\n",
   CPP_HEAD + "    int n; cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    // TODO: print every subset (see statement for ordering)\n    return 0;\n}\n"),
 
-P("top-k-frequent", "Top K Frequent Elements", "Medium", "Heap / Top-K", 1,
+P("top-k-frequent", "Top K Frequent Elements", "Medium", "Heap / Top-K", 2,
   "<p>Given an integer array and <code>k</code>, return the <code>k</code> most frequent values. Break frequency ties by the <b>smaller value</b> first, and print the result in order of <b>decreasing frequency</b>, then increasing value.</p>",
   "Line 1: n k. Line 2: n integers.",
   "The k values, space-separated on one line.",
@@ -1495,7 +1495,7 @@ P("top-k-frequent", "Top K Frequent Elements", "Medium", "Heap / Top-K", 1,
   PY_HEAD + "    n = int(data[0]); k = int(data[1])\n    a = list(map(int, data[2:2+n]))\n    # TODO: print the k most frequent values (see statement for tie-breaking/order)\n\nmain()\n",
   CPP_HEAD + "    int n, k; cin >> n >> k;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    // TODO: print the k most frequent values (see statement for tie-breaking/order)\n    return 0;\n}\n"),
 
-P("number-of-provinces", "Number of Provinces", "Medium", "Union-Find", 1,
+P("number-of-provinces", "Number of Provinces", "Medium", "Union-Find", 2,
   "<p>An <code>n x n</code> matrix <code>M</code> has <code>M[i][j] = 1</code> if cities <code>i</code> and <code>j</code> are directly connected. A <b>province</b> is a connected group of cities. Return the number of provinces.</p>",
   "Line 1: n. Next n lines: n integers (0/1), the isConnected matrix.",
   "The number of provinces.",
@@ -1505,7 +1505,7 @@ P("number-of-provinces", "Number of Provinces", "Medium", "Union-Find", 1,
   PY_HEAD + "    n = int(data[0])\n    vals = list(map(int, data[1:1+n*n]))\n    M = [vals[i*n:(i+1)*n] for i in range(n)]\n    # TODO: count connected components (union-find or DFS)\n\nmain()\n",
   CPP_HEAD + "    int n; cin >> n;\n    vector<vector<int>> M(n, vector<int>(n));\n    for (auto& r : M) for (auto& x : r) cin >> x;\n    // TODO: count connected components (union-find or DFS)\n    return 0;\n}\n"),
 
-P("jump-game", "Jump Game", "Medium", "Greedy", 1,
+P("jump-game", "Jump Game", "Medium", "Greedy", 2,
   "<p>Each element is the maximum jump length from that index. Starting at index 0, return <code>true</code> if you can reach the last index, else <code>false</code>.</p>",
   "Line 1: n. Line 2: n non-negative integers.",
   "'true' or 'false'.",
@@ -1516,7 +1516,7 @@ P("jump-game", "Jump Game", "Medium", "Greedy", 1,
   CPP_HEAD + "    int n; cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    // TODO: greedily track the farthest reachable index; print true/false\n    return 0;\n}\n"),
 
 # ----------------------------------------------------------------------------
-# Applied Intuition company set (week 17). Sourced from interviewsolver.com.
+# Applied Intuition company set (week 18). Sourced from interviewsolver.com.
 # stdin->stdout, exact-judge friendly. A few LeetCode originals are adapted to a
 # deterministic variant (noted in the statement) so a single exact judge works.
 # ----------------------------------------------------------------------------
@@ -1561,7 +1561,7 @@ def ref_all_nodes_distance_k():
             if nb not in seen: seen.add(nb); q.append((nb, d + 1))
     print(" ".join(map(str, sorted(res))))
 
-P("all-nodes-distance-k", "All Nodes Distance K in Binary Tree", "Medium", "Tree / BFS", 17,
+P("all-nodes-distance-k", "All Nodes Distance K in Binary Tree", "Medium", "Tree / BFS", 18,
   "<p>Given the root of a binary tree (values are unique), a <code>target</code> value, and an integer <code>k</code>, return all node values that are distance <code>k</code> from the target node, in <b>ascending order</b>.</p>",
   "Line 1: level-order tree, space-separated, 'null' for missing. Line 2: target value. Line 3: k.",
   "The values at distance k, ascending and space-separated (blank line if none).",
@@ -1583,7 +1583,7 @@ def ref_diameter():
     depth(root)
     print(best[0])
 
-P("diameter-of-binary-tree", "Diameter of Binary Tree", "Easy", "Tree / DFS", 17,
+P("diameter-of-binary-tree", "Diameter of Binary Tree", "Easy", "Tree / DFS", 18,
   "<p>Return the length of the <b>diameter</b> of a binary tree: the number of edges on the longest path between any two nodes (it need not pass through the root).</p>",
   "Line 1: level-order tree, space-separated, 'null' for missing.",
   "The diameter (edge count).",
@@ -1606,7 +1606,7 @@ def ref_combination_sum():
     res.sort()
     print("\n".join(" ".join(map(str, c)) for c in res))
 
-P("combination-sum", "Combination Sum", "Medium", "Backtracking", 17,
+P("combination-sum", "Combination Sum", "Medium", "Backtracking", 18,
   "<p>Given distinct positive integers and a target, return every combination (each number may be reused unlimited times) that sums to the target. Print each combination in non-decreasing order, one per line, with combinations sorted lexicographically.</p>",
   "Line 1: n. Line 2: n distinct integers. Line 3: target.",
   "Each combination on its own line, numbers ascending, combinations sorted (blank if none).",
@@ -1631,7 +1631,7 @@ def ref_randomized_collection():
             out.append(str(cnt[x]))
     print("\n".join(out))
 
-P("insert-delete-getrandom-duplicates", "Insert Delete GetRandom O(1) - Duplicates Allowed", "Hard", "Hash Table / Design", 17,
+P("insert-delete-getrandom-duplicates", "Insert Delete GetRandom O(1) - Duplicates Allowed", "Hard", "Hash Table / Design", 18,
   "<p>Design a multiset supporting O(1) <code>insert</code>, <code>remove</code>, and membership counts. <i>Adapted for deterministic judging:</i> the random draw is replaced by a <code>count</code> query, so only the O(1) bookkeeping is tested.</p><p>Process each op: <code>insert x</code> prints 1 if x was newly added (absent before) else 0, and always inserts one copy; <code>remove x</code> prints 1 if a copy was present (and removes one) else 0; <code>count x</code> prints x's current multiplicity.</p>",
   "Line 1: q. Next q lines: 'insert x', 'remove x', or 'count x'.",
   "One line per op (the value described above).",
@@ -1652,7 +1652,7 @@ def ref_check_swap():
     elif len(diff) == 2 and diff[0] == diff[1][::-1]: print("true")
     else: print("false")
 
-P("check-string-swap", "Check if One String Swap Can Make Strings Equal", "Easy", "Hash Table / String", 17,
+P("check-string-swap", "Check if One String Swap Can Make Strings Equal", "Easy", "Hash Table / String", 18,
   "<p>Two equal-length strings. Return <code>true</code> if you can make them equal with <b>at most one</b> swap of two characters within a single string, else <code>false</code>.</p>",
   "Line 1: s1. Line 2: s2.",
   "'true' or 'false'.",
@@ -1674,7 +1674,7 @@ def ref_unique_paths_ii():
             else: dp[r][c] = (dp[r - 1][c] if r > 0 else 0) + (dp[r][c - 1] if c > 0 else 0)
     print(dp[rows - 1][cols - 1])
 
-P("unique-paths-ii", "Unique Paths II", "Medium", "Dynamic Programming", 17,
+P("unique-paths-ii", "Unique Paths II", "Medium", "Dynamic Programming", 18,
   "<p>Count paths from the top-left to the bottom-right of a grid, moving only <b>right</b> or <b>down</b>. Cells marked <code>1</code> are obstacles and cannot be entered.</p>",
   "Line 1: rows cols. Next rows lines: cols integers (0 = open, 1 = obstacle).",
   "The number of unique paths.",
@@ -1700,7 +1700,7 @@ def ref_nested_weight_ii():
     dfs(data, 1)
     print(total)
 
-P("nested-list-weight-sum-ii", "Nested List Weight Sum II", "Medium", "DFS / Stack", 17,
+P("nested-list-weight-sum-ii", "Nested List Weight Sum II", "Medium", "DFS / Stack", 18,
   "<p>Each integer in a nested list has a weight based on its depth, but <b>reversed</b>: leaf-level integers weigh the least. Weight = <code>maxDepth - depth + 1</code>. Return the sum of each integer times its weight.</p>",
   "Line 1: a nested list in JSON bracket notation, e.g. [1,[4,[6]]].",
   "The weighted sum.",
@@ -1720,7 +1720,7 @@ def ref_string_compression():
         out.append(s[i] + (str(cnt) if cnt > 1 else "")); i = j
     print("".join(out))
 
-P("string-compression", "String Compression", "Medium", "Two Pointers / String", 17,
+P("string-compression", "String Compression", "Medium", "Two Pointers / String", 18,
   "<p>Run-length compress a string: each maximal run of a repeated character becomes the character followed by the run length (length omitted when it is 1). Print the compressed string. E.g. <code>aabbbcccc</code> &rarr; <code>a2b3c4</code>.</p>",
   "Line 1: the string (no spaces).",
   "The compressed string.",
@@ -1737,7 +1737,7 @@ def ref_min_abs_diff():
     res = [(a[i], a[i + 1]) for i in range(n - 1) if a[i + 1] - a[i] == best]
     print("\n".join(f"{x} {y}" for x, y in res))
 
-P("minimum-absolute-difference", "Minimum Absolute Difference", "Easy", "Array / Sorting", 17,
+P("minimum-absolute-difference", "Minimum Absolute Difference", "Easy", "Array / Sorting", 18,
   "<p>Given an array of distinct integers, find every pair (a, b) with a &lt; b whose absolute difference equals the <b>minimum</b> absolute difference of any pair. Print pairs in ascending order of the smaller element.</p>",
   "Line 1: n. Line 2: n distinct integers.",
   "Each qualifying pair 'a b' on its own line, ascending.",
@@ -1757,7 +1757,7 @@ def ref_search_insert():
         else: hi = mid
     print(lo)
 
-P("search-insert-position", "Search Insert Position", "Easy", "Binary Search", 17,
+P("search-insert-position", "Search Insert Position", "Easy", "Binary Search", 18,
   "<p>Given a sorted array of distinct integers and a target, return the index where it is found, or the index where it would be inserted to keep the array sorted. O(log n).</p>",
   "Line 1: n. Line 2: n sorted distinct integers. Line 3: target.",
   "The index (0-based).",
@@ -1793,7 +1793,7 @@ def ref_snake_game():
         out.append(score)
     print(" ".join(map(str, out)))
 
-P("design-snake-game", "Design Snake Game", "Medium", "Array / Queue / Design", 17,
+P("design-snake-game", "Design Snake Game", "Medium", "Array / Queue / Design", 18,
   "<p>Simulate the Snake game on a <code>width x height</code> board. The snake starts length 1 at cell (0,0). Food appears at given cells <b>in order</b>; eating one grows the snake and scores a point. Moving into a wall or into the snake's own body ends the game. Print the score after each move; on game over print <code>-1</code> and stop.</p>",
   "Line 1: width height. Line 2: F. Next F lines: 'r c' food cells (in order). Next line: M. Next M lines: a move (U/D/L/R).",
   "Score after each move, space-separated; ends with -1 if the game is lost.",
@@ -1810,7 +1810,7 @@ def ref_reorganize_feasible():
     n = len(s); c = Counter(s)
     print("true" if n > 0 and max(c.values()) <= (n + 1) // 2 else ("true" if n == 0 else "false"))
 
-P("reorganize-string", "Reorganize String", "Medium", "Greedy / Heap", 17,
+P("reorganize-string", "Reorganize String", "Medium", "Greedy / Heap", 18,
   "<p><i>Adapted for deterministic judging:</i> report whether the string <b>can</b> be rearranged so that no two adjacent characters are the same. (The construction is the natural follow-up; feasibility is the key insight: it is possible iff the most frequent character appears at most &lceil;n/2&rceil; times.)</p>",
   "Line 1: the string.",
   "'true' if a valid rearrangement exists, else 'false'.",
@@ -1839,7 +1839,7 @@ def ref_repeat_limit():
             heapq.heappush(heap, (negord, ch))
     print("".join(res))
 
-P("construct-string-repeat-limit", "Construct String With Repeat Limit", "Medium", "Greedy / Heap", 17,
+P("construct-string-repeat-limit", "Construct String With Repeat Limit", "Medium", "Greedy / Heap", 18,
   "<p>Using all the characters of <code>s</code>, build the <b>lexicographically largest</b> string in which no character is used more than <code>repeatLimit</code> times in a row.</p>",
   "Line 1: s. Line 2: repeatLimit.",
   "The lexicographically largest valid string.",
@@ -1860,7 +1860,7 @@ def ref_koko():
         else: lo = mid + 1
     print(lo)
 
-P("koko-eating-bananas", "Koko Eating Bananas", "Medium", "Binary Search", 17,
+P("koko-eating-bananas", "Koko Eating Bananas", "Medium", "Binary Search", 18,
   "<p>Koko eats at <code>k</code> bananas/hour, finishing at most one pile per hour. Given the piles and <code>h</code> total hours, return the <b>minimum</b> integer speed <code>k</code> that finishes every pile within h hours.</p>",
   "Line 1: n. Line 2: n integers (pile sizes). Line 3: h.",
   "The minimum eating speed k.",
@@ -1879,7 +1879,7 @@ def ref_kth_factor():
             if cnt == k: print(i); return
     print(-1)
 
-P("kth-factor-of-n", "The kth Factor of n", "Medium", "Math / Number Theory", 17,
+P("kth-factor-of-n", "The kth Factor of n", "Medium", "Math / Number Theory", 18,
   "<p>Return the <code>k</code>-th smallest positive integer that divides <code>n</code>, or <code>-1</code> if n has fewer than k divisors.</p>",
   "Line 1: n k.",
   "The kth factor of n, or -1.",
@@ -1906,7 +1906,7 @@ def ref_fraction():
         frac.append(str(rem // den)); rem %= den
     res.append("".join(frac)); print("".join(res))
 
-P("fraction-to-recurring-decimal", "Fraction to Recurring Decimal", "Medium", "Hash Table / Math", 17,
+P("fraction-to-recurring-decimal", "Fraction to Recurring Decimal", "Medium", "Hash Table / Math", 18,
   "<p>Given the numerator and denominator of a fraction, return the value as a string. If the fractional part repeats, enclose the repeating block in parentheses. E.g. <code>4/333</code> &rarr; <code>0.(012)</code>.</p>",
   "Line 1: numerator denominator.",
   "The decimal string.",
@@ -1933,7 +1933,7 @@ def ref_kth_smallest_matrix():
         else: hi = mid
     print(lo)
 
-P("kth-smallest-in-sorted-matrix", "Kth Smallest Element in a Sorted Matrix", "Medium", "Binary Search / Heap", 17,
+P("kth-smallest-in-sorted-matrix", "Kth Smallest Element in a Sorted Matrix", "Medium", "Binary Search / Heap", 18,
   "<p>Given an <code>n x n</code> matrix whose rows and columns are each sorted ascending, return the <code>k</code>-th smallest element (in overall sorted order, counting duplicates).</p>",
   "Line 1: n. Next n lines: n integers each. Last line: k.",
   "The kth smallest element.",
@@ -1955,7 +1955,7 @@ def ref_rank_teams():
     ranked = sorted(teams, key=lambda t: ([-x for x in score[t]], t))
     print("".join(ranked))
 
-P("rank-teams-by-votes", "Rank Teams by Votes", "Medium", "Array / Hash Table / Sorting", 17,
+P("rank-teams-by-votes", "Rank Teams by Votes", "Medium", "Array / Hash Table / Sorting", 18,
   "<p>Each voter ranks all teams (letters) in order of preference. Rank the teams by number of first-place votes, breaking ties by second-place votes, and so on; if still tied, order alphabetically. Return the final ranking.</p>",
   "Line 1: V (number of votes). Next V lines: a ranking string (a permutation of the team letters).",
   "The final team ranking as a string.",

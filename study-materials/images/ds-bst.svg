@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340" font-family="system-ui, sans-serif">
+  <rect width="640" height="340" fill="#0f1320"/>
+  <text x="20" y="30" fill="#e8ecf6" font-size="16" font-weight="bold">Binary search tree — left &lt; node &lt; right; O(h) ops</text>
+
+  <!-- edges -->
+  <g stroke="#2b3350" stroke-width="2">
+    <line x1="300" y1="90"  x2="200" y2="150"/>
+    <line x1="300" y1="90"  x2="400" y2="150"/>
+    <line x1="200" y1="150" x2="140" y2="215"/>
+    <line x1="200" y1="150" x2="260" y2="215"/>
+    <line x1="400" y1="150" x2="460" y2="215"/>
+  </g>
+  <!-- nodes -->
+  <g font-size="15" text-anchor="middle">
+    <circle cx="300" cy="90"  r="22" fill="#232b44" stroke="#22d3a6" stroke-width="2"/><text x="300" y="96" fill="#e8ecf6">8</text>
+    <circle cx="200" cy="150" r="22" fill="#232b44" stroke="#2b3350"/><text x="200" y="156" fill="#e8ecf6">3</text>
+    <circle cx="400" cy="150" r="22" fill="#232b44" stroke="#2b3350"/><text x="400" y="156" fill="#e8ecf6">10</text>
+    <circle cx="140" cy="215" r="22" fill="#232b44" stroke="#2b3350"/><text x="140" y="221" fill="#e8ecf6">1</text>
+    <circle cx="260" cy="215" r="22" fill="#232b44" stroke="#2b3350"/><text x="260" y="221" fill="#e8ecf6">6</text>
+    <circle cx="460" cy="215" r="22" fill="#232b44" stroke="#2b3350"/><text x="460" y="221" fill="#e8ecf6">14</text>
+  </g>
+  <text x="232" y="120" fill="#9aa6c2" font-size="11" text-anchor="middle">&lt; 8</text>
+  <text x="368" y="120" fill="#9aa6c2" font-size="11" text-anchor="middle">&gt; 8</text>
+
+  <!-- in-order = sorted -->
+  <text x="20" y="268" fill="#22d3a6" font-size="13" font-weight="bold">In-order (left → node → right) = sorted:</text>
+  <g font-size="14" text-anchor="middle">
+    <rect x="40"  y="280" width="34" height="30" fill="#1c2236" stroke="#2b3350"/><text x="57"  y="300" fill="#e8ecf6">1</text>
+    <rect x="74"  y="280" width="34" height="30" fill="#1c2236" stroke="#2b3350"/><text x="91"  y="300" fill="#e8ecf6">3</text>
+    <rect x="108" y="280" width="34" height="30" fill="#1c2236" stroke="#2b3350"/><text x="125" y="300" fill="#e8ecf6">6</text>
+    <rect x="142" y="280" width="34" height="30" fill="#1c2236" stroke="#22d3a6"/><text x="159" y="300" fill="#e8ecf6">8</text>
+    <rect x="176" y="280" width="34" height="30" fill="#1c2236" stroke="#2b3350"/><text x="193" y="300" fill="#e8ecf6">10</text>
+    <rect x="210" y="280" width="34" height="30" fill="#1c2236" stroke="#2b3350"/><text x="227" y="300" fill="#e8ecf6">14</text>
+  </g>
+
+  <!-- balance warning -->
+  <rect x="410" y="252" width="215" height="58" rx="8" fill="#1c2236" stroke="#f0a742"/>
+  <text x="422" y="274" fill="#f0a742" font-size="12">sorted input degrades to a chain</text>
+  <text x="422" y="294" fill="#9aa6c2" font-size="12">→ balance to keep h = O(log n)</text>
+
+  <line x1="20" y1="322" x2="620" y2="322" stroke="#2b3350" stroke-width="1"/>
+  <text x="20" y="336" fill="#22d3a6" font-size="11.5">Python: no built-in balanced BST → sorted list + bisect   ·   C++: std::map / std::set (red-black)</text>
+</svg>

@@ -1,4 +1,4 @@
-# Week 17 — Applied Intuition: Company Problem Set
+# Week 18 — Applied Intuition: Company Problem Set
 
 > The coding questions reported for **Applied Intuition** interviews (sourced from
 > interviewsolver.com). Every one is solvable in the in-site editor in Python or
@@ -38,7 +38,7 @@ warmers and two Hard design questions. The signal to optimize for:
 | **String / hashing** | One Swap Equal · String Compression · Rank Teams by Votes | Count mismatches / runs / per-position tallies; Rank Teams tie-breaks alphabetically. |
 | **Math** | The kth Factor of n · Fraction to Recurring Decimal | Fraction: remember seen **remainders** to detect the repeating cycle. |
 | **Design** | Design Snake Game · Insert/Delete/GetRandom · (Merge k Lists) | Snake = deque body + occupancy set; the tail vacates unless you just ate. |
-| **Sliding window / matrix / D&C** | Longest Substring · Rotate Image · Merge k Sorted Lists | Already in the bank from weeks 1–3; included here for completeness. |
+| **Sliding window / matrix / D&C** | Longest Substring · Rotate Image · Merge k Sorted Lists | Already in the bank from weeks 2–4; included here for completeness. |
 
 ---
 

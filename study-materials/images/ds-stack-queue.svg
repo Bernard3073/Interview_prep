@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="300" viewBox="0 0 640 300" font-family="system-ui, sans-serif">
+  <rect width="640" height="300" fill="#0f1320"/>
+  <text x="20" y="30" fill="#e8ecf6" font-size="16" font-weight="bold">Stack (LIFO) vs Queue (FIFO) — O(1) at the allowed ends</text>
+
+  <!-- STACK -->
+  <text x="140" y="66" fill="#22d3a6" font-size="14" text-anchor="middle" font-weight="bold">Stack — LIFO</text>
+  <text x="140" y="84" fill="#9aa6c2" font-size="11" text-anchor="middle">push / pop the same (top) end</text>
+  <g font-size="15" text-anchor="middle">
+    <rect x="80" y="100" width="120" height="34" fill="#232b44" stroke="#22d3a6"/><text x="140" y="123" fill="#e8ecf6">30  ← top</text>
+    <rect x="80" y="134" width="120" height="34" fill="#1c2236" stroke="#2b3350"/><text x="140" y="157" fill="#e8ecf6">20</text>
+    <rect x="80" y="168" width="120" height="34" fill="#1c2236" stroke="#2b3350"/><text x="140" y="191" fill="#e8ecf6">10  ← bottom</text>
+  </g>
+  <g stroke="#22d3a6" stroke-width="2" fill="none" marker-end="url(#arr)">
+    <path d="M215 95 C250 95, 250 118, 210 117"/>
+  </g>
+  <text x="228" y="90" fill="#9aa6c2" font-size="11">push</text>
+  <text x="228" y="130" fill="#9aa6c2" font-size="11">pop</text>
+  <text x="140" y="228" fill="#9aa6c2" font-size="11" text-anchor="middle">DFS · undo · monotonic stack</text>
+
+  <!-- QUEUE -->
+  <text x="440" y="66" fill="#22d3a6" font-size="14" text-anchor="middle" font-weight="bold">Queue — FIFO</text>
+  <text x="440" y="84" fill="#9aa6c2" font-size="11" text-anchor="middle">enqueue at back, dequeue at front</text>
+  <g font-size="15" text-anchor="middle">
+    <rect x="320" y="110" width="60" height="40" fill="#232b44" stroke="#22d3a6"/><text x="350" y="135" fill="#e8ecf6">10</text>
+    <rect x="380" y="110" width="60" height="40" fill="#1c2236" stroke="#2b3350"/><text x="410" y="135" fill="#e8ecf6">20</text>
+    <rect x="440" y="110" width="60" height="40" fill="#1c2236" stroke="#2b3350"/><text x="470" y="135" fill="#e8ecf6">30</text>
+    <rect x="500" y="110" width="60" height="40" fill="#232b44" stroke="#22d3a6"/><text x="530" y="135" fill="#e8ecf6">40</text>
+  </g>
+  <text x="350" y="172" fill="#9aa6c2" font-size="11" text-anchor="middle">front ↑</text>
+  <text x="530" y="172" fill="#9aa6c2" font-size="11" text-anchor="middle">back ↑</text>
+  <g stroke="#22d3a6" stroke-width="2" fill="none" marker-end="url(#arr)">
+    <path d="M575 130 H560"/>
+    <path d="M320 130 H305"/>
+  </g>
+  <text x="585" y="118" fill="#9aa6c2" font-size="11">enqueue</text>
+  <text x="270" y="118" fill="#9aa6c2" font-size="11">dequeue</text>
+  <text x="440" y="228" fill="#9aa6c2" font-size="11" text-anchor="middle">BFS frontier · scheduling · deque = both ends</text>
+
+  <!-- language note -->
+  <line x1="20" y1="250" x2="620" y2="250" stroke="#2b3350" stroke-width="1"/>
+  <text x="20" y="272" fill="#22d3a6" font-size="12">Python: list (stack) · collections.deque (queue — list.pop(0) is O(n)!)</text>
+  <text x="20" y="290" fill="#22d3a6" font-size="12">C++: std::stack · std::queue · std::deque</text>
+
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#22d3a6"/>
+    </marker>
+  </defs>
+</svg>

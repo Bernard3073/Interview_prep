@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="280" viewBox="0 0 640 280" font-family="system-ui, sans-serif">
+  <rect width="640" height="280" fill="#0f1320"/>
+  <text x="20" y="30" fill="#e8ecf6" font-size="16" font-weight="bold">Hash map — key → hash(key) % N → bucket; O(1) average</text>
+
+  <!-- keys -->
+  <g font-size="14" text-anchor="middle">
+    <rect x="24"  y="70"  width="80" height="30" rx="6" fill="#232b44" stroke="#2b3350"/><text x="64" y="90" fill="#e8ecf6">"cat"</text>
+    <rect x="24"  y="120" width="80" height="30" rx="6" fill="#232b44" stroke="#2b3350"/><text x="64" y="140" fill="#e8ecf6">"dog"</text>
+    <rect x="24"  y="170" width="80" height="30" rx="6" fill="#232b44" stroke="#2b3350"/><text x="64" y="190" fill="#e8ecf6">"bee"</text>
+  </g>
+
+  <!-- hash box -->
+  <rect x="150" y="105" width="90" height="60" rx="8" fill="#1c2236" stroke="#22d3a6"/>
+  <text x="195" y="132" fill="#22d3a6" font-size="14" text-anchor="middle">hash()</text>
+  <text x="195" y="150" fill="#9aa6c2" font-size="11" text-anchor="middle">% N</text>
+
+  <!-- arrows keys -> hash -->
+  <g stroke="#2b3350" stroke-width="2" fill="none">
+    <path d="M104 85 C130 90, 130 120, 150 122"/>
+    <path d="M104 135 H150"/>
+    <path d="M104 185 C130 180, 130 150, 150 148"/>
+  </g>
+
+  <!-- buckets array -->
+  <text x="300" y="58" fill="#9aa6c2" font-size="13">buckets (array of N slots)</text>
+  <g font-size="14" text-anchor="middle">
+    <rect x="300" y="70"  width="120" height="30" fill="#1c2236" stroke="#2b3350"/><text x="360" y="90" fill="#9aa6c2">0</text>
+    <rect x="300" y="100" width="120" height="30" fill="#1c2236" stroke="#22d3a6"/><text x="360" y="120" fill="#e8ecf6">1 → "cat"</text>
+    <rect x="300" y="130" width="120" height="30" fill="#1c2236" stroke="#2b3350"/><text x="360" y="150" fill="#9aa6c2">2</text>
+    <rect x="300" y="160" width="120" height="30" fill="#1c2236" stroke="#22d3a6"/><text x="360" y="180" fill="#e8ecf6">3 → "dog"</text>
+    <rect x="300" y="190" width="120" height="30" fill="#1c2236" stroke="#22d3a6"/><text x="360" y="210" fill="#e8ecf6">4 → "bee"</text>
+  </g>
+
+  <!-- arrows hash -> buckets -->
+  <g stroke="#2b3350" stroke-width="2" fill="none">
+    <path d="M240 128 C270 120, 275 118, 300 115"/>
+    <path d="M240 138 C270 160, 275 173, 300 175"/>
+    <path d="M240 145 C270 195, 278 203, 300 205"/>
+  </g>
+
+  <!-- collision note -->
+  <rect x="460" y="100" width="150" height="60" rx="8" fill="#1c2236" stroke="#2b3350"/>
+  <text x="470" y="120" fill="#e8ecf6" font-size="12">collision → chain in</text>
+  <text x="470" y="138" fill="#e8ecf6" font-size="12">the same bucket</text>
+  <text x="470" y="154" fill="#9aa6c2" font-size="11">worst case O(n)</text>
+
+  <text x="24" y="252" fill="#9aa6c2" font-size="12">Load factor near 1.0 triggers a rehash. Keys must be hashable/immutable; no ordering.</text>
+  <text x="24" y="270" fill="#22d3a6" font-size="12">Python: dict / set    ·    C++: std::unordered_map / std::unordered_set</text>
+</svg>

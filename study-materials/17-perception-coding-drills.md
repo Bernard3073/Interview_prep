@@ -1,4 +1,4 @@
-# Week 16 — Perception Coding Drills (KF · IoU/NMS · Association · SORT)
+# Week 17 — Perception Coding Drills (KF · IoU/NMS · Association · SORT)
 
 > The coding rounds for a sensor-fusion / MOT role (Kodiak — Senior Autonomy
 > Engineer, Perception) are usually *"implement a small piece of the perception
