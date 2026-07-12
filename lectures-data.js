@@ -1026,5 +1026,36 @@ const LECTURES = {
         "id": "resources"
       }
     ]
+  },
+  "17": {
+    "title": "Week 17 — Applied Intuition: Company Problem Set",
+    "html": "<blockquote class=\"lec-callout\">The coding questions reported for <strong>Applied Intuition</strong> interviews (sourced from interviewsolver.com). Every one is solvable in the in-site editor in Python or C++ — see <strong>💻 Practice for this week</strong> below. This page is the map: what the set tells you, how to group the problems, and the three that are adapted so the exact-match judge works.</blockquote>\n<hr>\n<h2 id=\"what-this-set-signals\">What this set signals</h2>\n<p>Applied Intuition builds simulation and autonomy software, and the question mix is a <strong>generalist software bar</strong>, not a robotics-math gauntlet. You get trees, backtracking, DP, binary search, greedy/heap, string manipulation, plain math, and a couple of design problems — standard LeetCode Medium territory with a few Easy warmers and two Hard design questions. The signal to optimize for:</p>\n<ul><li><strong>Breadth over depth.</strong> No single pattern dominates, so shore up your weakest area rather than grinding one topic. Revisit <a href=\"01-leetcode-patterns.md\" target=\"_blank\" rel=\"noopener\">01-leetcode-patterns</a> and the <a href=\"topic.html?t=binary-search\" target=\"_blank\" rel=\"noopener\">pattern deep-dives</a>.</li><li><strong>Clean coding + edge cases.</strong> Easy/Medium problems are judged on crispness: off-by-one in binary search, empty inputs, angle/overflow. Say the brute force and its complexity first, then optimize.</li><li><strong>Design fluency.</strong> Snake Game and the O(1) multiset test whether you can pick the right data structures under a latency constraint — narrate the invariant.</li></ul>\n<hr>\n<h2 id=\"group-the-problems-by-pattern\">Group the problems by pattern</h2>\n<div class=\"lec-table-wrap\"><table class=\"lec-table\"><thead><tr><th>Pattern</th><th>Problems</th><th>Watch for</th></tr></thead><tbody><tr><td><strong>Trees</strong></td><td>All Nodes Distance K · Diameter of Binary Tree</td><td>K-distance needs <strong>parent links</strong> (turn the tree into a graph, then BFS); diameter is DFS returning depth while tracking <code>max(l+r)</code>.</td></tr><tr><td><strong>Backtracking / DP</strong></td><td>Combination Sum · Unique Paths II</td><td>Combination Sum reuses elements (don't advance the index); Unique Paths II zeroes out obstacle cells.</td></tr><tr><td><strong>Binary search</strong></td><td>Search Insert Position · Koko Eating Bananas · Kth Smallest in a Sorted Matrix</td><td>Koko and Kth-Smallest are <strong>binary search on the answer</strong>, not the array — define the monotonic predicate.</td></tr><tr><td><strong>Greedy / heap</strong></td><td>Reorganize String · Construct String With Repeat Limit</td><td>Both are max-heap by frequency/char; the trick is placing a <strong>breaker</strong> char between runs.</td></tr><tr><td><strong>String / hashing</strong></td><td>One Swap Equal · String Compression · Rank Teams by Votes</td><td>Count mismatches / runs / per-position tallies; Rank Teams tie-breaks alphabetically.</td></tr><tr><td><strong>Math</strong></td><td>The kth Factor of n · Fraction to Recurring Decimal</td><td>Fraction: remember seen <strong>remainders</strong> to detect the repeating cycle.</td></tr><tr><td><strong>Design</strong></td><td>Design Snake Game · Insert/Delete/GetRandom · (Merge k Lists)</td><td>Snake = deque body + occupancy set; the tail vacates unless you just ate.</td></tr><tr><td><strong>Sliding window / matrix / D&amp;C</strong></td><td>Longest Substring · Rotate Image · Merge k Sorted Lists</td><td>Already in the bank from weeks 1–3; included here for completeness.</td></tr></tbody></table></div>\n<hr>\n<h2 id=\"the-three-adapted-problems-deterministic-judging\">The three adapted problems (deterministic judging)</h2>\n<p>The in-site judge is <strong>exact stdin→stdout</strong>, so problems with random or non-unique answers are reformulated. The core skill is unchanged; only the output differs. Each problem statement flags this too.</p>\n<ul><li><strong>Reorganize String</strong> → prints <code>true</code>/<code>false</code> for <strong>feasibility</strong> (possible iff the most frequent char ≤ ⌈n/2⌉). The construction is the natural follow-up.</li><li><strong>Insert Delete GetRandom O(1) — Duplicates</strong> → the random draw is replaced by a <code>count x</code> query, so the judge tests the <strong>O(1) multiset bookkeeping</strong> (the actual hard part) rather than a random return.</li><li><strong>Design Snake Game</strong> → already deterministic (food order and moves are given); it prints the <strong>score after each move</strong>, ending with <code>-1</code> on game over.</li></ul>\n<blockquote class=\"lec-callout\">On the real interview these come back in their original form. Solve the adapted version here for the algorithm, then rehearse the \"in original form I'd…\" answer: for Reorganize String, build the result with a max-heap placing the two most frequent chars each round; for GetRandom, back the multiset with a <code>value → set-of-indices</code> map plus a flat array for O(1) random.</blockquote>\n<hr>\n<h2 id=\"how-to-work-this-set\">How to work this set</h2>\n<ol><li><strong>Untimed first pass</strong> for coverage — hit one problem per pattern row above.</li><li><strong>Timed second pass</strong> at ~25 min each on the Mediums; the Easies should be &lt; 10.</li><li>Any miss → open the matching <a href=\"01-leetcode-patterns.md\" target=\"_blank\" rel=\"noopener\">pattern deep-dive</a> and do its extra reps, then re-attempt.</li></ol>\n<h2 id=\"resources\">Resources</h2>\n<ul><li>Source list: interviewsolver.com/interview-questions/applied-intuition</li><li>Pattern reference: <a href=\"01-leetcode-patterns.md\" target=\"_blank\" rel=\"noopener\">01-leetcode-patterns</a> and the per-pattern deep-dive subpages.</li><li>Solve them in-site: the <strong>💻 Practice for this week</strong> panel below (Python or C++, no setup).</li></ul>",
+    "toc": [
+      {
+        "level": 2,
+        "txt": "What this set signals",
+        "id": "what-this-set-signals"
+      },
+      {
+        "level": 2,
+        "txt": "Group the problems by pattern",
+        "id": "group-the-problems-by-pattern"
+      },
+      {
+        "level": 2,
+        "txt": "The three adapted problems (deterministic judging)",
+        "id": "the-three-adapted-problems-deterministic-judging"
+      },
+      {
+        "level": 2,
+        "txt": "How to work this set",
+        "id": "how-to-work-this-set"
+      },
+      {
+        "level": 2,
+        "txt": "Resources",
+        "id": "resources"
+      }
+    ]
   }
 };

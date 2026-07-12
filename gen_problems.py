@@ -1516,6 +1516,455 @@ P("jump-game", "Jump Game", "Medium", "Greedy", 1,
   CPP_HEAD + "    int n; cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    // TODO: greedily track the farthest reachable index; print true/false\n    return 0;\n}\n"),
 
 # ----------------------------------------------------------------------------
+# Applied Intuition company set (week 17). Sourced from interviewsolver.com.
+# stdin->stdout, exact-judge friendly. A few LeetCode originals are adapted to a
+# deterministic variant (noted in the statement) so a single exact judge works.
+# ----------------------------------------------------------------------------
+class _TN:
+    __slots__ = ("v", "l", "r")
+    def __init__(self, v): self.v = v; self.l = None; self.r = None
+
+def _build_tree(tokens):
+    """LeetCode level-order serialization with 'null' for missing children."""
+    from collections import deque
+    if not tokens or tokens[0] == "null":
+        return None
+    root = _TN(int(tokens[0])); q = deque([root]); i = 1
+    while q and i < len(tokens):
+        node = q.popleft()
+        if i < len(tokens):
+            t = tokens[i]; i += 1
+            if t != "null": node.l = _TN(int(t)); q.append(node.l)
+        if i < len(tokens):
+            t = tokens[i]; i += 1
+            if t != "null": node.r = _TN(int(t)); q.append(node.r)
+    return root
+
+def ref_all_nodes_distance_k():
+    import sys
+    from collections import deque, defaultdict
+    lines = sys.stdin.read().split("\n")
+    root = _build_tree(lines[0].split())
+    target = int(lines[1]); k = int(lines[2])
+    graph = defaultdict(list)
+    def dfs(node, par):
+        if not node: return
+        if par is not None:
+            graph[node.v].append(par.v); graph[par.v].append(node.v)
+        dfs(node.l, node); dfs(node.r, node)
+    dfs(root, None)
+    seen = {target}; q = deque([(target, 0)]); res = []
+    while q:
+        v, d = q.popleft()
+        if d == k: res.append(v); continue
+        for nb in graph[v]:
+            if nb not in seen: seen.add(nb); q.append((nb, d + 1))
+    print(" ".join(map(str, sorted(res))))
+
+P("all-nodes-distance-k", "All Nodes Distance K in Binary Tree", "Medium", "Tree / BFS", 17,
+  "<p>Given the root of a binary tree (values are unique), a <code>target</code> value, and an integer <code>k</code>, return all node values that are distance <code>k</code> from the target node, in <b>ascending order</b>.</p>",
+  "Line 1: level-order tree, space-separated, 'null' for missing. Line 2: target value. Line 3: k.",
+  "The values at distance k, ascending and space-separated (blank line if none).",
+  ref_all_nodes_distance_k,
+  [("3 5 1 6 2 0 8 null null 7 4\n5\n2\n", True), ("3 5 1 6 2 0 8 null null 7 4\n5\n0\n", True),
+   ("1\n1\n1\n", False), ("0 1 null 3 2\n2\n1\n", False)],
+  "import sys\n\ndef main():\n    lines = sys.stdin.read().split('\\n')\n    tokens = lines[0].split()\n    target = int(lines[1]); k = int(lines[2])\n    # TODO: build tree, add parent links, BFS k steps; print values ascending\n\nmain()\n",
+  CPP_HEAD + "    string line; getline(cin, line);\n    long long target, k; cin >> target >> k;\n    // TODO: parse the level-order tokens in `line`, BFS k steps; print ascending\n    return 0;\n}\n"),
+
+def ref_diameter():
+    import sys
+    root = _build_tree(sys.stdin.read().split("\n")[0].split())
+    best = [0]
+    def depth(node):
+        if not node: return 0
+        l = depth(node.l); r = depth(node.r)
+        best[0] = max(best[0], l + r)
+        return 1 + max(l, r)
+    depth(root)
+    print(best[0])
+
+P("diameter-of-binary-tree", "Diameter of Binary Tree", "Easy", "Tree / DFS", 17,
+  "<p>Return the length of the <b>diameter</b> of a binary tree: the number of edges on the longest path between any two nodes (it need not pass through the root).</p>",
+  "Line 1: level-order tree, space-separated, 'null' for missing.",
+  "The diameter (edge count).",
+  ref_diameter,
+  [("1 2 3 4 5\n", True), ("1 2\n", True), ("1\n", False), ("1 2 3 4 null null 5 6 null null 7\n", False)],
+  "import sys\n\ndef main():\n    tokens = sys.stdin.read().split('\\n')[0].split()\n    # TODO: build tree; DFS returning depth while tracking max(l+r)\n\nmain()\n",
+  CPP_HEAD + "    string line; getline(cin, line);\n    // TODO: parse the level-order tokens; DFS depth while tracking max(l+r)\n    return 0;\n}\n"),
+
+def ref_combination_sum():
+    import sys
+    d = sys.stdin.read().split()
+    n = int(d[0]); cand = sorted(map(int, d[1:1 + n])); target = int(d[1 + n])
+    res = []
+    def bt(start, remain, path):
+        if remain == 0: res.append(list(path)); return
+        for i in range(start, len(cand)):
+            if cand[i] > remain: break
+            path.append(cand[i]); bt(i, remain - cand[i], path); path.pop()
+    bt(0, target, [])
+    res.sort()
+    print("\n".join(" ".join(map(str, c)) for c in res))
+
+P("combination-sum", "Combination Sum", "Medium", "Backtracking", 17,
+  "<p>Given distinct positive integers and a target, return every combination (each number may be reused unlimited times) that sums to the target. Print each combination in non-decreasing order, one per line, with combinations sorted lexicographically.</p>",
+  "Line 1: n. Line 2: n distinct integers. Line 3: target.",
+  "Each combination on its own line, numbers ascending, combinations sorted (blank if none).",
+  ref_combination_sum,
+  [("4\n2 3 6 7\n7\n", True), ("3\n2 3 5\n8\n", True), ("1\n2\n1\n", False), ("2\n3 5\n8\n", False)],
+  PY_HEAD + "    n = int(data[0])\n    cand = list(map(int, data[1:1+n]))\n    target = int(data[1+n])\n    # TODO: backtrack (reuse allowed); print each combination sorted, combos sorted\n\nmain()\n",
+  CPP_HEAD + "    int n; cin >> n;\n    vector<int> cand(n);\n    for (auto& x : cand) cin >> x;\n    int target; cin >> target;\n    // TODO: backtrack (reuse allowed); print combinations\n    return 0;\n}\n"),
+
+def ref_randomized_collection():
+    import sys
+    from collections import Counter
+    data = sys.stdin.read().split("\n")
+    q = int(data[0].strip()); cnt = Counter(); out = []
+    for i in range(1, q + 1):
+        parts = data[i].split(); op = parts[0]; x = int(parts[1])
+        if op == "insert":
+            out.append("1" if cnt[x] == 0 else "0"); cnt[x] += 1
+        elif op == "remove":
+            if cnt[x] > 0: cnt[x] -= 1; out.append("1")
+            else: out.append("0")
+        else:  # count
+            out.append(str(cnt[x]))
+    print("\n".join(out))
+
+P("insert-delete-getrandom-duplicates", "Insert Delete GetRandom O(1) - Duplicates Allowed", "Hard", "Hash Table / Design", 17,
+  "<p>Design a multiset supporting O(1) <code>insert</code>, <code>remove</code>, and membership counts. <i>Adapted for deterministic judging:</i> the random draw is replaced by a <code>count</code> query, so only the O(1) bookkeeping is tested.</p><p>Process each op: <code>insert x</code> prints 1 if x was newly added (absent before) else 0, and always inserts one copy; <code>remove x</code> prints 1 if a copy was present (and removes one) else 0; <code>count x</code> prints x's current multiplicity.</p>",
+  "Line 1: q. Next q lines: 'insert x', 'remove x', or 'count x'.",
+  "One line per op (the value described above).",
+  ref_randomized_collection,
+  [("7\ninsert 1\ninsert 1\ninsert 2\ncount 1\nremove 1\ncount 1\nremove 3\n", True),
+   ("4\ninsert 5\nremove 5\nremove 5\ncount 5\n", True),
+   ("3\ninsert 9\ninsert 9\ncount 9\n", False)],
+  "import sys\n\ndef main():\n    data = sys.stdin.read().split('\\n')\n    q = int(data[0])\n    # TODO: keep a multiset; print per-op results\n\nmain()\n",
+  CPP_HEAD + "    int q; cin >> q;\n    // TODO: keep a multiset (unordered_map<int,int>); print per-op results\n    return 0;\n}\n"),
+
+def ref_check_swap():
+    import sys
+    lines = sys.stdin.read().split("\n")
+    s1 = lines[0].strip(); s2 = lines[1].strip()
+    if len(s1) != len(s2): print("false"); return
+    diff = [(a, b) for a, b in zip(s1, s2) if a != b]
+    if len(diff) == 0: print("true")
+    elif len(diff) == 2 and diff[0] == diff[1][::-1]: print("true")
+    else: print("false")
+
+P("check-string-swap", "Check if One String Swap Can Make Strings Equal", "Easy", "Hash Table / String", 17,
+  "<p>Two equal-length strings. Return <code>true</code> if you can make them equal with <b>at most one</b> swap of two characters within a single string, else <code>false</code>.</p>",
+  "Line 1: s1. Line 2: s2.",
+  "'true' or 'false'.",
+  ref_check_swap,
+  [("bank\nkanb\n", True), ("attack\ndefend\n", True), ("kelb\nkelb\n", False), ("abcd\nabdc\n", False)],
+  "import sys\n\ndef main():\n    lines = sys.stdin.read().split('\\n')\n    s1 = lines[0].strip(); s2 = lines[1].strip()\n    # TODO: count mismatched positions; print 'true'/'false'\n\nmain()\n",
+  CPP_HEAD + "    string s1, s2; cin >> s1 >> s2;\n    // TODO: count mismatched positions; print true/false\n    return 0;\n}\n"),
+
+def ref_unique_paths_ii():
+    import sys
+    d = sys.stdin.read().split()
+    rows = int(d[0]); cols = int(d[1]); vals = list(map(int, d[2:2 + rows * cols]))
+    g = [vals[i * cols:(i + 1) * cols] for i in range(rows)]
+    dp = [[0] * cols for _ in range(rows)]
+    for r in range(rows):
+        for c in range(cols):
+            if g[r][c] == 1: dp[r][c] = 0
+            elif r == 0 and c == 0: dp[r][c] = 1
+            else: dp[r][c] = (dp[r - 1][c] if r > 0 else 0) + (dp[r][c - 1] if c > 0 else 0)
+    print(dp[rows - 1][cols - 1])
+
+P("unique-paths-ii", "Unique Paths II", "Medium", "Dynamic Programming", 17,
+  "<p>Count paths from the top-left to the bottom-right of a grid, moving only <b>right</b> or <b>down</b>. Cells marked <code>1</code> are obstacles and cannot be entered.</p>",
+  "Line 1: rows cols. Next rows lines: cols integers (0 = open, 1 = obstacle).",
+  "The number of unique paths.",
+  ref_unique_paths_ii,
+  [("3 3\n0 0 0\n0 1 0\n0 0 0\n", True), ("2 2\n0 1\n0 0\n", True), ("1 1\n0\n", False), ("2 2\n1 0\n0 0\n", False)],
+  PY_HEAD + "    rows = int(data[0]); cols = int(data[1])\n    vals = list(map(int, data[2:2+rows*cols]))\n    g = [vals[i*cols:(i+1)*cols] for i in range(rows)]\n    # TODO: DP over the grid, obstacles contribute 0; print paths\n\nmain()\n",
+  CPP_HEAD + "    int rows, cols; cin >> rows >> cols;\n    vector<vector<int>> g(rows, vector<int>(cols));\n    for (auto& r : g) for (auto& x : r) cin >> x;\n    // TODO: DP over the grid; print number of paths\n    return 0;\n}\n"),
+
+def ref_nested_weight_ii():
+    import sys, json
+    data = json.loads(sys.stdin.read().strip())
+    def maxdepth(x):
+        best = 1
+        for e in x:
+            if isinstance(e, list): best = max(best, 1 + maxdepth(e))
+        return best
+    md = maxdepth(data); total = 0
+    def dfs(x, depth):
+        nonlocal total
+        for e in x:
+            if isinstance(e, int): total += e * (md - depth + 1)
+            else: dfs(e, depth + 1)
+    dfs(data, 1)
+    print(total)
+
+P("nested-list-weight-sum-ii", "Nested List Weight Sum II", "Medium", "DFS / Stack", 17,
+  "<p>Each integer in a nested list has a weight based on its depth, but <b>reversed</b>: leaf-level integers weigh the least. Weight = <code>maxDepth - depth + 1</code>. Return the sum of each integer times its weight.</p>",
+  "Line 1: a nested list in JSON bracket notation, e.g. [1,[4,[6]]].",
+  "The weighted sum.",
+  ref_nested_weight_ii,
+  [("[1,[4,[6]]]\n", True), ("[[1,1],2,[1,1]]\n", True), ("[5]\n", False), ("[[3,[2,[1]]]]\n", False)],
+  "import sys, json\n\ndef main():\n    data = json.loads(sys.stdin.read().strip())\n    # TODO: find max depth, then sum value*(maxDepth-depth+1)\n\nmain()\n",
+  CPP_HEAD + "    string s; getline(cin, s);\n    // TODO: parse the bracket string; weight = maxDepth - depth + 1\n    return 0;\n}\n"),
+
+def ref_string_compression():
+    import sys
+    s = sys.stdin.read().split("\n")[0]
+    out = []; i = 0; n = len(s)
+    while i < n:
+        j = i
+        while j < n and s[j] == s[i]: j += 1
+        cnt = j - i
+        out.append(s[i] + (str(cnt) if cnt > 1 else "")); i = j
+    print("".join(out))
+
+P("string-compression", "String Compression", "Medium", "Two Pointers / String", 17,
+  "<p>Run-length compress a string: each maximal run of a repeated character becomes the character followed by the run length (length omitted when it is 1). Print the compressed string. E.g. <code>aabbbcccc</code> &rarr; <code>a2b3c4</code>.</p>",
+  "Line 1: the string (no spaces).",
+  "The compressed string.",
+  ref_string_compression,
+  [("aabbbcccc\n", True), ("abc\n", True), ("aaaaaa\n", False), ("aabbccdd\n", False)],
+  "import sys\n\ndef main():\n    s = sys.stdin.read().split('\\n')[0]\n    # TODO: walk runs with two pointers; append char + count(if>1)\n\nmain()\n",
+  CPP_HEAD + "    string s; getline(cin, s);\n    // TODO: walk runs; append char + count(if>1)\n    return 0;\n}\n"),
+
+def ref_min_abs_diff():
+    import sys
+    d = sys.stdin.read().split()
+    n = int(d[0]); a = sorted(map(int, d[1:1 + n]))
+    best = min(a[i + 1] - a[i] for i in range(n - 1))
+    res = [(a[i], a[i + 1]) for i in range(n - 1) if a[i + 1] - a[i] == best]
+    print("\n".join(f"{x} {y}" for x, y in res))
+
+P("minimum-absolute-difference", "Minimum Absolute Difference", "Easy", "Array / Sorting", 17,
+  "<p>Given an array of distinct integers, find every pair (a, b) with a &lt; b whose absolute difference equals the <b>minimum</b> absolute difference of any pair. Print pairs in ascending order of the smaller element.</p>",
+  "Line 1: n. Line 2: n distinct integers.",
+  "Each qualifying pair 'a b' on its own line, ascending.",
+  ref_min_abs_diff,
+  [("4\n4 2 1 3\n", True), ("3\n1 3 6\n", True), ("5\n3 8 -10 23 19\n", False)],
+  PY_HEAD + "    n = int(data[0])\n    a = sorted(map(int, data[1:1+n]))\n    # TODO: min adjacent gap after sort; print all pairs with that gap\n\nmain()\n",
+  CPP_HEAD + "    int n; cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    // TODO: sort, find min adjacent gap, print all such pairs\n    return 0;\n}\n"),
+
+def ref_search_insert():
+    import sys
+    d = sys.stdin.read().split()
+    n = int(d[0]); a = list(map(int, d[1:1 + n])); target = int(d[1 + n])
+    lo, hi = 0, n
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if a[mid] < target: lo = mid + 1
+        else: hi = mid
+    print(lo)
+
+P("search-insert-position", "Search Insert Position", "Easy", "Binary Search", 17,
+  "<p>Given a sorted array of distinct integers and a target, return the index where it is found, or the index where it would be inserted to keep the array sorted. O(log n).</p>",
+  "Line 1: n. Line 2: n sorted distinct integers. Line 3: target.",
+  "The index (0-based).",
+  ref_search_insert,
+  [("4\n1 3 5 6\n5\n", True), ("4\n1 3 5 6\n2\n", True), ("4\n1 3 5 6\n7\n", False), ("1\n1\n0\n", False)],
+  PY_HEAD + "    n = int(data[0])\n    a = list(map(int, data[1:1+n]))\n    target = int(data[1+n])\n    # TODO: lower-bound binary search; print the index\n\nmain()\n",
+  CPP_HEAD + "    int n; cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    int target; cin >> target;\n    // TODO: lower-bound binary search; print index\n    return 0;\n}\n"),
+
+def ref_snake_game():
+    import sys
+    from collections import deque
+    data = sys.stdin.read().split("\n")
+    w, h = map(int, data[0].split())
+    F = int(data[1].strip()); idx = 2; food = []
+    for _ in range(F):
+        r, c = map(int, data[idx].split()); idx += 1; food.append((r, c))
+    M = int(data[idx].strip()); idx += 1
+    moves = [data[idx + i].strip() for i in range(M)]
+    body = deque([(0, 0)]); occ = {(0, 0)}
+    score = 0; fi = 0; out = []
+    dirs = {"U": (-1, 0), "D": (1, 0), "L": (0, -1), "R": (0, 1)}
+    for mv in moves:
+        dr, dc = dirs[mv]; hr, hc = body[-1]; nr, nc = hr + dr, hc + dc
+        if nr < 0 or nr >= h or nc < 0 or nc >= w:
+            out.append(-1); break
+        eat = fi < len(food) and (nr, nc) == food[fi]
+        if not eat:
+            tail = body.popleft(); occ.discard(tail)
+        if (nr, nc) in occ:
+            out.append(-1); break
+        body.append((nr, nc)); occ.add((nr, nc))
+        if eat: score += 1; fi += 1
+        out.append(score)
+    print(" ".join(map(str, out)))
+
+P("design-snake-game", "Design Snake Game", "Medium", "Array / Queue / Design", 17,
+  "<p>Simulate the Snake game on a <code>width x height</code> board. The snake starts length 1 at cell (0,0). Food appears at given cells <b>in order</b>; eating one grows the snake and scores a point. Moving into a wall or into the snake's own body ends the game. Print the score after each move; on game over print <code>-1</code> and stop.</p>",
+  "Line 1: width height. Line 2: F. Next F lines: 'r c' food cells (in order). Next line: M. Next M lines: a move (U/D/L/R).",
+  "Score after each move, space-separated; ends with -1 if the game is lost.",
+  ref_snake_game,
+  [("3 2\n2\n1 2\n0 1\n5\nR\nD\nR\nU\nL\n", True), ("3 3\n1\n0 1\n2\nR\nR\n", True),
+   ("2 2\n0\n2\nR\nD\n", False)],
+  "import sys\n\ndef main():\n    data = sys.stdin.read().split('\\n')\n    w, h = map(int, data[0].split())\n    # TODO: simulate the snake with a deque body + occupancy set\n\nmain()\n",
+  CPP_HEAD + "    int w, h; cin >> w >> h;\n    int F; cin >> F;\n    // TODO: read food, moves; simulate with a deque body + occupancy set\n    return 0;\n}\n"),
+
+def ref_reorganize_feasible():
+    import sys
+    from collections import Counter
+    s = sys.stdin.read().split("\n")[0].strip()
+    n = len(s); c = Counter(s)
+    print("true" if n > 0 and max(c.values()) <= (n + 1) // 2 else ("true" if n == 0 else "false"))
+
+P("reorganize-string", "Reorganize String", "Medium", "Greedy / Heap", 17,
+  "<p><i>Adapted for deterministic judging:</i> report whether the string <b>can</b> be rearranged so that no two adjacent characters are the same. (The construction is the natural follow-up; feasibility is the key insight: it is possible iff the most frequent character appears at most &lceil;n/2&rceil; times.)</p>",
+  "Line 1: the string.",
+  "'true' if a valid rearrangement exists, else 'false'.",
+  ref_reorganize_feasible,
+  [("aab\n", True), ("aaab\n", True), ("aaabc\n", False), ("aaaabbc\n", False)],
+  "import sys\nfrom collections import Counter\n\ndef main():\n    s = sys.stdin.read().split('\\n')[0].strip()\n    # TODO: print 'true' iff max frequency <= (n+1)//2\n\nmain()\n",
+  CPP_HEAD + "    string s; getline(cin, s);\n    // TODO: print true iff max frequency <= (n+1)/2\n    return 0;\n}\n"),
+
+def ref_repeat_limit():
+    import sys, heapq
+    from collections import Counter
+    lines = sys.stdin.read().split("\n")
+    s = lines[0].strip(); limit = int(lines[1].strip())
+    cnt = Counter(s)
+    heap = [(-ord(ch), ch) for ch in cnt]
+    heapq.heapify(heap); res = []
+    while heap:
+        negord, ch = heapq.heappop(heap)
+        use = min(cnt[ch], limit)
+        res.append(ch * use); cnt[ch] -= use
+        if cnt[ch] > 0:
+            if not heap: break
+            no2, ch2 = heapq.heappop(heap)
+            res.append(ch2); cnt[ch2] -= 1
+            if cnt[ch2] > 0: heapq.heappush(heap, (no2, ch2))
+            heapq.heappush(heap, (negord, ch))
+    print("".join(res))
+
+P("construct-string-repeat-limit", "Construct String With Repeat Limit", "Medium", "Greedy / Heap", 17,
+  "<p>Using all the characters of <code>s</code>, build the <b>lexicographically largest</b> string in which no character is used more than <code>repeatLimit</code> times in a row.</p>",
+  "Line 1: s. Line 2: repeatLimit.",
+  "The lexicographically largest valid string.",
+  ref_repeat_limit,
+  [("cczazcc\n3\n", True), ("aababab\n2\n", True), ("zzzzz\n2\n", False), ("aaabbbccc\n1\n", False)],
+  "import sys\nfrom collections import Counter\n\ndef main():\n    lines = sys.stdin.read().split('\\n')\n    s = lines[0].strip(); limit = int(lines[1].strip())\n    # TODO: greedily take the largest char up to `limit`, break runs with next char\n\nmain()\n",
+  CPP_HEAD + "    string s; getline(cin, s);\n    int limit; cin >> limit;\n    // TODO: greedily build the largest string with runs capped at limit\n    return 0;\n}\n"),
+
+def ref_koko():
+    import sys
+    d = sys.stdin.read().split()
+    n = int(d[0]); piles = list(map(int, d[1:1 + n])); H = int(d[1 + n])
+    lo, hi = 1, max(piles)
+    def hours(k): return sum((p + k - 1) // k for p in piles)
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if hours(mid) <= H: hi = mid
+        else: lo = mid + 1
+    print(lo)
+
+P("koko-eating-bananas", "Koko Eating Bananas", "Medium", "Binary Search", 17,
+  "<p>Koko eats at <code>k</code> bananas/hour, finishing at most one pile per hour. Given the piles and <code>h</code> total hours, return the <b>minimum</b> integer speed <code>k</code> that finishes every pile within h hours.</p>",
+  "Line 1: n. Line 2: n integers (pile sizes). Line 3: h.",
+  "The minimum eating speed k.",
+  ref_koko,
+  [("4\n3 6 7 11\n8\n", True), ("5\n30 11 23 4 20\n5\n", True), ("5\n30 11 23 4 20\n6\n", False), ("1\n1000000000\n2\n", False)],
+  PY_HEAD + "    n = int(data[0])\n    piles = list(map(int, data[1:1+n]))\n    h = int(data[1+n])\n    # TODO: binary search k in [1, max(piles)]; hours(k) = sum(ceil(p/k))\n\nmain()\n",
+  CPP_HEAD + "    int n; cin >> n;\n    vector<long long> piles(n);\n    for (auto& x : piles) cin >> x;\n    long long h; cin >> h;\n    // TODO: binary search minimal k with total hours <= h\n    return 0;\n}\n"),
+
+def ref_kth_factor():
+    import sys
+    d = sys.stdin.read().split()
+    n = int(d[0]); k = int(d[1]); cnt = 0
+    for i in range(1, n + 1):
+        if n % i == 0:
+            cnt += 1
+            if cnt == k: print(i); return
+    print(-1)
+
+P("kth-factor-of-n", "The kth Factor of n", "Medium", "Math / Number Theory", 17,
+  "<p>Return the <code>k</code>-th smallest positive integer that divides <code>n</code>, or <code>-1</code> if n has fewer than k divisors.</p>",
+  "Line 1: n k.",
+  "The kth factor of n, or -1.",
+  ref_kth_factor,
+  [("12 3\n", True), ("7 2\n", True), ("4 4\n", False), ("1000 3\n", False)],
+  PY_HEAD + "    n = int(data[0]); k = int(data[1])\n    # TODO: enumerate divisors 1..n; print the kth or -1\n\nmain()\n",
+  CPP_HEAD + "    long long n, k; cin >> n >> k;\n    // TODO: enumerate divisors; print the kth or -1\n    return 0;\n}\n"),
+
+def ref_fraction():
+    import sys
+    d = sys.stdin.read().split()
+    num = int(d[0]); den = int(d[1])
+    if num == 0: print("0"); return
+    res = []
+    if (num < 0) != (den < 0): res.append("-")
+    num = abs(num); den = abs(den)
+    res.append(str(num // den)); rem = num % den
+    if rem == 0: print("".join(res)); return
+    res.append("."); seen = {}; frac = []
+    while rem != 0:
+        if rem in seen:
+            frac.insert(seen[rem], "("); frac.append(")"); break
+        seen[rem] = len(frac); rem *= 10
+        frac.append(str(rem // den)); rem %= den
+    res.append("".join(frac)); print("".join(res))
+
+P("fraction-to-recurring-decimal", "Fraction to Recurring Decimal", "Medium", "Hash Table / Math", 17,
+  "<p>Given the numerator and denominator of a fraction, return the value as a string. If the fractional part repeats, enclose the repeating block in parentheses. E.g. <code>4/333</code> &rarr; <code>0.(012)</code>.</p>",
+  "Line 1: numerator denominator.",
+  "The decimal string.",
+  ref_fraction,
+  [("1 2\n", True), ("4 333\n", True), ("2 1\n", False), ("-50 8\n", False)],
+  PY_HEAD + "    num = int(data[0]); den = int(data[1])\n    # TODO: long division; remember remainders to detect the repeating cycle\n\nmain()\n",
+  CPP_HEAD + "    long long num, den; cin >> num >> den;\n    // TODO: long division; track remainders to find the repeating cycle\n    return 0;\n}\n"),
+
+def ref_kth_smallest_matrix():
+    import sys
+    d = sys.stdin.read().split()
+    n = int(d[0]); vals = list(map(int, d[1:1 + n * n])); k = int(d[1 + n * n])
+    m = [vals[i * n:(i + 1) * n] for i in range(n)]
+    lo, hi = m[0][0], m[n - 1][n - 1]
+    def count_le(x):
+        cnt = 0; r = n - 1; c = 0
+        while r >= 0 and c < n:
+            if m[r][c] <= x: cnt += r + 1; c += 1
+            else: r -= 1
+        return cnt
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if count_le(mid) < k: lo = mid + 1
+        else: hi = mid
+    print(lo)
+
+P("kth-smallest-in-sorted-matrix", "Kth Smallest Element in a Sorted Matrix", "Medium", "Binary Search / Heap", 17,
+  "<p>Given an <code>n x n</code> matrix whose rows and columns are each sorted ascending, return the <code>k</code>-th smallest element (in overall sorted order, counting duplicates).</p>",
+  "Line 1: n. Next n lines: n integers each. Last line: k.",
+  "The kth smallest element.",
+  ref_kth_smallest_matrix,
+  [("3\n1 5 9\n10 11 13\n12 13 15\n8\n", True), ("2\n-5 -4\n-5 -4\n2\n", True), ("1\n7\n1\n", False), ("3\n1 2 3\n4 5 6\n7 8 9\n5\n", False)],
+  PY_HEAD + "    n = int(data[0])\n    vals = list(map(int, data[1:1+n*n]))\n    m = [vals[i*n:(i+1)*n] for i in range(n)]\n    k = int(data[1+n*n])\n    # TODO: binary search on value; count elements <= mid by walking bottom-left\n\nmain()\n",
+  CPP_HEAD + "    int n; cin >> n;\n    vector<vector<int>> m(n, vector<int>(n));\n    for (auto& r : m) for (auto& x : r) cin >> x;\n    int k; cin >> k;\n    // TODO: binary search on value; count <= mid via bottom-left walk\n    return 0;\n}\n"),
+
+def ref_rank_teams():
+    import sys
+    data = sys.stdin.read().split("\n")
+    V = int(data[0].strip())
+    votes = [data[1 + i].strip() for i in range(V)]
+    teams = votes[0]; m = len(teams)
+    score = {t: [0] * m for t in teams}
+    for v in votes:
+        for pos, t in enumerate(v):
+            score[t][pos] += 1
+    ranked = sorted(teams, key=lambda t: ([-x for x in score[t]], t))
+    print("".join(ranked))
+
+P("rank-teams-by-votes", "Rank Teams by Votes", "Medium", "Array / Hash Table / Sorting", 17,
+  "<p>Each voter ranks all teams (letters) in order of preference. Rank the teams by number of first-place votes, breaking ties by second-place votes, and so on; if still tied, order alphabetically. Return the final ranking.</p>",
+  "Line 1: V (number of votes). Next V lines: a ranking string (a permutation of the team letters).",
+  "The final team ranking as a string.",
+  ref_rank_teams,
+  [("5\nABC\nACB\nABC\nACB\nACB\n", True), ("2\nWXYZ\nXYZW\n", True), ("1\nZMK\n", False), ("3\nBCA\nCAB\nABC\n", False)],
+  "import sys\n\ndef main():\n    data = sys.stdin.read().split('\\n')\n    V = int(data[0])\n    votes = [data[1+i].strip() for i in range(V)]\n    # TODO: per-team position counts; sort by counts desc, then alphabetically\n\nmain()\n",
+  CPP_HEAD + "    int V; cin >> V;\n    vector<string> votes(V);\n    for (auto& s : votes) cin >> s;\n    // TODO: per-team position counts; sort desc, tie-break alphabetically\n    return 0;\n}\n"),
+
+# ----------------------------------------------------------------------------
 # Compile-check every C++ starter so users never hit a template compile error
 # ----------------------------------------------------------------------------
 def _find_cxx():
