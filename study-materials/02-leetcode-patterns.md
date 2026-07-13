@@ -11,6 +11,7 @@
 
 When you read a problem, map its *shape* to a pattern before writing code:
 
+- **Self-similar / tree / nested / "solve a smaller version of the same problem"** → recursion (the engine under DFS, backtracking, divide & conquer, and top-down DP).
 - **Sorted array / pair-sum / in-place dedup** → two pointers.
 - **Contiguous subarray / substring with a constraint** → sliding window.
 - **Shortest path / level-by-level / "minimum steps"** → BFS.
@@ -39,6 +40,7 @@ repeats.
 
 | Pattern | Deep-dive subpage | Questions covered |
 |---|---|---|
+| Recursion | [Open →](topic.html?t=recursion) | Pow(x, n) · Reverse Linked List · Merge Two Sorted Lists · Fibonacci (naive vs. memoized) |
 | Two pointers | [Open →](topic.html?t=two-pointers) | Valid Palindrome · Container With Most Water · Two Sum II · Move Zeroes |
 | Sliding window | [Open →](topic.html?t=sliding-window) | Minimum Window Substring · Longest Repeating Char Replacement · Permutation in String · Max Consecutive Ones III |
 | BFS | [Open →](topic.html?t=bfs) | Level Order Traversal · 01 Matrix · Open the Lock |
@@ -58,6 +60,7 @@ repeats.
 
 | Pattern | Typical time | Space | Tell-tale phrasing |
 |---|---|---|---|
+| Recursion | #calls × work/call | O(depth) stack | "tree", "self-similar", "nested", "smaller subproblem" |
 | Two pointers | O(n) | O(1) | "sorted", "pair/triplet", "in place" |
 | Sliding window | O(n) | O(k) | "contiguous", "longest/shortest subarray" |
 | BFS | O(V+E) | O(width) | "shortest", "fewest steps", "level" |
