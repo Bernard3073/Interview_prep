@@ -414,6 +414,23 @@ const CURRICULUM = [
     ],
     robotics: [],
   },
+  {
+    week: 19,
+    title: "C++ Review — Pointers, Smart Pointers, Memory & STL",
+    goal: "The interview-day refresher on the four C++ topics that always come up: raw pointers & references, smart pointers & ownership (unique/shared/weak, cycles), memory management (stack/heap, RAII, leaks/dangling/UB, Rule of 0/3/5, move), and the common STL (container complexity, iterator invalidation, algorithms & idioms). Every section ends with the reflex answer an interviewer is listening for. Concentrated companion to the robotics-flavored Week 11.",
+    lecture: "lecture.html?week=19",
+    topics: [
+      "Pointers vs references; nullptr; const placement",
+      "Stack vs heap; new/delete rules; when to allocate dynamically",
+      "Memory bugs: leaks, dangling / use-after-free, double free, UB",
+      "Smart pointers: unique_ptr / shared_ptr / weak_ptr, make_*, cycles",
+      "RAII, the Rule of 0/3/5, and move semantics",
+      "STL containers & complexity; map vs unordered_map; operator[] trap",
+      "Iterator invalidation; the erase-remove idiom; STL algorithms",
+    ],
+    leetcode: [],
+    robotics: [],
+  },
 ];
 
 if (typeof module !== "undefined") module.exports = CURRICULUM;
