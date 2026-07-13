@@ -1,4 +1,4 @@
-# Week 5 — Camera Models & Classical Image Processing
+# Week 6 — Camera Models & Classical Image Processing
 
 > How does a 3D world become a 2D array of pixels — and what can we recover from
 > that array with filters before any learning is involved?
@@ -52,7 +52,7 @@ Show the camera a planar checkerboard at several orientations:
 2. Each view gives a homography board→image.
 3. Solve linearly for `K`, then per-view `[R|t]`.
 4. Refine everything + distortion by minimizing **reprojection error** (nonlinear
-   least squares — your Week 3 Gauss–Newton/LM).
+   least squares — your Week 4 Gauss–Newton/LM).
 
 > Reprojection error (px) is the universal sanity metric: project known 3D points
 > with your estimated params and measure pixel distance to detections. < ~0.5 px

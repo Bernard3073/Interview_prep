@@ -1,4 +1,4 @@
-# Week 9 — Deep Learning for Perception
+# Week 10 — Deep Learning for Perception
 
 > Classical geometry tells you *where*; learned models increasingly tell you
 > *what*. Modern perception stacks combine both. Know the building blocks, the

@@ -1,4 +1,4 @@
-# Week 16 — Sensor Fusion & Multi-Object Tracking (Autonomous Trucking)
+# Week 17 — Sensor Fusion & Multi-Object Tracking (Autonomous Trucking)
 
 > Prep for **Kodiak — Senior Autonomy Engineer, Perception**. The role is state
 > estimation + sensor fusion + multi-object tracking (MOT) across camera, radar,

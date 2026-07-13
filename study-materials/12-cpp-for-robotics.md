@@ -1,4 +1,4 @@
-# Week 11 — C++ for Robotics
+# Week 12 — C++ for Robotics
 
 > Most production robotics runs on C++: it gives you predictable performance,
 > deterministic resource management, direct hardware access, and the ecosystem
