@@ -65,9 +65,26 @@ const CURRICULUM = [
   },
   {
     week: 3,
+    title: "C++ Review — Pointers, Smart Pointers, Memory & STL",
+    goal: "The interview-day refresher on the four C++ topics that always come up: raw pointers & references, smart pointers & ownership (unique/shared/weak, cycles), memory management (stack/heap, RAII, leaks/dangling/UB, Rule of 0/3/5, move), and the common STL (container complexity, iterator invalidation, algorithms & idioms). Every section ends with the reflex answer an interviewer is listening for. Concentrated companion to the robotics-flavored Week 12.",
+    lecture: "lecture.html?week=3",
+    topics: [
+      "Pointers vs references; nullptr; const placement",
+      "Stack vs heap; new/delete rules; when to allocate dynamically",
+      "Memory bugs: leaks, dangling / use-after-free, double free, UB",
+      "Smart pointers: unique_ptr / shared_ptr / weak_ptr, make_*, cycles",
+      "RAII, the Rule of 0/3/5, and move semantics",
+      "STL containers & complexity; map vs unordered_map; operator[] trap",
+      "Iterator invalidation; the erase-remove idiom; STL algorithms",
+    ],
+    leetcode: [],
+    robotics: [],
+  },
+  {
+    week: 4,
     title: "Math Foundations",
     goal: "Rebuild the linear algebra, probability, and optimization muscles every perception algorithm leans on.",
-    lecture: "lecture.html?week=3",
+    lecture: "lecture.html?week=4",
     topics: [
       "Vectors, matrices, norms, dot/cross products",
       "Eigenvalues, eigenvectors, SVD (geometric meaning)",
@@ -86,10 +103,10 @@ const CURRICULUM = [
     ],
   },
   {
-    week: 4,
+    week: 5,
     title: "3D Geometry & Rigid-Body Transforms",
     goal: "Master rotations, quaternions, and SE(3) — the language of every robot pose.",
-    lecture: "lecture.html?week=4",
+    lecture: "lecture.html?week=5",
     topics: [
       "Rotation matrices, properties of SO(3)",
       "Euler angles & gimbal lock",
@@ -109,10 +126,10 @@ const CURRICULUM = [
     ],
   },
   {
-    week: 5,
+    week: 6,
     title: "Camera Models & Classical Image Processing",
     goal: "Understand how 3D becomes pixels, and the filtering/feature toolkit on top of it.",
-    lecture: "lecture.html?week=5",
+    lecture: "lecture.html?week=6",
     topics: [
       "Pinhole model, intrinsics K, extrinsics",
       "Lens distortion (radial/tangential) & undistortion",
@@ -132,10 +149,10 @@ const CURRICULUM = [
     ],
   },
   {
-    week: 6,
+    week: 7,
     title: "Features & Multi-View Geometry",
     goal: "Detect, describe, and match features; recover geometry between views.",
-    lecture: "lecture.html?week=6",
+    lecture: "lecture.html?week=7",
     topics: [
       "Harris corners, FAST, blob detectors",
       "Descriptors: SIFT, ORB, BRIEF; matching + ratio test",
@@ -156,10 +173,10 @@ const CURRICULUM = [
     ],
   },
   {
-    week: 7,
+    week: 8,
     title: "State Estimation & Filtering",
     goal: "Fuse noisy sensors over time: Bayes filter, KF/EKF/UKF, particle filter.",
-    lecture: "lecture.html?week=7",
+    lecture: "lecture.html?week=8",
     topics: [
       "Recursive Bayes filter (predict/update)",
       "Kalman filter derivation & assumptions",
@@ -179,10 +196,10 @@ const CURRICULUM = [
     ],
   },
   {
-    week: 8,
+    week: 9,
     title: "SLAM, Odometry & Sensor Fusion",
     goal: "Tie geometry + estimation together into mapping and localization systems.",
-    lecture: "lecture.html?week=8",
+    lecture: "lecture.html?week=9",
     topics: [
       "SLAM problem: front-end vs back-end",
       "Visual odometry pipeline (feature & direct)",
@@ -202,10 +219,10 @@ const CURRICULUM = [
     ],
   },
   {
-    week: 9,
+    week: 10,
     title: "Deep Learning for Perception",
     goal: "Modern neural perception: detection, segmentation, 3D, and point clouds.",
-    lecture: "lecture.html?week=9",
+    lecture: "lecture.html?week=10",
     topics: [
       "CNN building blocks; receptive field; BN/dropout",
       "Object detection (one-stage vs two-stage, anchors, NMS)",
@@ -225,10 +242,10 @@ const CURRICULUM = [
     ],
   },
   {
-    week: 10,
+    week: 11,
     title: "Systems, ROS & Mock Interviews",
     goal: "Wire it into real systems and rehearse the interview itself.",
-    lecture: "lecture.html?week=10",
+    lecture: "lecture.html?week=11",
     topics: [
       "ROS/ROS2 concepts: nodes, topics, TF, time sync",
       "Real-time, latency, threading, memory in C++",
@@ -248,10 +265,10 @@ const CURRICULUM = [
     ],
   },
   {
-    week: 11,
+    week: 12,
     title: "C++ for Robotics",
     goal: "The C++ idioms you're expected to speak fluently — RAII, ownership, move semantics, real-time memory, and concurrency. Plus a real-time systems problem; re-solve earlier ones with the C++ tab too.",
-    lecture: "lecture.html?week=11",
+    lecture: "lecture.html?week=12",
     topics: [
       "RAII & deterministic resource management",
       "Smart pointers: unique_ptr / shared_ptr / weak_ptr",
@@ -268,10 +285,10 @@ const CURRICULUM = [
     ],
   },
   {
-    week: 12,
+    week: 13,
     title: "Zipline — Aerial Perception & 3D Reconstruction",
     goal: "Role-specific prep for Zipline's Droid team: cloud-side perception that builds 3D + semantic world models from satellite/aerial imagery, predicts deliverability, and ships priors to the onboard stack. Question bank, worked deep-dives (bundle adjustment, DSM vs DTM, semantic-to-3D fusion, deliverability calibration, coordinate frames, eval without ground truth), and solved coding problems.",
-    lecture: "lecture.html?week=12",
+    lecture: "lecture.html?week=13",
     topics: [
       "SfM / MVS / NeRF / 3DGS for aerial reconstruction",
       "Bundle adjustment with GPS/IMU/RTK pose priors",
@@ -288,10 +305,10 @@ const CURRICULUM = [
     robotics: [],
   },
   {
-    week: 13,
+    week: 14,
     title: "Zipline — Aerial Perception: Detailed Answers",
-    goal: "Full worked answers to every question in the Week 12 question bank — the 'what a strong senior/staff answer actually says' companion. Covers SfM/MVS tradeoffs, BA with pose priors, DSM/DTM, semantic-to-3D fusion, bootstrapping with little labeled data, domain shift, the onboarding pipeline & onboard trust contract, production MLE judgment, and safety-critical eval with per-hazard gates.",
-    lecture: "lecture.html?week=13",
+    goal: "Full worked answers to every question in the Week 13 question bank — the 'what a strong senior/staff answer actually says' companion. Covers SfM/MVS tradeoffs, BA with pose priors, DSM/DTM, semantic-to-3D fusion, bootstrapping with little labeled data, domain shift, the onboarding pipeline & onboard trust contract, production MLE judgment, and safety-critical eval with per-hazard gates.",
+    lecture: "lecture.html?week=14",
     topics: [
       "A1 — Reconstruction & multi-view geometry, answered",
       "A2 — Semantic segmentation & learned perception, answered",
@@ -304,10 +321,10 @@ const CURRICULUM = [
     robotics: [],
   },
   {
-    week: 14,
+    week: 15,
     title: "BEV Transformers & Attention",
     goal: "Build the transformer from scratch — tokens, scaled dot-product attention, self vs. cross vs. multi-head, positional encoding — then see exactly how BEVFormer/DETR3D reuse it for multi-camera 3D perception. Diagrams, PyTorch/NumPy code, and the attention questions interviewers actually ask.",
-    lecture: "lecture.html?week=14",
+    lecture: "lecture.html?week=15",
     topics: [
       "Tokens, embeddings & the transformer block (attention + FFN + residual/LayerNorm)",
       "Scaled dot-product attention and the √dₖ scaling",
@@ -324,10 +341,10 @@ const CURRICULUM = [
     ],
   },
   {
-    week: 15,
+    week: 16,
     title: "Concurrency for Robotics (async/await + sensor streams)",
     goal: "Python async/await done right for data/perception infra — diagnose I/O- vs CPU-bound, run concurrent tasks with sequential steps, bound concurrency with semaphores and backpressure. Then the same reasoning applied to multi-rate sensor streams, time sync, and ROS2 executors — and where async is the wrong tool (the hard-real-time control loop).",
-    lecture: "lecture.html?week=15",
+    lecture: "lecture.html?week=16",
     topics: [
       "The two worlds: hard-real-time C++/ROS2 vs offline Python/asyncio infra",
       "async/await, gather, create_task; total time = max, not sum",
@@ -341,10 +358,10 @@ const CURRICULUM = [
     robotics: [],
   },
   {
-    week: 16,
+    week: 17,
     title: "Sensor Fusion & Multi-Object Tracking (Autonomous Trucking)",
     goal: "Turn per-sensor detections into stable, evaluated tracks for a highway-speed truck. Tracking-by-detection end to end: fusion architecture (early vs late), data association (gating, GNN/Hungarian, JPDA, MHT), track lifecycle (birth, M-of-N confirm, coasting through occlusion, death), and fusing camera/radar/lidar/thermal/IMU by their complementary failure modes. Plus learned+classical fusion, tracking metrics (MOTA/IDF1/HOTA) and their blind spots, and the trucking domain (long stopping distance, long range, articulation). Prep for Kodiak — Senior Autonomy Engineer, Perception.",
-    lecture: "lecture.html?week=16",
+    lecture: "lecture.html?week=17",
     topics: [
       "Tracking-by-detection: predict → associate → update → lifecycle",
       "Fusion architecture: early vs mid (BEV) vs late/track-level; graceful degradation",
@@ -359,10 +376,10 @@ const CURRICULUM = [
     robotics: [],
   },
   {
-    week: 17,
+    week: 18,
     title: "Perception Coding Drills (KF · IoU/NMS · Association · SORT)",
     goal: "The write-the-code companion to weeks 7 and 16. The six perception coding problems that recur in sensor-fusion/MOT interviews, each with approach, a clean reference solution, complexity, and the follow-ups interviewers push on: a 1D + constant-velocity Kalman filter, IoU + NMS, greedy vs Hungarian data association, a minimal SORT tracker, Mahalanobis gating, and two-pointer time-sync of sensor streams. Prep for Kodiak — Senior Autonomy Engineer, Perception.",
-    lecture: "lecture.html?week=17",
+    lecture: "lecture.html?week=18",
     topics: [
       "Kalman filter from scratch: 1D then constant-velocity (Joseph-form update)",
       "IoU + Non-Max Suppression; the clamp bug and soft-NMS",
@@ -376,10 +393,10 @@ const CURRICULUM = [
     robotics: [],
   },
   {
-    week: 18,
+    week: 19,
     title: "Applied Intuition — Company Problem Set",
     goal: "The coding questions reported for Applied Intuition interviews (sourced from interviewsolver.com), all solvable in the in-site editor (Python or C++). A broad mix — trees, backtracking, DP, binary search, greedy/heap, string, math, and design — reflecting a generalist AV-software bar rather than one pattern. Three (Reorganize String, Insert/Delete/GetRandom, Snake Game) are adapted to deterministic I/O so the exact judge works; the adaptation is noted in each statement.",
-    lecture: "lecture.html?week=18",
+    lecture: "lecture.html?week=19",
     topics: [
       "Trees: All Nodes Distance K (BFS + parent links), Diameter (DFS)",
       "Backtracking & DP: Combination Sum, Unique Paths II",
@@ -412,23 +429,6 @@ const CURRICULUM = [
       { name: "Rank Teams by Votes", pid: "rank-teams-by-votes", url: "https://leetcode.com/problems/rank-teams-by-votes/", diff: "Medium", tag: "Sorting" },
       { name: "Longest Substring Without Repeating Characters", pid: "longest-substring-no-repeat", url: "https://leetcode.com/problems/longest-substring-without-repeating-characters/", diff: "Medium", tag: "Sliding Window" },
     ],
-    robotics: [],
-  },
-  {
-    week: 19,
-    title: "C++ Review — Pointers, Smart Pointers, Memory & STL",
-    goal: "The interview-day refresher on the four C++ topics that always come up: raw pointers & references, smart pointers & ownership (unique/shared/weak, cycles), memory management (stack/heap, RAII, leaks/dangling/UB, Rule of 0/3/5, move), and the common STL (container complexity, iterator invalidation, algorithms & idioms). Every section ends with the reflex answer an interviewer is listening for. Concentrated companion to the robotics-flavored Week 11.",
-    lecture: "lecture.html?week=19",
-    topics: [
-      "Pointers vs references; nullptr; const placement",
-      "Stack vs heap; new/delete rules; when to allocate dynamically",
-      "Memory bugs: leaks, dangling / use-after-free, double free, UB",
-      "Smart pointers: unique_ptr / shared_ptr / weak_ptr, make_*, cycles",
-      "RAII, the Rule of 0/3/5, and move semantics",
-      "STL containers & complexity; map vs unordered_map; operator[] trap",
-      "Iterator invalidation; the erase-remove idiom; STL algorithms",
-    ],
-    leetcode: [],
     robotics: [],
   },
 ];

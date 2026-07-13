@@ -1,9 +1,9 @@
-# Week 19 — C++ Review: Pointers, Smart Pointers, Memory & STL
+# Week 3 — C++ Review: Pointers, Smart Pointers, Memory & STL
 
 > A focused, interview-day refresher on the four things a C++ interviewer will
 > almost certainly probe: **raw pointers & references**, **smart pointers &
 > ownership**, **memory management** (stack/heap, RAII, leaks & UB), and the
-> **STL** you're expected to reach for without thinking. Week 11 framed these
+> **STL** you're expected to reach for without thinking. Week 12 framed these
 > for robotics; this week is the concentrated review you skim the night before
 > — every section ends with the reflex answer an interviewer is listening for.
 
@@ -433,4 +433,4 @@ Because of **cache locality**. A `vector`'s elements are contiguous, so scans an
 - C++ Core Guidelines (isocpp.github.io/CppCoreGuidelines) — R.* (resource) & F.* rules.
 - Compiler Explorer (godbolt.org) — *see* that `unique_ptr` compiles to a raw pointer.
 
-➡ **Related:** the robotics-flavored companion is [Week 11: C++ for Robotics](lecture.html?week=11) (RAII in real-time loops, concurrency, ring buffers, Eigen).
+➡ **Related:** the robotics-flavored companion is [Week 12: C++ for Robotics](lecture.html?week=12) (RAII in real-time loops, concurrency, ring buffers, Eigen).
