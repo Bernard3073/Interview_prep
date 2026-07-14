@@ -48,6 +48,94 @@ class TreeNode:
 A complete tree needs no pointers — it packs into an **array** (child of `i` at `2i+1`, `2i+2`).
 That's exactly how a heap is stored; see the Heaps page.
 
+:::solution Building a binary tree — by hand and from a level-order list
+```python
+class TreeNode:
+    def __init__(self, val, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+# --- By hand (bottom-up) ---
+#         1
+#        / \
+#       2   3
+#      / \
+#     4   5
+root = TreeNode(1,
+        left=TreeNode(2, TreeNode(4), TreeNode(5)),
+        right=TreeNode(3))
+
+# --- From a level-order list (LeetCode style, None = missing node) ---
+from collections import deque
+
+def build_tree(values):
+    if not values or values[0] is None:
+        return None
+    root = TreeNode(values[0])
+    q, i = deque([root]), 1
+    while q and i < len(values):
+        node = q.popleft()
+        if i < len(values) and values[i] is not None:   # left child
+            node.left = TreeNode(values[i]); q.append(node.left)
+        i += 1
+        if i < len(values) and values[i] is not None:   # right child
+            node.right = TreeNode(values[i]); q.append(node.right)
+        i += 1
+    return root
+
+root = build_tree([1, 2, 3, 4, 5, None, None])
+```
+```cpp
+#include <queue>
+#include <vector>
+#include <optional>
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode* l, TreeNode* r) : val(x), left(l), right(r) {}
+};
+
+// --- By hand (bottom-up) ---
+//         1
+//        / \
+//       2   3
+//      / \
+//     4   5
+TreeNode* root = new TreeNode(1,
+        new TreeNode(2, new TreeNode(4), new TreeNode(5)),
+        new TreeNode(3));
+
+// --- From a level-order list (nullopt = missing node) ---
+TreeNode* buildTree(const vector<optional<int>>& values) {
+    if (values.empty() || !values[0].has_value()) return nullptr;
+    TreeNode* root = new TreeNode(values[0].value());
+    queue<TreeNode*> q; q.push(root);
+    size_t i = 1;
+    while (!q.empty() && i < values.size()) {
+        TreeNode* node = q.front(); q.pop();
+        if (i < values.size() && values[i].has_value()) {   // left child
+            node->left = new TreeNode(values[i].value()); q.push(node->left);
+        }
+        ++i;
+        if (i < values.size() && values[i].has_value()) {   // right child
+            node->right = new TreeNode(values[i].value()); q.push(node->right);
+        }
+        ++i;
+    }
+    return root;
+}
+// usage: TreeNode* root = buildTree({1, 2, 3, 4, 5, nullopt, nullopt});
+```
+> Hand-building is fine for a quick test tree; level-order construction rebuilds the
+> `[1,2,3,null,...]` inputs LeetCode hands you. In C++ these `new` nodes leak — for real code use
+> `unique_ptr<TreeNode>` or free them with a post-order traversal, and say so unprompted.
+:::
+
 ---
 
 ## Traversals — the core skill

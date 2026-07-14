@@ -62,6 +62,15 @@ Interview_prep/
 > *editable source*. Edit them and run `node build_lectures.cjs` to regenerate the
 > rendered notes, or just edit `lectures-data.js` directly.
 
+<!-- -->
+
+> **Local dev — see edits immediately.** Because the site loads generated
+> `*-data.js`, a fresh `.md` edit won't appear until it's rebuilt. Run
+> `node watch.cjs` in a terminal while you work: it watches every
+> `study-materials/**/*.md` and rebuilds the matching data file on save (~150ms),
+> so a browser refresh always shows your latest change. The pre-commit hook runs
+> the same builds, so committed output is never stale.
+
 ## 🗓️ The plan at a glance (8 weeks + a C++ deep-dive)
 
 | Week | Theme |
