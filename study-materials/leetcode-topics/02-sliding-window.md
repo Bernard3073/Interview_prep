@@ -55,6 +55,10 @@ satisfy the requirement, then contract left while it stays satisfied, recording 
 `have`/`need` counters track how many distinct chars are fully covered so the check is `O(1)`.
 **O(|s| + |t|)** time.
 
+**Example:** `s = "ADOBECODEBANC", t = "ABC"` → `"BANC"`. The window first covers `t` at
+`"ADOBEC"`, then keeps shrinking/sliding to smaller covering windows until `"BANC"` (length 4)
+proves smallest.
+
 :::solution
 ```python
 from collections import Counter
@@ -109,6 +113,9 @@ Longest substring you can make all-identical by replacing at most `k` characters
 valid when `(window length − count of its most frequent char) ≤ k`. Track `maxFreq`; when the
 window turns invalid, slide left by one. **O(n)** time, **O(26)** space.
 
+**Example:** `s = "AABABBA", k = 1` → `4`. The window `"AABA"` has 3 `A`s and one `B`; replacing
+that single `B` (within the budget `k=1`) makes four identical characters.
+
 :::solution
 ```python
 from collections import defaultdict
@@ -151,6 +158,9 @@ Does `s2` contain a permutation of `s1` as a substring? Slide a **fixed-size** w
 `|s1|` over `s2` and compare frequency vectors. Maintain a `matches` counter over 26 letters so
 each step is `O(1)`. **O(|s2|)** time.
 
+**Example:** `s1 = "ab", s2 = "eidbaooo"` → `true`. The length-2 window reaches `"ba"`, whose
+letter counts match `"ab"` — a permutation is present. `s1 = "ab", s2 = "eidboaoo"` → `false`.
+
 :::solution
 ```python
 def check_inclusion(s1: str, s2: str) -> bool:
@@ -190,6 +200,9 @@ bool checkInclusion(std::string s1, std::string s2) {
 
 Longest run of 1s after flipping at most `k` zeros. A window is valid while it contains `≤ k`
 zeros; grow right, and when the zero count exceeds `k`, move left past one zero. **O(n)** time.
+
+**Example:** `nums = [1,1,1,0,0,0,1,1,1,1,0], k = 2` → `6`. Flipping the two zeros at indices 3
+and 4 joins `[1,1,1,0,0,1,1,1,1]`'s middle into a run of six consecutive 1s.
 
 :::solution
 ```python

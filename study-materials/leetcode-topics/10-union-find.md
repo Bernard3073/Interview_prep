@@ -58,6 +58,9 @@ A tree had one extra edge added, forming a single cycle; return the edge that ca
 (the last one in the input that closes a cycle). Union each edge — the first `union` that returns
 false is the redundant edge. **O(n · α(n))** time.
 
+**Example:** `edges = [[1,2],[1,3],[2,3]]` → `[2,3]`. Unioning `1-2` and `1-3` connects all three
+nodes; the edge `2-3` then finds 2 and 3 already in the same set, so it's the redundant one.
+
 :::solution
 ```python
 def find_redundant_connection(edges: list[list[int]]) -> list[int]:
@@ -101,6 +104,9 @@ std::vector<int> findRedundantConnection(std::vector<std::vector<int>>& edges) {
 Count groups after unioning all edges. Start with `n` components and decrement each time a
 `union` actually merges two different sets. **O(n + E·α(n))** time.
 
+**Example:** `n = 5, edges = [[0,1],[1,2],[3,4]]` → `2`. Starting from 5 singletons, the merges
+`0-1`, `1-2`, `3-4` drop the count to 2 components: `{0,1,2}` and `{3,4}`.
+
 :::solution
 ```python
 def count_components(n: int, edges: list[list[int]]) -> int:
@@ -132,6 +138,10 @@ int countComponents(int n, std::vector<std::vector<int>>& edges) {
 Merge accounts that share any email (same person). Map each email to an owner index, union
 accounts sharing an email, then group emails by their set's root. Sort each group and prepend the
 name. Union-find handles the transitive "A shares with B, B shares with C" merging cleanly.
+
+**Example:** `[["John","a@x.com","b@x.com"], ["John","b@x.com","c@x.com"], ["Mary","m@x.com"]]`
+→ `[["John","a@x.com","b@x.com","c@x.com"], ["Mary","m@x.com"]]`. The first two Johns share
+`b@x.com`, so they merge into one account; the unrelated Mary stays separate.
 
 :::solution
 ```python

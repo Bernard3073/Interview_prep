@@ -63,6 +63,10 @@ Deep-copy a connected undirected graph. DFS from the start node, keeping a `old 
 each node is cloned exactly once; the map also breaks cycles (return the existing clone on a
 revisit). **O(V+E)** time.
 
+**Example:** adjacency `[[2,4],[1,3],[2,4],[1,3]]` (a 4-node square, 1–2–3–4–1) → an
+independent copy with the same structure. Cloning node 1 recurses into 2, which recurses back to
+1 — the map returns 1's existing clone instead of looping forever.
+
 :::solution
 ```python
 class Node:
@@ -119,6 +123,9 @@ Node* cloneGraph(Node* node) {
 Largest connected region of 1s (4-directionally) in a grid. DFS from each unvisited land cell,
 sinking cells as you count them so nothing is double-counted. **O(R·C)** time.
 
+**Example:** `[[1,1,0,0],[1,0,0,1],[0,0,1,1]]` → `3`. The top-left island has 3 cells and the
+bottom-right island has 3; the largest area is `3`.
+
 :::solution
 ```python
 def max_area_of_island(grid: list[list[int]]) -> int:
@@ -163,6 +170,10 @@ Cells from which water can reach **both** oceans. Instead of searching from ever
 **inward from the borders**: mark all cells reachable from the Pacific edge and, separately,
 from the Atlantic edge, flowing to **higher-or-equal** neighbors. The answer is the
 intersection. **O(R·C)** time.
+
+**Example:** for the classic `heights = [[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],
+[5,1,1,2,4]]`, the cells reaching both oceans are `[[0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]]`
+— the ridge cells high enough to drain toward both the top/left and bottom/right edges.
 
 :::solution
 ```python

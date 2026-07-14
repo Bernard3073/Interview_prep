@@ -60,6 +60,9 @@ Rain Water**, and stock-span problems — swap the comparison and what you recor
 Are the brackets balanced and correctly nested? Push openers; on a closer, the top must be its
 matching opener — otherwise it's invalid. Valid iff the stack ends empty. **O(n)** time.
 
+**Example:** `"()[]{}"` → `true` (each closer matches the most recent opener); `"(]"` → `false`
+(the `]` doesn't match the open `(` on top).
+
 :::solution
 ```python
 def is_valid(s: str) -> bool:
@@ -100,6 +103,9 @@ For each day, how many days until a warmer one. A **decreasing** monotonic stack
 when today is warmer than the top, pop and record the distance. Unresolved days keep 0.
 **O(n)** time.
 
+**Example:** `[73,74,75,71,69,72,76,73]` → `[1,1,4,2,1,1,0,0]`. Day 0 (73) waits 1 day for 74;
+day 2 (75) waits 4 days for 76; the last two days never see a warmer day, so they stay 0.
+
 :::solution
 ```python
 def daily_temperatures(temps: list[int]) -> list[int]:
@@ -139,6 +145,9 @@ Largest axis-aligned rectangle under the bar heights. An **increasing** monotoni
 indices: when a shorter bar appears, pop taller bars and compute each popped bar's maximal
 rectangle (its height × the width between the new boundary and the previous stack entry). A
 sentinel `0` at the end flushes the stack. **O(n)** time.
+
+**Example:** `heights = [2,1,5,6,2,3]` → `10`. The bars of height 5 and 6 (indices 2–3) span a
+width of 2 at height 5, giving the maximal rectangle `5 × 2 = 10`.
 
 :::solution
 ```python
@@ -183,6 +192,9 @@ int largestRectangleArea(std::vector<int>& heights) {
 
 A stack with `push`/`pop`/`top`/`getMin` all `O(1)`. Keep an **auxiliary stack of running
 minima** alongside the data stack; each entry records the min of everything at or below it.
+
+**Example:** `push(-2); push(0); push(-3); getMin()` → `-3`; then `pop(); getMin()` → `-2`;
+`top()` → `0`. The `mins` stack mirrors the running minimum so each query is `O(1)`.
 
 :::solution
 ```python

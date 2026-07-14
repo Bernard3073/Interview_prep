@@ -47,6 +47,9 @@ def subsets(nums):
 All orderings of distinct `nums`. At each depth, choose any unused element, recurse, then undo.
 A `used` array (or swapping in place) tracks what's already placed. **O(n · n!)** outputs.
 
+**Example:** `[1,2,3]` → `[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]` — all `3! = 6`
+orderings.
+
 :::solution
 ```python
 def permute(nums: list[int]) -> list[list[int]]:
@@ -94,6 +97,10 @@ std::vector<std::vector<int>> permute(std::vector<int>& nums) {
 All combinations of `candidates` (reuse allowed) that sum to `target`. Pass `start` so
 combinations stay non-decreasing (no permuted duplicates); recurse from `i` (not `i+1`) to allow
 reuse; prune when the remaining target goes negative.
+
+**Example:** `candidates = [2,3,6,7], target = 7` → `[[2,2,3],[7]]`. `2+2+3 = 7` (reuse of 2) and
+the single `7` both reach the target; `[3,2,2]` isn't listed separately because `start` keeps
+each combination non-decreasing.
 
 :::solution
 ```python
@@ -143,6 +150,10 @@ std::vector<std::vector<int>> combinationSum(std::vector<int>& candidates, int t
 Does `word` exist in the grid along 4-directional adjacent cells (no reuse)? DFS from each cell,
 marking the current cell visited (mutate then restore) as you match characters. **O(R·C·4^L)**
 worst case.
+
+**Example:** `board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"`
+→ `true`; the path snakes `A→B→C→C→E→D`. `word = "ABCB"` → `false` (the first `B` can't be
+reused).
 
 :::solution
 ```python

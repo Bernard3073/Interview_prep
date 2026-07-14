@@ -35,6 +35,9 @@ Keep a **size-k min-heap**: push each value, pop the smallest whenever the heap 
 heap's root is then the k-th largest. **O(n log k)** time, **O(k)** space — cheaper than sorting
 when `k ≪ n`.
 
+**Example:** `nums = [3,2,1,5,6,4], k = 2` → `5`. The size-2 heap ends holding the two largest,
+`{5,6}`, and its root (the smaller of them) `5` is the 2nd largest.
+
 :::solution
 ```python
 import heapq
@@ -69,6 +72,9 @@ int findKthLargest(std::vector<int>& nums, int k) {
 Return the `k` points nearest the origin. Same size-k heap idea, ordered by squared distance
 (no `sqrt` needed) — but as a **max-heap** so the farthest of the current best-k sits on top and
 gets evicted. **O(n log k)** time.
+
+**Example:** `points = [[1,3],[-2,2]], k = 1` → `[[-2,2]]`. Distances² are `1²+3²=10` and
+`(-2)²+2²=8`; `[-2,2]` is closer, so it's the single closest point.
 
 :::solution
 ```python
@@ -108,6 +114,9 @@ std::vector<std::vector<int>> kClosest(std::vector<std::vector<int>>& points, in
 Maintain **two heaps**: a max-heap `lo` for the smaller half and a min-heap `hi` for the larger
 half, kept balanced in size. The median is `lo`'s top (odd total) or the average of both tops
 (even). Each `addNum` is `O(log n)`; `findMedian` is `O(1)`.
+
+**Example:** `addNum(1), addNum(2)` then `findMedian()` → `1.5` (average of the two tops);
+`addNum(3)` then `findMedian()` → `2` (odd count, `lo`'s top).
 
 :::solution
 ```python

@@ -47,6 +47,9 @@ memoize and it becomes DP.
 Sort in guaranteed `O(n log n)` with a stable merge sort: split in half, sort each half, merge.
 The merge walks two sorted halves with two pointers.
 
+**Example:** `[5,2,3,1]` → `[1,2,3,5]`. Split into `[5,2]` and `[3,1]`, sort each to `[2,5]` and
+`[1,3]`, then merge the two sorted halves into `[1,2,3,5]`.
+
 :::solution
 ```python
 def sort_array(nums: list[int]) -> list[int]:
@@ -93,6 +96,9 @@ std::vector<int> sortArray(std::vector<int>& nums) {
 The average-`O(n)` cousin of quicksort: partition around a pivot, then recurse into **only the
 side** that contains the k-th largest. Worst case `O(n²)`, avoided in practice with a random
 pivot.
+
+**Example:** `nums = [3,2,1,5,6,4], k = 2` → `5`. The 2nd largest equals the element that lands
+at sorted index `6 − 2 = 4`; quickselect partitions until that slot holds `5`.
 
 :::solution
 ```python
@@ -153,6 +159,9 @@ For each element, how many elements to its right are smaller. Do it **while merg
 indices: when the right half contributes an element before a left-half element, every element
 already merged from the right is smaller than that left element — accumulate those counts.
 **O(n log n)** time.
+
+**Example:** `[5,2,6,1]` → `[2,1,1,0]`. To the right of `5` are `2,1` (2 smaller); right of `2`
+is `1` (1 smaller); right of `6` is `1` (1 smaller); right of `1` there is nothing (0).
 
 :::solution
 ```python

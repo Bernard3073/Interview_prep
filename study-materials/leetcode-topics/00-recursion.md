@@ -60,6 +60,10 @@ Compute `x^n`. Naive multiplication is O(n); **halve the exponent** instead — 
 negating `n`. The single recursive call on `n/2` is what makes the recursion tree a *chain* of
 depth `log n`.
 
+**Example:** `my_pow(2.0, 10) → 1024.0`. The chain halves the exponent each step —
+`10 → 5 → 2 → 1 → 0` — so only ~4 multiplications, not 10. `my_pow(2.0, -2) → 0.25` (invert
+first: `x=0.5, n=2`).
+
 :::solution
 ```python
 def my_pow(x: float, n: int) -> float:
@@ -96,6 +100,10 @@ Textbook **linear recursion**: recurse to the tail, then rewire pointers on the 
 Trust that `reverse(head.next)` hands you the reversed rest; you only have to fix the single link
 between `head` and `head.next`. **O(n)** time, **O(n)** stack.
 
+**Example:** `1 → 2 → 3 → None` becomes `3 → 2 → 1 → None`. The recursion descends to node `3`
+(the new head), then on the way back up node `2` points at `1`, and node `1` points at `2` — each
+frame fixes exactly one link.
+
 :::solution
 ```python
 class ListNode:
@@ -130,6 +138,10 @@ ListNode* reverseList(ListNode* head) {
 Recursion that **builds structure**: the smaller head is the answer's head; its `next` is "the
 merge of the rest," which is the same problem on shorter input. Base case is when either list is
 empty. **O(n + m)** time, O(n + m) stack.
+
+**Example:** `a = 1 → 3 → 5`, `b = 2 → 4` merge to `1 → 2 → 3 → 4 → 5`. Each call picks the
+smaller head (`1`, then `2`, then `3`, …) and defers the rest to a recursive call on the shorter
+remaining lists.
 
 :::solution
 ```python
@@ -166,6 +178,10 @@ The canonical lesson in *why recursion can be slow and how to fix it without cha
 Naive `fib(n) = fib(n-1) + fib(n-2)` is **branching** recursion: the same arguments recur, so the
 tree has O(φⁿ) nodes — exponential. Because subproblems **overlap**, caching each result
 (**memoization**) collapses it to **O(n)**. That one step *is* top-down DP.
+
+**Example:** `fib(6) → 8` (sequence `0,1,1,2,3,5,8`). Naively, `fib(6)` calls `fib(5)` and
+`fib(4)`, but `fib(4)` is also recomputed inside `fib(5)` — and `fib(3)` three times, `fib(2)`
+five times. Memoizing computes each `fib(k)` once and reuses it.
 
 :::solution
 ```python

@@ -56,6 +56,9 @@ Max sum of non-adjacent houses. State: `dp[i]` = best loot considering houses `0
 `dp[i] = max(dp[i-1], dp[i-2] + nums[i])` — skip house `i`, or rob it and add `dp[i-2]`. Only the
 last two values matter, so it's `O(1)` space.
 
+**Example:** `[2,7,9,3,1]` → `12`. Robbing houses `2 + 9 + 1` (non-adjacent) beats the
+alternative `7 + 3 = 10`.
+
 :::solution
 ```python
 def rob(nums: list[int]) -> int:
@@ -86,6 +89,9 @@ int rob(std::vector<int>& nums) {
 Length of the longest strictly increasing subsequence. The `O(n log n)` method keeps `tails[k]` =
 the smallest possible tail of an increasing subsequence of length `k+1`; binary-search where each
 value extends or replaces a tail. The array's length is the answer.
+
+**Example:** `[10,9,2,5,3,7,101,18]` → `4`. One longest increasing subsequence is `[2,3,7,101]`
+(also `[2,3,7,18]`), of length 4.
 
 :::solution
 ```python
@@ -125,6 +131,9 @@ Number of paths from top-left to bottom-right of an `m × n` grid moving only ri
 `dp[c] = dp[c] + dp[c-1]` (paths from above + paths from the left), rolled into a single row for
 `O(n)` space.
 
+**Example:** `m = 3, n = 7` → `28`. Each cell's path count is the sum of the cell above and the
+cell to the left; the bottom-right accumulates to 28.
+
 :::solution
 ```python
 def unique_paths(m: int, n: int) -> int:
@@ -154,6 +163,10 @@ int uniquePaths(int m, int n) {
 Can `s` be segmented into words from a dictionary? State: `dp[i]` = "is `s[:i]` segmentable?".
 Transition: `dp[i]` is true if some `j < i` has `dp[j]` true and `s[j:i]` is a word. **O(n²)**
 time (with a set for `O(1)` lookups).
+
+**Example:** `s = "leetcode", wordDict = ["leet","code"]` → `true` (`"leet" + "code"`).
+`s = "catsandog", wordDict = ["cats","dog","sand","and","cat"]` → `false` (no split covers
+`"…og"`).
 
 :::solution
 ```python

@@ -136,6 +136,9 @@ Return node values grouped by level. Process the queue one **level at a time**: 
 current queue size, pop exactly that many nodes, and enqueue their children for the next level.
 **O(n)** time.
 
+**Example:** tree `[3,9,20,null,null,15,7]` → `[[3],[9,20],[15,7]]`. Root `3` is level 0, its
+children `9,20` are level 1, and `20`'s children `15,7` are level 2.
+
 :::solution
 ```python
 from collections import deque
@@ -194,6 +197,9 @@ For each cell, the distance to the nearest 0. **Multi-source BFS**: seed the que
 zeros at distance 0, then relax outward — the first time a 1-cell is reached is its shortest
 distance. **O(R·C)** time.
 
+**Example:** `[[0,0,0],[0,1,0],[1,1,1]]` → `[[0,0,0],[0,1,0],[1,2,1]]`. Every 0 stays 0; the
+center 1 is one step from a 0, and the bottom-middle 1 is two steps away.
+
 :::solution
 ```python
 from collections import deque
@@ -249,7 +255,12 @@ std::vector<std::vector<int>> updateMatrix(std::vector<std::vector<int>>& mat) {
 
 Fewest moves to turn a 4-wheel lock from `"0000"` to `target`, avoiding deadends. State = the
 4-digit string; each state has 8 neighbors (each wheel ±1). Plain BFS over the state graph gives
-the minimum number of moves. **O(10⁴ · 8)** states.
+the minimum number of moves.
+
+**Example:** `deadends = ["0201","0101","0102","1212","2002"], target = "0202"` → `6`. One
+shortest path is `0000→1000→1100→1200→1201→1202→0202`, routing around every deadend.
+
+**O(10⁴ · 8)** states.
 
 :::solution
 ```python

@@ -56,6 +56,9 @@ case-insensitively. **O(n)** time, **O(1)** space.
 **Key idea:** don't build a cleaned copy of the string — filter on the fly so space stays
 constant.
 
+**Example:** `"A man, a plan, a canal: Panama"` → `true` (reads `amanaplanacanalpanama`
+both ways); `"race a car"` → `false` (`raceacar` reversed is `racaecar`).
+
 :::solution
 ```python
 def is_palindrome(s: str) -> bool:
@@ -95,6 +98,9 @@ ends; the area is `min(h[i], h[j]) * (j - i)`. **Always move the shorter wall in
 taller one can only ever be limited by a shorter partner, so moving it can't improve the area.
 **O(n)** time, **O(1)** space.
 
+**Example:** `height = [1,8,6,2,5,4,8,3,7]` → `49`. The best container uses the walls at index
+`1` (height 8) and index `8` (height 7): `min(8,7) × (8−1) = 7 × 7 = 49`.
+
 :::solution
 ```python
 def max_area(height: list[int]) -> int:
@@ -131,6 +137,9 @@ Return the 1-indexed pair that sums to `target`. Because the array is **sorted**
 pointers give `O(n)`/`O(1)` — no hash map needed. If the sum is too small, advance the left
 pointer (need a bigger value); too big, retreat the right.
 
+**Example:** `numbers = [2,7,11,15], target = 9` → `[1,2]`. Start at `2 + 15 = 17 > 9`, retreat
+right to `2 + 11 = 13`, then `2 + 7 = 9` — return the 1-based indices `[1, 2]`.
+
 :::solution
 ```python
 def two_sum(numbers: list[int], target: int) -> list[int]:
@@ -165,6 +174,9 @@ std::vector<int> twoSum(std::vector<int>& numbers, int target) {
 Move all zeros to the end in place, keeping the relative order of non-zeros. A **fast/slow**
 pair: `write` marks where the next non-zero goes; `read` scans. Swap on each non-zero.
 **O(n)** time, **O(1)** space.
+
+**Example:** `[0,1,0,3,12]` → `[1,3,12,0,0]`. The non-zeros `1,3,12` are compacted to the front
+in their original order, and the two zeros fall to the end.
 
 :::solution
 ```python

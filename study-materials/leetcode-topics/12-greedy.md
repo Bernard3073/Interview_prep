@@ -38,6 +38,9 @@ Find the start index from which you can complete the loop, or `-1`. If total gas
 solution exists and is **unique**; track a running tank, and whenever it goes negative, no start
 in the stretch just covered can work — restart from the next station. **O(n)** time, one pass.
 
+**Example:** `gas = [1,2,3,4,5], cost = [3,4,5,1,2]` → `3`. Total gas (15) equals total cost, so a
+start exists; the tank only survives the loop when you begin at station 3.
+
 :::solution
 ```python
 def can_complete_circuit(gas: list[int], cost: list[int]) -> int:
@@ -75,6 +78,9 @@ Minimum jumps to reach the last index (a jump is guaranteed possible). Greedily 
 current reachable "level": within `[left, right]`, compute the farthest reachable; when you pass
 the level's end, increment the jump count and start a new level. **O(n)** time — a BFS-in-disguise.
 
+**Example:** `[2,3,1,1,4]` → `2`. Jump from index 0 to index 1 (value 3), then from index 1
+straight to the last index — two jumps.
+
 :::solution
 ```python
 def jump(nums: list[int]) -> int:
@@ -108,6 +114,9 @@ int jump(std::vector<int>& nums) {
 Merge all overlapping intervals. **Sort by start**, then sweep: extend the last merged interval's
 end when the next one overlaps, otherwise start a new interval. Sorting exposes the greedy sweep.
 **O(n log n)** time.
+
+**Example:** `[[1,3],[2,6],[8,10],[15,18]]` → `[[1,6],[8,10],[15,18]]`. `[1,3]` and `[2,6]`
+overlap and merge into `[1,6]`; the other two are disjoint and pass through unchanged.
 
 :::solution
 ```python
@@ -146,6 +155,9 @@ std::vector<std::vector<int>> merge(std::vector<std::vector<int>>& intervals) {
 Minimum intervals to remove so the rest don't overlap. **Sort by end time** and greedily keep
 each interval whose start is ≥ the last kept end (classic interval scheduling); remove the rest.
 Earliest-finish-first is the provably safe greedy. **O(n log n)** time.
+
+**Example:** `[[1,2],[2,3],[3,4],[1,3]]` → `1`. Keeping `[1,2],[2,3],[3,4]` leaves no overlaps;
+only `[1,3]` (which overlaps `[2,3]`) must be removed.
 
 :::solution
 ```python

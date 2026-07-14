@@ -52,6 +52,10 @@ Smallest eating speed `k` so Koko finishes all piles within `h` hours. **Search 
 `feasible(k)` = `sum(ceil(pile / k)) ≤ h`, which is monotonic in `k`. Binary-search the smallest
 feasible `k` in `[1, max(piles)]`. **O(n log max)** time.
 
+**Example:** `piles = [3,6,7,11], h = 8` → `4`. At speed 4 the hours are
+`ceil(3/4)+ceil(6/4)+ceil(7/4)+ceil(11/4) = 1+2+2+3 = 8 ≤ 8`; speed 3 needs 9 hours, so 4 is the
+smallest that fits.
+
 :::solution
 ```python
 import math
@@ -97,6 +101,9 @@ A sorted array rotated at an unknown pivot; find the minimum in `O(log n)`. Comp
 right end: if `nums[mid] > nums[hi]` the minimum lies to the **right** of `mid`; otherwise it's at
 `mid` or to its left. Converges on the pivot.
 
+**Example:** `[4,5,6,7,0,1,2]` → `0`. `mid = 7 > nums[hi] = 2`, so the minimum is to the right;
+the search narrows onto the pivot value `0`.
+
 :::solution
 ```python
 def find_min(nums: list[int]) -> int:
@@ -131,6 +138,9 @@ int findMin(std::vector<int>& nums) {
 Return the start and end indices of `target`. Two binary searches: `lower_bound` (first index
 `≥ target`) and `upper_bound` (first index `> target`). If the target is absent, return
 `[-1, -1]`. **O(log n)** time.
+
+**Example:** `nums = [5,7,7,8,8,10], target = 8` → `[3,4]` (the two 8s sit at indices 3 and 4).
+`target = 6` → `[-1,-1]` since 6 is absent.
 
 :::solution
 ```python
@@ -167,6 +177,9 @@ std::vector<int> searchRange(std::vector<int>& nums, int target) {
 Rows sorted, and each row's first element exceeds the previous row's last — so the matrix reads
 as one sorted list of length `m·n`. Binary-search that virtual array, mapping index `k` to
 `(k / n, k % n)`. **O(log(m·n))** time.
+
+**Example:** `matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3` → `true`. Treated as
+the flat sorted list `[1,3,5,7,10,…,60]`, index 1 holds `3`; `target = 13` → `false`.
 
 :::solution
 ```python
