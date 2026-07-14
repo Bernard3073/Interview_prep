@@ -178,25 +178,27 @@ a.logo { text-decoration: none; }
   font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }
 .lec-pre {
-  background: #0b0e18; border: 1px solid var(--border); border-radius: 10px;
+  background: #1e1e1e; border: 1px solid var(--border); border-radius: 10px;
   padding: 14px 16px; overflow-x: auto; margin: 14px 0; max-width: 100%;
 }
-[data-theme="light"] .lec-pre { background: #f1f4fb; }
+[data-theme="light"] .lec-pre { background: #ffffff; }
 .lec-pre code {
-  background: none; color: #cfe3ff; padding: 0; font-size: 13px; line-height: 1.5;
+  background: none; color: #d4d4d4; padding: 0; font-size: 13px; line-height: 1.5;
   font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; white-space: pre;
 }
-[data-theme="light"] .lec-pre code { color: #2a3a66; }
+[data-theme="light"] .lec-pre code { color: #1e1e1e; }
 
-/* VS Code-style code window (title bar + Dark+ highlighting; stays dark in both themes) */
+/* VS Code-style code window: Dark+ palette in dark theme, Light+ palette in light theme */
 .code-window {
   margin: 16px 0; border: 1px solid var(--border); border-radius: 10px;
-  overflow: hidden; background: #0b0e18; box-shadow: 0 8px 24px rgba(0, 0, 0, .3);
+  overflow: hidden; background: #1e1e1e; box-shadow: 0 8px 24px rgba(0, 0, 0, .3);
 }
+[data-theme="light"] .code-window { background: #ffffff; box-shadow: 0 6px 18px rgba(20, 30, 60, .1); }
 .code-titlebar {
   display: flex; align-items: center; gap: 10px;
-  padding: 8px 12px; background: #191f33; border-bottom: 1px solid #262d45;
+  padding: 8px 12px; background: #252526; border-bottom: 1px solid #333333;
 }
+[data-theme="light"] .code-titlebar { background: #f3f3f3; border-bottom: 1px solid #e0e0e0; }
 .code-dots { display: inline-flex; gap: 6px; }
 .code-dots i { width: 12px; height: 12px; border-radius: 50%; display: block; }
 .code-dots i:nth-child(1) { background: #ff5f56; }
@@ -206,15 +208,19 @@ a.logo { text-decoration: none; }
   color: #9aa6c2; font-size: 12px; margin-left: 4px;
   font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; letter-spacing: .02em;
 }
+[data-theme="light"] .code-lang { color: #616161; }
 .code-copy {
   margin-left: auto; background: transparent; border: 1px solid #2b3350;
   color: #9aa6c2; border-radius: 6px; padding: 3px 10px; font-size: 11.5px;
   cursor: pointer; transition: color .12s, border-color .12s;
 }
+[data-theme="light"] .code-copy { border-color: #cfcfcf; color: #616161; }
 .code-copy:hover { color: #e8ecf6; border-color: var(--accent); }
+[data-theme="light"] .code-copy:hover { color: var(--accent); border-color: var(--accent); }
 /* the <pre> now lives inside the window frame — drop its own border/rounding/bg */
 .code-window .lec-pre { margin: 0; border: none; border-radius: 0; background: transparent; }
-.code-window .lec-pre code { color: #cfe3ff; }   /* keep code light on the dark window in any theme */
+.code-window .lec-pre code { color: #d4d4d4; }
+[data-theme="light"] .code-window .lec-pre code { color: #1e1e1e; }
 
 /* Python / C++ tabbed solution widget (topic deep-dive subpages) */
 .sol { margin: 18px 0; }
@@ -365,6 +371,7 @@ a.logo { text-decoration: none; }
    caret during trackpad/momentum scrolling. .editor-inner is sized to the code
    so the absolutely-positioned textarea covers the full scrollable content. */
 .editor-wrap { position: relative; flex: 1; min-height: 200px; background: #1e1e1e; overflow: auto; }
+[data-theme="light"] .editor-wrap { background: #ffffff; }
 .editor-inner { position: relative; min-width: 100%; min-height: 100%; width: max-content; }
 #code, .editor-hl {
   margin: 0; border: 0; padding: 16px; box-sizing: border-box;
@@ -379,12 +386,15 @@ a.logo { text-decoration: none; }
 }
 /* The <pre> sits in normal flow and defines the scrollable size. */
 .editor-hl { position: relative; display: block; z-index: 1; min-width: 100%; min-height: 100%; pointer-events: none; color: #d4d4d4; }
+[data-theme="light"] .editor-hl { color: #1e1e1e; }
 /* The textarea fills that content box exactly and never scrolls itself. */
 #code {
   position: absolute; inset: 0; z-index: 2; resize: none; outline: none; overflow: hidden;
   background: transparent; color: transparent; caret-color: #d4d4d4;
 }
+[data-theme="light"] #code { caret-color: #1e1e1e; }
 #code::selection { background: rgba(38, 79, 120, 0.6); }
+[data-theme="light"] #code::selection { background: rgba(173, 214, 255, 0.7); }
 
 /* VS Code Dark+ token colors */
 .tok-comment { color: #6a9955; font-style: italic; }
@@ -397,6 +407,19 @@ a.logo { text-decoration: none; }
 .tok-fn      { color: #dcdcaa; }   /* function calls */
 .tok-builtin { color: #dcdcaa; }
 .tok-pre     { color: #c586c0; }   /* C++ preprocessor */
+
+/* VS Code Light+ token colors (lecture/topic code windows + the practice editor,
+   both of which switch to a light background in light mode) */
+[data-theme="light"] .tok-comment { color: #008000; }
+[data-theme="light"] .tok-string  { color: #a31515; }
+[data-theme="light"] .tok-num     { color: #098658; }
+[data-theme="light"] .tok-kw      { color: #af00db; }
+[data-theme="light"] .tok-key     { color: #0000ff; }
+[data-theme="light"] .tok-const   { color: #0000ff; }
+[data-theme="light"] .tok-type    { color: #267f99; }
+[data-theme="light"] .tok-fn      { color: #795e26; }
+[data-theme="light"] .tok-builtin { color: #795e26; }
+[data-theme="light"] .tok-pre     { color: #af00db; }
 
 /* console */
 .console { border-top: 1px solid var(--border); background: var(--card); max-height: 42%; overflow-y: auto; }
