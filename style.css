@@ -113,9 +113,9 @@ a.logo { text-decoration: none; }
 
 .reader-layout {
   display: grid;
-  grid-template-columns: 260px minmax(0, 1fr) 240px;
-  gap: 28px;
-  max-width: 1400px;
+  grid-template-columns: 210px minmax(0, 1fr) 190px;
+  gap: 22px;
+  max-width: 1680px;
   margin: 0 auto;
   padding: 24px 28px 60px;
   align-items: start;

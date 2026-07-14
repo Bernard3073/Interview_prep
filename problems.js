@@ -2712,5 +2712,648 @@ const PROBLEMS = [
       "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split('\\n')\n    V = int(data[0])\n    votes = [data[1+i].strip() for i in range(V)]\n    # TODO: per-team position counts; sort by counts desc, then alphabetically\n\nmain()\n",
       "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int V; cin >> V;\n    vector<string> votes(V);\n    for (auto& s : votes) cin >> s;\n    // TODO: per-team position counts; sort desc, tie-break alphabetically\n    return 0;\n}\n"
     }
+  },
+  {
+    "id": "largest-rectangle-histogram",
+    "title": "Largest Rectangle in Histogram",
+    "diff": "Hard",
+    "pattern": "Monotonic Stack",
+    "week": 20,
+    "statement": "<p>Given the bar heights of a histogram (each bar width 1), return the area of the largest rectangle that fits entirely under the bars.</p>",
+    "inputFormat": "Line 1: n. Line 2: n non-negative integers (bar heights).",
+    "outputFormat": "The maximum rectangle area.",
+    "tests": [
+      {
+        "input": "6\n2 1 5 6 2 3\n",
+        "expected": "10\n",
+        "sample": true
+      },
+      {
+        "input": "2\n2 4\n",
+        "expected": "4\n",
+        "sample": true
+      },
+      {
+        "input": "1\n5\n",
+        "expected": "5\n",
+        "sample": false
+      },
+      {
+        "input": "5\n1 1 1 1 1\n",
+        "expected": "5\n",
+        "sample": false
+      },
+      {
+        "input": "6\n6 2 5 4 5 1\n",
+        "expected": "12\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    n = int(data[0])\n    h = list(map(int, data[1:1+n]))\n    # TODO: monotonic increasing stack of indices; pop when a shorter bar arrives\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int n; cin >> n;\n    vector<long long> h(n);\n    for (auto& x : h) cin >> x;\n    // TODO: monotonic stack; area = height * width when popping\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "n-queens",
+    "title": "N-Queens",
+    "diff": "Hard",
+    "pattern": "Backtracking",
+    "week": 20,
+    "statement": "<p>Place <code>n</code> queens on an n&times;n board so that no two attack each other. <i>Adapted for deterministic judging:</i> instead of printing every board, print the <b>number of distinct solutions</b> (this is the N-Queens II count). The backtracking search is identical; only the return value differs.</p>",
+    "inputFormat": "Line 1: n.",
+    "outputFormat": "The number of distinct solutions.",
+    "tests": [
+      {
+        "input": "4\n",
+        "expected": "2\n",
+        "sample": true
+      },
+      {
+        "input": "1\n",
+        "expected": "1\n",
+        "sample": true
+      },
+      {
+        "input": "8\n",
+        "expected": "92\n",
+        "sample": false
+      },
+      {
+        "input": "6\n",
+        "expected": "4\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    n = int(data[0])\n    # TODO: backtrack row by row; track used columns and both diagonals; count solutions\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int n; cin >> n;\n    // TODO: backtrack row by row; track used columns and both diagonals; count solutions\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "word-ladder-ii",
+    "title": "Word Ladder II",
+    "diff": "Hard",
+    "pattern": "BFS / Graph",
+    "week": 20,
+    "statement": "<p>Given <code>beginWord</code>, <code>endWord</code>, and a dictionary, a transformation changes one letter at a time and every intermediate word must be in the dictionary. <i>Adapted for deterministic judging:</i> print the <b>number of distinct shortest transformation sequences</b> from begin to end (0 if none). The shortest-path BFS is the same; you count paths instead of listing them.</p>",
+    "inputFormat": "Line 1: beginWord endWord. Line 2: n. Line 3: n dictionary words (space-separated).",
+    "outputFormat": "The count of distinct shortest transformation sequences.",
+    "tests": [
+      {
+        "input": "hit cog\n6\nhot dot dog lot log cog\n",
+        "expected": "2\n",
+        "sample": true
+      },
+      {
+        "input": "hit cog\n5\nhot dot dog lot log\n",
+        "expected": "0\n",
+        "sample": true
+      },
+      {
+        "input": "a c\n2\nb c\n",
+        "expected": "1\n",
+        "sample": false
+      },
+      {
+        "input": "hot dog\n2\nhot dog\n",
+        "expected": "0\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split('\\n')\n    begin, end = data[0].split()\n    n = int(data[1]); words = data[2].split() if n > 0 else []\n    # TODO: layered BFS from begin; accumulate path counts; print count reaching end\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    string begin, end; cin >> begin >> end;\n    int n; cin >> n;\n    vector<string> words(n);\n    for (auto& w : words) cin >> w;\n    // TODO: layered BFS; accumulate path counts; print count reaching end\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "max-stack",
+    "title": "Max Stack",
+    "diff": "Hard",
+    "pattern": "Stack / Design",
+    "week": 20,
+    "statement": "<p>Design a stack supporting <code>push x</code>, <code>top</code>, <code>pop</code>, <code>peekMax</code> (max element), and <code>popMax</code> (remove and return the max; if the max ties, remove the one closest to the top). Print the return value of every query op.</p>",
+    "inputFormat": "Line 1: q. Next q lines: 'push x', 'top', 'pop', 'peekMax', or 'popMax'.",
+    "outputFormat": "One line per query op (top / pop / peekMax / popMax).",
+    "tests": [
+      {
+        "input": "9\npush 5\npush 1\npush 5\ntop\npopMax\ntop\npeekMax\npop\ntop\n",
+        "expected": "5\n5\n1\n5\n1\n5\n",
+        "sample": true
+      },
+      {
+        "input": "4\npush 3\npush 3\npopMax\ntop\n",
+        "expected": "3\n3\n",
+        "sample": true
+      },
+      {
+        "input": "6\npush 2\npush 9\npush 4\npeekMax\npopMax\ntop\n",
+        "expected": "9\n9\n4\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split('\\n')\n    q = int(data[0])\n    # TODO: maintain a stack; popMax removes the top-most maximum\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int q; cin >> q;\n    // TODO: maintain a stack; popMax removes the top-most maximum\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "k-inverse-pairs",
+    "title": "K Inverse Pairs Array",
+    "diff": "Hard",
+    "pattern": "Dynamic Programming",
+    "week": 20,
+    "statement": "<p>Count the arrays that are permutations of 1..n with exactly <code>k</code> inverse pairs (index pairs i&lt;j with a[i]&gt;a[j]). Return the count modulo 1e9+7.</p>",
+    "inputFormat": "Line 1: n k.",
+    "outputFormat": "The count modulo 1000000007.",
+    "tests": [
+      {
+        "input": "3 0\n",
+        "expected": "1\n",
+        "sample": true
+      },
+      {
+        "input": "3 1\n",
+        "expected": "2\n",
+        "sample": true
+      },
+      {
+        "input": "1000 0\n",
+        "expected": "1\n",
+        "sample": false
+      },
+      {
+        "input": "5 4\n",
+        "expected": "20\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    n = int(data[0]); k = int(data[1])\n    # TODO: DP over prefix sums; dp[i][j] from dp[i-1][j-i+1 .. j]; mod 1e9+7\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    long long n, k; cin >> n >> k;\n    // TODO: DP with a sliding prefix-sum window; mod 1e9+7\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "daily-temperatures",
+    "title": "Daily Temperatures",
+    "diff": "Medium",
+    "pattern": "Monotonic Stack",
+    "week": 20,
+    "statement": "<p>For each day, output how many days you must wait for a warmer temperature (0 if none comes).</p>",
+    "inputFormat": "Line 1: n. Line 2: n integers (temperatures).",
+    "outputFormat": "n integers: days to wait for each day, space-separated.",
+    "tests": [
+      {
+        "input": "8\n73 74 75 71 69 72 76 73\n",
+        "expected": "1 1 4 2 1 1 0 0\n",
+        "sample": true
+      },
+      {
+        "input": "3\n30 40 50\n",
+        "expected": "1 1 0\n",
+        "sample": true
+      },
+      {
+        "input": "3\n30 60 90\n",
+        "expected": "1 1 0\n",
+        "sample": false
+      },
+      {
+        "input": "4\n90 80 70 60\n",
+        "expected": "0 0 0 0\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    n = int(data[0])\n    t = list(map(int, data[1:1+n]))\n    # TODO: monotonic decreasing stack of indices; resolve when a warmer day arrives\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int n; cin >> n;\n    vector<int> t(n);\n    for (auto& x : t) cin >> x;\n    // TODO: monotonic stack of indices; resolve on a warmer day\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "asteroid-collision",
+    "title": "Asteroid Collision",
+    "diff": "Medium",
+    "pattern": "Stack",
+    "week": 20,
+    "statement": "<p>Each integer is an asteroid: sign is direction (positive = right, negative = left), magnitude is size. Moving asteroids collide when a right-mover meets a left-mover; the smaller explodes (both if equal). Return the state after all collisions.</p>",
+    "inputFormat": "Line 1: n. Line 2: n non-zero integers.",
+    "outputFormat": "The surviving asteroids, space-separated (blank line if none).",
+    "tests": [
+      {
+        "input": "2\n5 10\n",
+        "expected": "5 10\n",
+        "sample": true
+      },
+      {
+        "input": "2\n8 -8\n",
+        "expected": "\n",
+        "sample": true
+      },
+      {
+        "input": "3\n10 2 -5\n",
+        "expected": "10\n",
+        "sample": false
+      },
+      {
+        "input": "4\n-2 -1 1 2\n",
+        "expected": "-2 -1 1 2\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    n = int(data[0])\n    a = list(map(int, data[1:1+n]))\n    # TODO: stack; a negative asteroid collides with positive ones on top\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int n; cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    // TODO: stack; resolve collisions between right- and left-movers\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "meeting-rooms-ii",
+    "title": "Meeting Rooms II",
+    "diff": "Medium",
+    "pattern": "Heap / Sweep",
+    "week": 20,
+    "statement": "<p>Given meeting intervals, return the minimum number of conference rooms required so no two overlapping meetings share a room. A meeting ending at time t frees the room for one starting at t.</p>",
+    "inputFormat": "Line 1: n. Next n lines: start end.",
+    "outputFormat": "The minimum number of rooms.",
+    "tests": [
+      {
+        "input": "3\n0 30\n5 10\n15 20\n",
+        "expected": "2\n",
+        "sample": true
+      },
+      {
+        "input": "2\n7 10\n2 4\n",
+        "expected": "1\n",
+        "sample": true
+      },
+      {
+        "input": "4\n1 5\n2 6\n3 7\n4 8\n",
+        "expected": "4\n",
+        "sample": false
+      },
+      {
+        "input": "1\n0 1\n",
+        "expected": "1\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    n = int(data[0])\n    # TODO: sort by start; min-heap of end times; heap size is rooms in use\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int n; cin >> n;\n    vector<pair<int,int>> iv(n);\n    for (auto& p : iv) cin >> p.first >> p.second;\n    // TODO: sort by start; min-heap of end times; track max heap size\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "coin-change-ii",
+    "title": "Coin Change II",
+    "diff": "Medium",
+    "pattern": "Dynamic Programming",
+    "week": 20,
+    "statement": "<p>Given coin denominations (unlimited supply) and a target amount, return the number of distinct combinations that make up the amount (order does not matter).</p>",
+    "inputFormat": "Line 1: amount. Line 2: n. Line 3: n coin values.",
+    "outputFormat": "The number of combinations.",
+    "tests": [
+      {
+        "input": "5\n3\n1 2 5\n",
+        "expected": "4\n",
+        "sample": true
+      },
+      {
+        "input": "3\n1\n2\n",
+        "expected": "0\n",
+        "sample": true
+      },
+      {
+        "input": "10\n1\n10\n",
+        "expected": "1\n",
+        "sample": false
+      },
+      {
+        "input": "0\n2\n3 7\n",
+        "expected": "1\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    amount = int(data[0]); n = int(data[1])\n    coins = list(map(int, data[2:2+n]))\n    # TODO: dp[a] += dp[a-c] for each coin (coin loop outside to avoid order dupes)\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int amount, n; cin >> amount >> n;\n    vector<int> coins(n);\n    for (auto& x : coins) cin >> x;\n    // TODO: unbounded-knapsack counting; coin loop outside the amount loop\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "subsets-ii",
+    "title": "Subsets II",
+    "diff": "Medium",
+    "pattern": "Backtracking",
+    "week": 20,
+    "statement": "<p>Given a collection that may contain duplicates, return all distinct subsets (the power set with no repeated subset). Print each subset in non-decreasing order, one per line, ordered by size then lexicographically. The empty subset is the first (blank) line.</p>",
+    "inputFormat": "Line 1: n. Line 2: n integers (may contain duplicates).",
+    "outputFormat": "Each distinct subset on its own line (empty subset is a leading blank line).",
+    "tests": [
+      {
+        "input": "3\n1 2 2\n",
+        "expected": "\n1\n2\n1 2\n2 2\n1 2 2\n",
+        "sample": true
+      },
+      {
+        "input": "2\n0 0\n",
+        "expected": "\n0\n0 0\n",
+        "sample": true
+      },
+      {
+        "input": "1\n5\n",
+        "expected": "\n5\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    n = int(data[0])\n    a = sorted(map(int, data[1:1+n]))\n    # TODO: sort, backtrack, skip a[i]==a[i-1] at the same depth to dedupe\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int n; cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    sort(a.begin(), a.end());\n    // TODO: backtrack, skipping duplicates at the same recursion depth\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "string-to-integer-atoi",
+    "title": "String to Integer (atoi)",
+    "diff": "Medium",
+    "pattern": "String / Parsing",
+    "week": 20,
+    "statement": "<p>Implement <code>atoi</code>: skip leading spaces, read an optional +/- sign, then consume digits until a non-digit, and clamp the result to the signed 32-bit range [-2^31, 2^31 - 1]. Leading spaces are significant, so the input is read as a raw line.</p>",
+    "inputFormat": "Line 1: the raw string (leading spaces significant).",
+    "outputFormat": "The parsed 32-bit integer.",
+    "tests": [
+      {
+        "input": "42\n",
+        "expected": "42\n",
+        "sample": true
+      },
+      {
+        "input": "   -42\n",
+        "expected": "-42\n",
+        "sample": true
+      },
+      {
+        "input": "4193 with words\n",
+        "expected": "4193\n",
+        "sample": false
+      },
+      {
+        "input": "words and 987\n",
+        "expected": "0\n",
+        "sample": false
+      },
+      {
+        "input": "-91283472332\n",
+        "expected": "-2147483648\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    s = sys.stdin.readline().rstrip('\\n')\n    # TODO: skip spaces, read sign, consume digits, clamp to 32-bit range\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    string s; getline(cin, s);\n    // TODO: skip spaces, read sign, consume digits, clamp to 32-bit range\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "reverse-words-in-a-string",
+    "title": "Reverse Words in a String",
+    "diff": "Medium",
+    "pattern": "String / Two Pointers",
+    "week": 20,
+    "statement": "<p>Reverse the order of words in the string. Words are separated by one or more spaces; collapse extra spaces and drop leading/trailing spaces, joining the reversed words with a single space.</p>",
+    "inputFormat": "Line 1: the input string.",
+    "outputFormat": "The words in reverse order, single-spaced.",
+    "tests": [
+      {
+        "input": "the sky is blue\n",
+        "expected": "the sky is blue\n",
+        "sample": true
+      },
+      {
+        "input": "  hello world  \n",
+        "expected": "hello world\n",
+        "sample": true
+      },
+      {
+        "input": "a good   example\n",
+        "expected": "a good example\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    s = sys.stdin.read().rstrip('\\n')\n    # TODO: split on whitespace, reverse the word list, join with single spaces\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    string s; getline(cin, s);\n    // TODO: split on whitespace, reverse words, join with single spaces\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "merge-strings-alternately",
+    "title": "Merge Strings Alternately",
+    "diff": "Easy",
+    "pattern": "String / Two Pointers",
+    "week": 20,
+    "statement": "<p>Merge two strings by adding letters in alternating order, starting with the first string. If one is longer, append its remaining letters to the end.</p>",
+    "inputFormat": "Line 1: word1. Line 2: word2.",
+    "outputFormat": "The merged string.",
+    "tests": [
+      {
+        "input": "abc\npqr\n",
+        "expected": "apbqcr\n",
+        "sample": true
+      },
+      {
+        "input": "ab\npqrs\n",
+        "expected": "apbqrs\n",
+        "sample": true
+      },
+      {
+        "input": "abcd\npq\n",
+        "expected": "apbqcd\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split('\\n')\n    w1 = data[0]; w2 = data[1] if len(data) > 1 else ''\n    # TODO: alternate characters, then append the tail of the longer string\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    string w1, w2; getline(cin, w1); getline(cin, w2);\n    // TODO: alternate characters, then append the tail of the longer string\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "find-the-celebrity",
+    "title": "Find the Celebrity",
+    "diff": "Medium",
+    "pattern": "Graph / Two Pointers",
+    "week": 20,
+    "statement": "<p>Among n people, a <b>celebrity</b> is known by everyone else but knows no one. You are given the full <code>knows</code> matrix (<code>knows[i][j]=1</code> means i knows j). Return the celebrity's index, or -1 if there is none.</p>",
+    "inputFormat": "Line 1: n. Next n lines: n values (0/1) \u2014 row i is who person i knows.",
+    "outputFormat": "The celebrity index, or -1.",
+    "tests": [
+      {
+        "input": "2\n0 1\n0 0\n",
+        "expected": "1\n",
+        "sample": true
+      },
+      {
+        "input": "3\n0 1 0\n0 0 0\n0 1 0\n",
+        "expected": "1\n",
+        "sample": true
+      },
+      {
+        "input": "2\n0 1\n1 0\n",
+        "expected": "-1\n",
+        "sample": false
+      },
+      {
+        "input": "3\n0 0 0\n1 0 1\n1 0 0\n",
+        "expected": "0\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    n = int(data[0])\n    # TODO: single-pass candidate elimination, then verify the candidate\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int n; cin >> n;\n    vector<vector<int>> k(n, vector<int>(n));\n    for (auto& row : k) for (auto& x : row) cin >> x;\n    // TODO: candidate elimination, then verify\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "check-completeness-binary-tree",
+    "title": "Check Completeness of a Binary Tree",
+    "diff": "Medium",
+    "pattern": "Tree / BFS",
+    "week": 20,
+    "statement": "<p>A binary tree is <b>complete</b> if every level except possibly the last is full, and the last level's nodes are as far left as possible. Return whether the given tree is complete.</p>",
+    "inputFormat": "Line 1: level-order tree, space-separated, 'null' for missing.",
+    "outputFormat": "'true' or 'false'.",
+    "tests": [
+      {
+        "input": "1 2 3 4 5 6\n",
+        "expected": "true\n",
+        "sample": true
+      },
+      {
+        "input": "1 2 3 4 5 null 7\n",
+        "expected": "false\n",
+        "sample": true
+      },
+      {
+        "input": "1 2 3 null 4\n",
+        "expected": "false\n",
+        "sample": false
+      },
+      {
+        "input": "1\n",
+        "expected": "true\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    tokens = sys.stdin.read().split('\\n')[0].split()\n    # TODO: BFS including nulls; once a null is seen, no real node may follow\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    string line; getline(cin, line);\n    // TODO: level-order BFS; once a gap (null) appears, no later node is allowed\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "kth-missing-positive",
+    "title": "Kth Missing Positive Number",
+    "diff": "Easy",
+    "pattern": "Binary Search / Array",
+    "week": 20,
+    "statement": "<p>Given a strictly increasing array of positive integers and an integer k, return the kth positive integer that is <b>missing</b> from the array.</p>",
+    "inputFormat": "Line 1: n. Line 2: n strictly increasing positive integers. Line 3: k.",
+    "outputFormat": "The kth missing positive integer.",
+    "tests": [
+      {
+        "input": "5\n2 3 4 7 11\n5\n",
+        "expected": "9\n",
+        "sample": true
+      },
+      {
+        "input": "4\n1 2 3 4\n2\n",
+        "expected": "6\n",
+        "sample": true
+      },
+      {
+        "input": "3\n1 2 3\n1\n",
+        "expected": "4\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    n = int(data[0])\n    arr = list(map(int, data[1:1+n]))\n    k = int(data[1+n])\n    # TODO: count missing before each index (arr[i]-(i+1)); binary search for the kth\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    int n; cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    int k; cin >> k;\n    // TODO: missing before index i is a[i]-(i+1); binary search for the kth\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": "ransom-note",
+    "title": "Ransom Note",
+    "diff": "Easy",
+    "pattern": "Hash Table / Counting",
+    "week": 20,
+    "statement": "<p>Return whether the ransom note can be built using the letters of the magazine, where each magazine letter may be used at most once.</p>",
+    "inputFormat": "Line 1: ransomNote. Line 2: magazine.",
+    "outputFormat": "'true' or 'false'.",
+    "tests": [
+      {
+        "input": "aa\naab\n",
+        "expected": "true\n",
+        "sample": true
+      },
+      {
+        "input": "a\nb\n",
+        "expected": "false\n",
+        "sample": true
+      },
+      {
+        "input": "aab\nbaa\n",
+        "expected": "true\n",
+        "sample": false
+      }
+    ],
+    "category": "leetcode",
+    "checker": "exact",
+    "tol": 0.0,
+    "starter": {
+      "python": "import sys\n\ndef main():\n    data = sys.stdin.read().split('\\n')\n    ransom = data[0]; mag = data[1] if len(data) > 1 else ''\n    # TODO: count magazine letters; decrement per ransom letter; false if any runs out\n\nmain()\n",
+      "cpp": "#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    ios::sync_with_stdio(false); cin.tie(nullptr);\n    string ransom, mag; getline(cin, ransom); getline(cin, mag);\n    // TODO: count magazine letters; verify each ransom letter is available\n    return 0;\n}\n"
+    }
   }
 ];

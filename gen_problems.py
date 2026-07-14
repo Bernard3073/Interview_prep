@@ -1965,6 +1965,425 @@ P("rank-teams-by-votes", "Rank Teams by Votes", "Medium", "Array / Hash Table / 
   CPP_HEAD + "    int V; cin >> V;\n    vector<string> votes(V);\n    for (auto& s : votes) cin >> s;\n    // TODO: per-team position counts; sort desc, tie-break alphabetically\n    return 0;\n}\n"),
 
 # ----------------------------------------------------------------------------
+# Aurora company set (week 20). Sourced from interviewsolver.com.
+# stdin->stdout, exact-judge friendly. A few LeetCode originals are adapted to a
+# deterministic variant (noted in the statement) so a single exact judge works.
+# ----------------------------------------------------------------------------
+def ref_largest_rectangle():
+    import sys
+    d = sys.stdin.read().split()
+    n = int(d[0]); h = list(map(int, d[1:1+n]))
+    st = []; best = 0
+    for i in range(n + 1):
+        cur = h[i] if i < n else 0
+        while st and h[st[-1]] >= cur:
+            top = st.pop()
+            width = i if not st else i - st[-1] - 1
+            best = max(best, h[top] * width)
+        st.append(i)
+    print(best)
+
+P("largest-rectangle-histogram", "Largest Rectangle in Histogram", "Hard", "Monotonic Stack", 20,
+  "<p>Given the bar heights of a histogram (each bar width 1), return the area of the largest rectangle that fits entirely under the bars.</p>",
+  "Line 1: n. Line 2: n non-negative integers (bar heights).",
+  "The maximum rectangle area.",
+  ref_largest_rectangle,
+  [("6\n2 1 5 6 2 3\n", True), ("2\n2 4\n", True), ("1\n5\n", False),
+   ("5\n1 1 1 1 1\n", False), ("6\n6 2 5 4 5 1\n", False)],
+  PY_HEAD + "    n = int(data[0])\n    h = list(map(int, data[1:1+n]))\n    # TODO: monotonic increasing stack of indices; pop when a shorter bar arrives\n\nmain()\n",
+  CPP_HEAD + "    int n; cin >> n;\n    vector<long long> h(n);\n    for (auto& x : h) cin >> x;\n    // TODO: monotonic stack; area = height * width when popping\n    return 0;\n}\n"),
+
+def ref_n_queens():
+    import sys
+    n = int(sys.stdin.read().split()[0])
+    cols = set(); d1 = set(); d2 = set(); cnt = [0]
+    def bt(r):
+        if r == n: cnt[0] += 1; return
+        for c in range(n):
+            if c in cols or (r - c) in d1 or (r + c) in d2: continue
+            cols.add(c); d1.add(r - c); d2.add(r + c)
+            bt(r + 1)
+            cols.discard(c); d1.discard(r - c); d2.discard(r + c)
+    bt(0)
+    print(cnt[0])
+
+P("n-queens", "N-Queens", "Hard", "Backtracking", 20,
+  "<p>Place <code>n</code> queens on an n&times;n board so that no two attack each other. <i>Adapted for deterministic judging:</i> instead of printing every board, print the <b>number of distinct solutions</b> (this is the N-Queens II count). The backtracking search is identical; only the return value differs.</p>",
+  "Line 1: n.",
+  "The number of distinct solutions.",
+  ref_n_queens,
+  [("4\n", True), ("1\n", True), ("8\n", False), ("6\n", False)],
+  PY_HEAD + "    n = int(data[0])\n    # TODO: backtrack row by row; track used columns and both diagonals; count solutions\n\nmain()\n",
+  CPP_HEAD + "    int n; cin >> n;\n    // TODO: backtrack row by row; track used columns and both diagonals; count solutions\n    return 0;\n}\n"),
+
+def ref_word_ladder_ii():
+    import sys
+    from collections import defaultdict
+    from string import ascii_lowercase
+    data = sys.stdin.read().split("\n")
+    begin, end = data[0].split()
+    n = int(data[1])
+    words = data[2].split() if n > 0 else []
+    wordset = set(words)
+    if end not in wordset:
+        print(0); return
+    if begin == end:
+        print(1); return
+    level = {begin}; ways = {begin: 1}; visited = {begin}
+    while level:
+        nxt = defaultdict(int)
+        for w in level:
+            for i in range(len(w)):
+                for ch in ascii_lowercase:
+                    if ch == w[i]: continue
+                    nw = w[:i] + ch + w[i+1:]
+                    if nw in wordset and nw not in visited:
+                        nxt[nw] += ways[w]
+        if not nxt: break
+        for nw in nxt: visited.add(nw)
+        if end in nxt:
+            print(nxt[end]); return
+        level = set(nxt.keys()); ways = nxt
+    print(0)
+
+P("word-ladder-ii", "Word Ladder II", "Hard", "BFS / Graph", 20,
+  "<p>Given <code>beginWord</code>, <code>endWord</code>, and a dictionary, a transformation changes one letter at a time and every intermediate word must be in the dictionary. <i>Adapted for deterministic judging:</i> print the <b>number of distinct shortest transformation sequences</b> from begin to end (0 if none). The shortest-path BFS is the same; you count paths instead of listing them.</p>",
+  "Line 1: beginWord endWord. Line 2: n. Line 3: n dictionary words (space-separated).",
+  "The count of distinct shortest transformation sequences.",
+  ref_word_ladder_ii,
+  [("hit cog\n6\nhot dot dog lot log cog\n", True), ("hit cog\n5\nhot dot dog lot log\n", True),
+   ("a c\n2\nb c\n", False), ("hot dog\n2\nhot dog\n", False)],
+  "import sys\n\ndef main():\n    data = sys.stdin.read().split('\\n')\n    begin, end = data[0].split()\n    n = int(data[1]); words = data[2].split() if n > 0 else []\n    # TODO: layered BFS from begin; accumulate path counts; print count reaching end\n\nmain()\n",
+  CPP_HEAD + "    string begin, end; cin >> begin >> end;\n    int n; cin >> n;\n    vector<string> words(n);\n    for (auto& w : words) cin >> w;\n    // TODO: layered BFS; accumulate path counts; print count reaching end\n    return 0;\n}\n"),
+
+def ref_max_stack():
+    import sys
+    data = sys.stdin.read().split("\n")
+    q = int(data[0].strip()); st = []; out = []
+    for i in range(1, q + 1):
+        parts = data[i].split(); op = parts[0]
+        if op == "push":
+            st.append(int(parts[1]))
+        elif op == "top":
+            out.append(str(st[-1]))
+        elif op == "pop":
+            out.append(str(st.pop()))
+        elif op == "peekMax":
+            out.append(str(max(st)))
+        elif op == "popMax":
+            m = max(st)
+            for j in range(len(st) - 1, -1, -1):
+                if st[j] == m: del st[j]; break
+            out.append(str(m))
+    print("\n".join(out))
+
+P("max-stack", "Max Stack", "Hard", "Stack / Design", 20,
+  "<p>Design a stack supporting <code>push x</code>, <code>top</code>, <code>pop</code>, <code>peekMax</code> (max element), and <code>popMax</code> (remove and return the max; if the max ties, remove the one closest to the top). Print the return value of every query op.</p>",
+  "Line 1: q. Next q lines: 'push x', 'top', 'pop', 'peekMax', or 'popMax'.",
+  "One line per query op (top / pop / peekMax / popMax).",
+  ref_max_stack,
+  [("9\npush 5\npush 1\npush 5\ntop\npopMax\ntop\npeekMax\npop\ntop\n", True),
+   ("4\npush 3\npush 3\npopMax\ntop\n", True),
+   ("6\npush 2\npush 9\npush 4\npeekMax\npopMax\ntop\n", False)],
+  "import sys\n\ndef main():\n    data = sys.stdin.read().split('\\n')\n    q = int(data[0])\n    # TODO: maintain a stack; popMax removes the top-most maximum\n\nmain()\n",
+  CPP_HEAD + "    int q; cin >> q;\n    // TODO: maintain a stack; popMax removes the top-most maximum\n    return 0;\n}\n"),
+
+def ref_k_inverse_pairs():
+    import sys
+    d = sys.stdin.read().split()
+    n = int(d[0]); k = int(d[1]); MOD = 10**9 + 7
+    dp = [0] * (k + 1); dp[0] = 1
+    for i in range(1, n + 1):
+        pref = [0] * (k + 2)
+        for j in range(k + 1):
+            pref[j + 1] = (pref[j] + dp[j]) % MOD
+        ndp = [0] * (k + 1)
+        for j in range(k + 1):
+            lo = max(0, j - i + 1)
+            ndp[j] = (pref[j + 1] - pref[lo]) % MOD
+        dp = ndp
+    print(dp[k] % MOD)
+
+P("k-inverse-pairs", "K Inverse Pairs Array", "Hard", "Dynamic Programming", 20,
+  "<p>Count the arrays that are permutations of 1..n with exactly <code>k</code> inverse pairs (index pairs i&lt;j with a[i]&gt;a[j]). Return the count modulo 1e9+7.</p>",
+  "Line 1: n k.",
+  "The count modulo 1000000007.",
+  ref_k_inverse_pairs,
+  [("3 0\n", True), ("3 1\n", True), ("1000 0\n", False), ("5 4\n", False)],
+  PY_HEAD + "    n = int(data[0]); k = int(data[1])\n    # TODO: DP over prefix sums; dp[i][j] from dp[i-1][j-i+1 .. j]; mod 1e9+7\n\nmain()\n",
+  CPP_HEAD + "    long long n, k; cin >> n >> k;\n    // TODO: DP with a sliding prefix-sum window; mod 1e9+7\n    return 0;\n}\n"),
+
+def ref_daily_temperatures():
+    import sys
+    d = sys.stdin.read().split()
+    n = int(d[0]); t = list(map(int, d[1:1+n]))
+    res = [0] * n; st = []
+    for i in range(n):
+        while st and t[i] > t[st[-1]]:
+            j = st.pop(); res[j] = i - j
+        st.append(i)
+    print(" ".join(map(str, res)))
+
+P("daily-temperatures", "Daily Temperatures", "Medium", "Monotonic Stack", 20,
+  "<p>For each day, output how many days you must wait for a warmer temperature (0 if none comes).</p>",
+  "Line 1: n. Line 2: n integers (temperatures).",
+  "n integers: days to wait for each day, space-separated.",
+  ref_daily_temperatures,
+  [("8\n73 74 75 71 69 72 76 73\n", True), ("3\n30 40 50\n", True), ("3\n30 60 90\n", False),
+   ("4\n90 80 70 60\n", False)],
+  PY_HEAD + "    n = int(data[0])\n    t = list(map(int, data[1:1+n]))\n    # TODO: monotonic decreasing stack of indices; resolve when a warmer day arrives\n\nmain()\n",
+  CPP_HEAD + "    int n; cin >> n;\n    vector<int> t(n);\n    for (auto& x : t) cin >> x;\n    // TODO: monotonic stack of indices; resolve on a warmer day\n    return 0;\n}\n"),
+
+def ref_asteroid_collision():
+    import sys
+    d = sys.stdin.read().split()
+    n = int(d[0]); a = list(map(int, d[1:1+n])); st = []
+    for x in a:
+        alive = True
+        while alive and x < 0 and st and st[-1] > 0:
+            if st[-1] < -x:
+                st.pop(); continue
+            elif st[-1] == -x:
+                st.pop()
+            alive = False
+        if alive: st.append(x)
+    print(" ".join(map(str, st)))
+
+P("asteroid-collision", "Asteroid Collision", "Medium", "Stack", 20,
+  "<p>Each integer is an asteroid: sign is direction (positive = right, negative = left), magnitude is size. Moving asteroids collide when a right-mover meets a left-mover; the smaller explodes (both if equal). Return the state after all collisions.</p>",
+  "Line 1: n. Line 2: n non-zero integers.",
+  "The surviving asteroids, space-separated (blank line if none).",
+  ref_asteroid_collision,
+  [("2\n5 10\n", True), ("2\n8 -8\n", True), ("3\n10 2 -5\n", False), ("4\n-2 -1 1 2\n", False)],
+  PY_HEAD + "    n = int(data[0])\n    a = list(map(int, data[1:1+n]))\n    # TODO: stack; a negative asteroid collides with positive ones on top\n\nmain()\n",
+  CPP_HEAD + "    int n; cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    // TODO: stack; resolve collisions between right- and left-movers\n    return 0;\n}\n"),
+
+def ref_meeting_rooms_ii():
+    import sys, heapq
+    d = sys.stdin.read().split()
+    n = int(d[0]); idx = 1; iv = []
+    for _ in range(n):
+        s = int(d[idx]); e = int(d[idx+1]); idx += 2
+        iv.append((s, e))
+    iv.sort()
+    heap = []; best = 0
+    for s, e in iv:
+        while heap and heap[0] <= s:
+            heapq.heappop(heap)
+        heapq.heappush(heap, e)
+        best = max(best, len(heap))
+    print(best)
+
+P("meeting-rooms-ii", "Meeting Rooms II", "Medium", "Heap / Sweep", 20,
+  "<p>Given meeting intervals, return the minimum number of conference rooms required so no two overlapping meetings share a room. A meeting ending at time t frees the room for one starting at t.</p>",
+  "Line 1: n. Next n lines: start end.",
+  "The minimum number of rooms.",
+  ref_meeting_rooms_ii,
+  [("3\n0 30\n5 10\n15 20\n", True), ("2\n7 10\n2 4\n", True), ("4\n1 5\n2 6\n3 7\n4 8\n", False),
+   ("1\n0 1\n", False)],
+  "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    n = int(data[0])\n    # TODO: sort by start; min-heap of end times; heap size is rooms in use\n\nmain()\n",
+  CPP_HEAD + "    int n; cin >> n;\n    vector<pair<int,int>> iv(n);\n    for (auto& p : iv) cin >> p.first >> p.second;\n    // TODO: sort by start; min-heap of end times; track max heap size\n    return 0;\n}\n"),
+
+def ref_coin_change_ii():
+    import sys
+    d = sys.stdin.read().split()
+    amount = int(d[0]); n = int(d[1]); coins = list(map(int, d[2:2+n]))
+    dp = [0] * (amount + 1); dp[0] = 1
+    for c in coins:
+        for a in range(c, amount + 1):
+            dp[a] += dp[a - c]
+    print(dp[amount])
+
+P("coin-change-ii", "Coin Change II", "Medium", "Dynamic Programming", 20,
+  "<p>Given coin denominations (unlimited supply) and a target amount, return the number of distinct combinations that make up the amount (order does not matter).</p>",
+  "Line 1: amount. Line 2: n. Line 3: n coin values.",
+  "The number of combinations.",
+  ref_coin_change_ii,
+  [("5\n3\n1 2 5\n", True), ("3\n1\n2\n", True), ("10\n1\n10\n", False), ("0\n2\n3 7\n", False)],
+  "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    amount = int(data[0]); n = int(data[1])\n    coins = list(map(int, data[2:2+n]))\n    # TODO: dp[a] += dp[a-c] for each coin (coin loop outside to avoid order dupes)\n\nmain()\n",
+  CPP_HEAD + "    int amount, n; cin >> amount >> n;\n    vector<int> coins(n);\n    for (auto& x : coins) cin >> x;\n    // TODO: unbounded-knapsack counting; coin loop outside the amount loop\n    return 0;\n}\n"),
+
+def ref_subsets_ii():
+    import sys
+    d = sys.stdin.read().split()
+    n = int(d[0]); a = sorted(map(int, d[1:1+n])); res = []
+    def bt(start, path):
+        res.append(list(path))
+        for i in range(start, n):
+            if i > start and a[i] == a[i-1]: continue
+            path.append(a[i]); bt(i + 1, path); path.pop()
+    bt(0, [])
+    res.sort(key=lambda s: (len(s), s))
+    print("\n".join(" ".join(map(str, s)) for s in res))
+
+P("subsets-ii", "Subsets II", "Medium", "Backtracking", 20,
+  "<p>Given a collection that may contain duplicates, return all distinct subsets (the power set with no repeated subset). Print each subset in non-decreasing order, one per line, ordered by size then lexicographically. The empty subset is the first (blank) line.</p>",
+  "Line 1: n. Line 2: n integers (may contain duplicates).",
+  "Each distinct subset on its own line (empty subset is a leading blank line).",
+  ref_subsets_ii,
+  [("3\n1 2 2\n", True), ("2\n0 0\n", True), ("1\n5\n", False)],
+  PY_HEAD + "    n = int(data[0])\n    a = sorted(map(int, data[1:1+n]))\n    # TODO: sort, backtrack, skip a[i]==a[i-1] at the same depth to dedupe\n\nmain()\n",
+  CPP_HEAD + "    int n; cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    sort(a.begin(), a.end());\n    // TODO: backtrack, skipping duplicates at the same recursion depth\n    return 0;\n}\n"),
+
+def ref_atoi():
+    import sys
+    s = sys.stdin.readline().rstrip("\n")
+    i = 0; m = len(s)
+    while i < m and s[i] == ' ': i += 1
+    sign = 1
+    if i < m and s[i] in '+-':
+        if s[i] == '-': sign = -1
+        i += 1
+    num = 0
+    while i < m and s[i].isdigit():
+        num = num * 10 + int(s[i]); i += 1
+    num *= sign
+    INT_MAX = 2**31 - 1; INT_MIN = -2**31
+    num = max(INT_MIN, min(INT_MAX, num))
+    print(num)
+
+P("string-to-integer-atoi", "String to Integer (atoi)", "Medium", "String / Parsing", 20,
+  "<p>Implement <code>atoi</code>: skip leading spaces, read an optional +/- sign, then consume digits until a non-digit, and clamp the result to the signed 32-bit range [-2^31, 2^31 - 1]. Leading spaces are significant, so the input is read as a raw line.</p>",
+  "Line 1: the raw string (leading spaces significant).",
+  "The parsed 32-bit integer.",
+  ref_atoi,
+  [("42\n", True), ("   -42\n", True), ("4193 with words\n", False),
+   ("words and 987\n", False), ("-91283472332\n", False)],
+  "import sys\n\ndef main():\n    s = sys.stdin.readline().rstrip('\\n')\n    # TODO: skip spaces, read sign, consume digits, clamp to 32-bit range\n\nmain()\n",
+  CPP_HEAD + "    string s; getline(cin, s);\n    // TODO: skip spaces, read sign, consume digits, clamp to 32-bit range\n    return 0;\n}\n"),
+
+def ref_reverse_words():
+    import sys
+    s = sys.stdin.read().rstrip("\n")
+    print(" ".join(s.split()))
+
+P("reverse-words-in-a-string", "Reverse Words in a String", "Medium", "String / Two Pointers", 20,
+  "<p>Reverse the order of words in the string. Words are separated by one or more spaces; collapse extra spaces and drop leading/trailing spaces, joining the reversed words with a single space.</p>",
+  "Line 1: the input string.",
+  "The words in reverse order, single-spaced.",
+  ref_reverse_words,
+  [("the sky is blue\n", True), ("  hello world  \n", True), ("a good   example\n", False)],
+  "import sys\n\ndef main():\n    s = sys.stdin.read().rstrip('\\n')\n    # TODO: split on whitespace, reverse the word list, join with single spaces\n\nmain()\n",
+  CPP_HEAD + "    string s; getline(cin, s);\n    // TODO: split on whitespace, reverse words, join with single spaces\n    return 0;\n}\n"),
+
+def ref_merge_strings_alternately():
+    import sys
+    data = sys.stdin.read().split("\n")
+    w1 = data[0]; w2 = data[1] if len(data) > 1 else ""
+    res = []; i = 0
+    while i < len(w1) or i < len(w2):
+        if i < len(w1): res.append(w1[i])
+        if i < len(w2): res.append(w2[i])
+        i += 1
+    print("".join(res))
+
+P("merge-strings-alternately", "Merge Strings Alternately", "Easy", "String / Two Pointers", 20,
+  "<p>Merge two strings by adding letters in alternating order, starting with the first string. If one is longer, append its remaining letters to the end.</p>",
+  "Line 1: word1. Line 2: word2.",
+  "The merged string.",
+  ref_merge_strings_alternately,
+  [("abc\npqr\n", True), ("ab\npqrs\n", True), ("abcd\npq\n", False)],
+  "import sys\n\ndef main():\n    data = sys.stdin.read().split('\\n')\n    w1 = data[0]; w2 = data[1] if len(data) > 1 else ''\n    # TODO: alternate characters, then append the tail of the longer string\n\nmain()\n",
+  CPP_HEAD + "    string w1, w2; getline(cin, w1); getline(cin, w2);\n    // TODO: alternate characters, then append the tail of the longer string\n    return 0;\n}\n"),
+
+def ref_find_celebrity():
+    import sys
+    d = sys.stdin.read().split()
+    n = int(d[0]); idx = 1
+    k = [[0]*n for _ in range(n)]
+    for i in range(n):
+        for j in range(n):
+            k[i][j] = int(d[idx]); idx += 1
+    cand = 0
+    for i in range(1, n):
+        if k[cand][i] == 1: cand = i
+    for i in range(n):
+        if i == cand: continue
+        if k[cand][i] == 1 or k[i][cand] == 0:
+            print(-1); return
+    print(cand)
+
+P("find-the-celebrity", "Find the Celebrity", "Medium", "Graph / Two Pointers", 20,
+  "<p>Among n people, a <b>celebrity</b> is known by everyone else but knows no one. You are given the full <code>knows</code> matrix (<code>knows[i][j]=1</code> means i knows j). Return the celebrity's index, or -1 if there is none.</p>",
+  "Line 1: n. Next n lines: n values (0/1) — row i is who person i knows.",
+  "The celebrity index, or -1.",
+  ref_find_celebrity,
+  [("2\n0 1\n0 0\n", True), ("3\n0 1 0\n0 0 0\n0 1 0\n", True), ("2\n0 1\n1 0\n", False),
+   ("3\n0 0 0\n1 0 1\n1 0 0\n", False)],
+  "import sys\n\ndef main():\n    data = sys.stdin.read().split()\n    n = int(data[0])\n    # TODO: single-pass candidate elimination, then verify the candidate\n\nmain()\n",
+  CPP_HEAD + "    int n; cin >> n;\n    vector<vector<int>> k(n, vector<int>(n));\n    for (auto& row : k) for (auto& x : row) cin >> x;\n    // TODO: candidate elimination, then verify\n    return 0;\n}\n"),
+
+def ref_check_completeness():
+    import sys
+    from collections import deque
+    tokens = sys.stdin.read().split("\n")[0].split()
+    root = _build_tree(tokens)
+    if not root:
+        print("true"); return
+    q = deque([root]); seen_null = False
+    while q:
+        node = q.popleft()
+        if node is None:
+            seen_null = True
+        else:
+            if seen_null:
+                print("false"); return
+            q.append(node.l); q.append(node.r)
+    print("true")
+
+P("check-completeness-binary-tree", "Check Completeness of a Binary Tree", "Medium", "Tree / BFS", 20,
+  "<p>A binary tree is <b>complete</b> if every level except possibly the last is full, and the last level's nodes are as far left as possible. Return whether the given tree is complete.</p>",
+  "Line 1: level-order tree, space-separated, 'null' for missing.",
+  "'true' or 'false'.",
+  ref_check_completeness,
+  [("1 2 3 4 5 6\n", True), ("1 2 3 4 5 null 7\n", True), ("1 2 3 null 4\n", False),
+   ("1\n", False)],
+  "import sys\n\ndef main():\n    tokens = sys.stdin.read().split('\\n')[0].split()\n    # TODO: BFS including nulls; once a null is seen, no real node may follow\n\nmain()\n",
+  CPP_HEAD + "    string line; getline(cin, line);\n    // TODO: level-order BFS; once a gap (null) appears, no later node is allowed\n    return 0;\n}\n"),
+
+def ref_kth_missing_positive():
+    import sys
+    d = sys.stdin.read().split()
+    n = int(d[0]); arr = list(map(int, d[1:1+n])); k = int(d[1+n])
+    seen = set(arr); count = 0; num = 0
+    while True:
+        num += 1
+        if num not in seen:
+            count += 1
+            if count == k:
+                print(num); return
+
+P("kth-missing-positive", "Kth Missing Positive Number", "Easy", "Binary Search / Array", 20,
+  "<p>Given a strictly increasing array of positive integers and an integer k, return the kth positive integer that is <b>missing</b> from the array.</p>",
+  "Line 1: n. Line 2: n strictly increasing positive integers. Line 3: k.",
+  "The kth missing positive integer.",
+  ref_kth_missing_positive,
+  [("5\n2 3 4 7 11\n5\n", True), ("4\n1 2 3 4\n2\n", True), ("3\n1 2 3\n1\n", False)],
+  PY_HEAD + "    n = int(data[0])\n    arr = list(map(int, data[1:1+n]))\n    k = int(data[1+n])\n    # TODO: count missing before each index (arr[i]-(i+1)); binary search for the kth\n\nmain()\n",
+  CPP_HEAD + "    int n; cin >> n;\n    vector<int> a(n);\n    for (auto& x : a) cin >> x;\n    int k; cin >> k;\n    // TODO: missing before index i is a[i]-(i+1); binary search for the kth\n    return 0;\n}\n"),
+
+def ref_ransom_note():
+    import sys
+    from collections import Counter
+    data = sys.stdin.read().split("\n")
+    ransom = data[0]; mag = data[1] if len(data) > 1 else ""
+    cnt = Counter(mag)
+    for ch in ransom:
+        if cnt[ch] <= 0:
+            print("false"); return
+        cnt[ch] -= 1
+    print("true")
+
+P("ransom-note", "Ransom Note", "Easy", "Hash Table / Counting", 20,
+  "<p>Return whether the ransom note can be built using the letters of the magazine, where each magazine letter may be used at most once.</p>",
+  "Line 1: ransomNote. Line 2: magazine.",
+  "'true' or 'false'.",
+  ref_ransom_note,
+  [("aa\naab\n", True), ("a\nb\n", True), ("aab\nbaa\n", False)],
+  "import sys\n\ndef main():\n    data = sys.stdin.read().split('\\n')\n    ransom = data[0]; mag = data[1] if len(data) > 1 else ''\n    # TODO: count magazine letters; decrement per ransom letter; false if any runs out\n\nmain()\n",
+  CPP_HEAD + "    string ransom, mag; getline(cin, ransom); getline(cin, mag);\n    // TODO: count magazine letters; verify each ransom letter is available\n    return 0;\n}\n"),
+
+# ----------------------------------------------------------------------------
 # Compile-check every C++ starter so users never hit a template compile error
 # ----------------------------------------------------------------------------
 def _find_cxx():
