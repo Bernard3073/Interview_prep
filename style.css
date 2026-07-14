@@ -124,7 +124,10 @@ a.logo { text-decoration: none; }
   font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
   color: var(--muted); margin: 4px 0 10px; font-weight: 600;
 }
-.lec-sidebar, .lec-toc { position: sticky; top: 90px; align-self: start; }
+.lec-sidebar, .lec-toc {
+  position: sticky; top: 90px; align-self: start;
+  max-height: calc(100vh - 110px); overflow-y: auto;
+}
 
 #lec-nav { display: grid; gap: 4px; }
 .lec-nav-item {
